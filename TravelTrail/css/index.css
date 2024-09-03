@@ -1,0 +1,145 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url("../images/bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.joti-one-regular {
+    font-family: "Joti One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.josefin-sans {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+#header {
+    background-color: rgba(0, 0, 0, 0.4);
+    height: 12vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#left-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 12vh;
+}
+
+#left-nav a {
+    text-decoration: none;
+}
+
+#right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.logo-container {
+    width: 60px;
+    height: 60px;
+    background-color: black;
+    margin-left: 1vw;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    margin-left: 1vw;
+    font-family: "Joti One", serif;
+    font-size: 40px;
+}
+
+.user-profile {
+    height: 85px;
+    width: 85px;
+    border-radius: 50%;
+    background-color: red;
+    margin-right: 1vw;
+}
+
+#right-nav a {
+    text-decoration: none;
+    font-family: "Joti One", serif;
+    font-size: 30px;
+    color: white;
+    margin-right: 80px;
+}
+
+#right-nav a:hover {
+    color: #929292;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.user-profile:hover {
+    cursor: pointer;
+}
+
+#main-title {
+    margin-top: 20vh;
+    margin-left: 6vw;
+}
+
+.title {
+    font-family: "Joti One", serif;
+    font-size: 35px;
+}
+
+#sub-main-title {
+    margin-left: 6vw;
+}
+
+.sub-title {
+    font-family: "Josefin Sans", sans-serif;
+    font-size: 25px;
+    font-weight: 400;
+}
+
+.explore-btn {
+    background-color: black;
+    color: white;
+    font-family: "Joti One", serif;
+    margin-left: 6vw;
+    border: none;
+    height: 60px;
+    width: 200px;
+    border-radius: 8px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+#socials {
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 4vw;
+    height: 22vh;
+    float: right;
+    margin-right: 2vw;
+    margin-top: 6vh;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-icons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-icons a {
+    color: white;
+    font-size: 30px;
+    margin: 8px;
+}
