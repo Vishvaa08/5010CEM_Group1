@@ -1,9 +1,10 @@
+html{
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
     padding: 0;
-    background-image: url("../images/bg.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
 }
 
 .joti-one-regular {
@@ -24,6 +25,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: fixed; /* Make the header fixed */
+    top: 0; /* Position it at the top of the page */
+    width: 100%; /* Make it span the full width of the page */
+    z-index: 1000; /* Ensure it stays on top of other elements */
 }
 
 #left-nav {
@@ -46,7 +51,7 @@ body {
     width: 60px;
     height: 60px;
     background-color: black;
-    margin-left: 1vw;
+    margin-left: 2vw;
     border-radius: 18px;
     display: flex;
     align-items: center;
@@ -54,7 +59,7 @@ body {
 }
 
 h1 {
-    margin-left: 1vw;
+    margin-left: 2vw;
     font-family: "Joti One", serif;
     font-size: 40px;
 }
@@ -124,7 +129,7 @@ h1 {
     height: 22vh;
     float: right;
     margin-right: 2vw;
-    margin-top: 6vh;
+    margin-top: 12vh;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -142,4 +147,24 @@ h1 {
     color: white;
     font-size: 30px;
     margin: 8px;
+}
+
+#home{
+    background-image: url("../images/bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: auto;
+    padding-top: 5vh;
+    height: calc(100vh - 5vh);
+}
+
+#about{
+    background-color: red;
+    height: 100vh;
+}
+
+#contact{
+    background-color: greenyellow;
+    height: 100vh;
 }
