@@ -25,10 +25,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: fixed; /* Make the header fixed */
-    top: 0; /* Position it at the top of the page */
-    width: 100%; /* Make it span the full width of the page */
-    z-index: 1000; /* Ensure it stays on top of other elements */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 6;
 }
 
 #left-nav {

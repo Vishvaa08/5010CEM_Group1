@@ -1,0 +1,92 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url("../images/bg.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+.joti-one-regular {
+    font-family: "Joti One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.josefin-sans {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+#header {
+    background-color: rgba(0, 0, 0, 0.4);
+    height: 12vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 6;
+}
+
+#left-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 12vh;
+}
+
+#left-nav a {
+    text-decoration: none;
+}
+
+#right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.logo-container {
+    width: 60px;
+    height: 60px;
+    background-color: black;
+    margin-left: 2vw;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    margin-left: 2vw;
+    font-family: "Joti One", serif;
+    font-size: 40px;
+}
+
+.user-profile {
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    background-color: red;
+    margin-right: 1vw;
+}
+
+#right-nav a {
+    text-decoration: none;
+    font-family: "Joti One", serif;
+    font-size: 30px;
+    color: white;
+    margin-right: 8vw;
+}
+
+#right-nav a:hover {
+    color: #929292;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.user-profile:hover {
+    cursor: pointer;
+}
