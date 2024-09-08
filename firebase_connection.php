@@ -4,7 +4,7 @@ require 'vendor/autoload.php';
 
 use Kreait\Firebase\Factory;
 
-$serviceAccount = __DIR__ . '/prvKey.json';
+$serviceAccount = __DIR__ . '/prvkey.json';
 
 $factory = (new Factory)
     ->withServiceAccount($serviceAccount)
