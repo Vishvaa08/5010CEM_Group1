@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Packages</title>
-    <link rel="stylesheet" type="text/css" href="css/packages.css">
+    <title>Cities</title>
+    <link rel="stylesheet" type="text/css" href="css/cities.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Joti+One&display=swap" rel="stylesheet">
@@ -19,7 +19,11 @@
 
     include 'firebase_connection.php';
 
-    $reference = $database->getReference('Packages');
+    $country = isset($_GET['country']) ? $_GET['country'] : '';
+
+    $reference = $database->getReference('Packages/')
+                            ->orderByChild('Country')
+                            ->equalTo($country);  
     $snapshot = $reference->getSnapshot();
     $data = $snapshot->getValue();
 
@@ -67,7 +71,7 @@
                 echo '<p>No details available</p>';
             }
 
-            echo '<a href="cities.php?country=' . urlencode($country) . '" class="explore-btn">Explore Now</a>';
+            echo '<a href="cities.php?country=' . urlencode($country) . '" class="explore-btn">View More</a>';
             /*
             echo '<a href="' . strtolower($country) . '.php" class="explore-btn">Explore Now' . '</a>';
             */

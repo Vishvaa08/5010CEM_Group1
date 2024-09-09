@@ -12,14 +12,4 @@ $factory = (new Factory)
 
 $database = $factory->createDatabase();
 
-/*
-$reference = $database->getReference('users');
-$reference->push([
-    'name' => 'Vishvaa',
-    'age' => '24'
-]);
-
-echo "Data Stored";
-*/
-
 ?>
