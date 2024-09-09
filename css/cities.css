@@ -1,0 +1,165 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url("../images/bg.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+.joti-one-regular {
+    font-family: "Joti One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.josefin-sans {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+#header {
+    background-color: rgba(0, 0, 0, 0.4);
+    height: 12vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 6;
+}
+
+#left-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 12vh;
+}
+
+#left-nav a {
+    text-decoration: none;
+}
+
+#right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.logo-container {
+    width: 60px;
+    height: 60px;
+    background-color: black;
+    margin-left: 2vw;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    margin-left: 2vw;
+    font-family: "Joti One", serif;
+    font-size: 40px;
+}
+
+.user-profile {
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    background-color: red;
+    margin-right: 1vw;
+}
+
+#right-nav a {
+    text-decoration: none;
+    font-family: "Joti One", serif;
+    font-size: 30px;
+    color: white;
+    margin-right: 8vw;
+}
+
+#right-nav a:hover {
+    color: #929292;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.user-profile:hover {
+    cursor: pointer;
+}
+
+#search-container{
+    display: flex;
+    justify-content: center;
+}
+
+#search-bar{
+    background-color: white;
+    width: 32vw;
+    height: 6vh;
+    border-radius: 10px;
+    position: relative;
+    top: 15vh;
+    border: solid 4px black;
+    text-align: center;
+    font-size: 30px;
+    font-family: "Joti One", serif;
+}
+
+#packages{
+    width: 100vw;
+    height: 65vh;
+    position: fixed;
+    overflow: auto;
+    top: 30vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10vw;
+}
+
+#packages::-webkit-scrollbar{
+    display: none;
+}
+
+.card-image {
+    width: 100%;
+    height: 20vh;
+    max-height: 20vh;
+    border-radius: 16px 16px 0px 0px;
+}
+
+.card {
+    background-color: #f4f4f4;
+    border-radius: 20px;
+    width: 20vw;
+    min-height: 50vh;
+    text-align: center;
+    border: solid 4px black;
+}
+
+.card h2 {
+    font-size: 30px;
+    font-family: "Joti One", serif;
+}
+
+.card p {
+    font-size: 15px;
+    padding: 0px 10px 25px 10px;
+}
+
+.explore-btn{
+    width: 10vw;
+    height: 100vh;
+    background-color: black;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: "Joti One", serif;
+    padding: 10px 10px 10px 10px;
+}
