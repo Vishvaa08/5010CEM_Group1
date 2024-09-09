@@ -21,9 +21,7 @@
 
     $country = isset($_GET['country']) ? $_GET['country'] : '';
 
-    $reference = $database->getReference('Packages/')
-                            ->orderByChild('Country')
-                            ->equalTo($country);  
+    $reference = $database->getReference('Packages/' . $country);  
     $snapshot = $reference->getSnapshot();
     $data = $snapshot->getValue();
 
@@ -56,27 +54,26 @@
 
         <?php
         //
-        foreach ($data as $country => $cities) {
-            echo '<div class="card">';
+        foreach ($data as $city => $cityData) {
+            if (isset($cityData['City'])) {
+                echo '<div class="card">';
 
-            if (isset($cities['image'])) {
-                echo '<img src="' . ($cities['image']) . ' Image" class="card-image">';
+                if (isset($cityData['image'])) {
+                    echo '<img src="' . $cityData['image'] . '" class="card-image">';
+                }
+
+                echo '<h2>' . ucfirst($cityData['City']) . '</h2>';
+
+                if (isset($cityData['PackageDetail'])) {
+                    echo '<p>' . ($cityData['PackageDetail']) . '</p>';
+                } else {
+                    echo '<p>No details available</p>';
+                }
+
+                echo '<a href="citydetails.php?city=' . urlencode($city) . '" class="explore-btn">Explore More</a>';
+
+                echo '</div>';
             }
-
-            echo '<h2>' . ucfirst($country) . '</h2>';
-
-            if (isset($cities['PackageDetail'])) {
-                echo '<p>' . ($cities['PackageDetail']) . '</p>';
-            } else {
-                echo '<p>No details available</p>';
-            }
-
-            echo '<a href="cities.php?country=' . urlencode($country) . '" class="explore-btn">View More</a>';
-            /*
-            echo '<a href="' . strtolower($country) . '.php" class="explore-btn">Explore Now' . '</a>';
-            */
-
-            echo '</div>';
         }
         ?>
 
