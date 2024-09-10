@@ -70,7 +70,7 @@
                     echo '<p>No details available</p>';
                 }
 
-                echo '<a href="citydetails.php?city=' . urlencode($city) . '" class="explore-btn">Explore More</a>';
+                echo '<a href="citydetails.php?city=' . urlencode($city) . '&country=' . urlencode($country) . '" class="explore-btn">Explore More</a>';
 
                 echo '</div>';
             }
