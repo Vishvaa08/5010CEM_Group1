@@ -112,7 +112,41 @@
 
     </div>
 
-    <div id="hotels"></div>
+    <div id="hotels">
+
+        <div id="container2">
+
+                <?php
+
+                $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Hotels');
+                $snapshot = $reference->getSnapshot();
+                $dataHotels = $snapshot->getValue();
+
+                foreach ($dataHotels as $hotel => $hotelData) {
+                    if (isset($hotelData['Hotel'])) {
+                        echo '<div class="card">';
+
+                        if (isset($hotelData['Image'])) {
+                            echo '<div class="image-container">';
+                            echo '<img src="' . $hotelData['Image'] . '" class="card-image">';
+                            echo '</div>';
+                        }
+
+                        if (isset($hotelData['Hotel'])) {
+                            echo '<div class="content-container">';
+                            echo '<h2>' . ($hotelData['Hotel']) . '</h2>';
+                            echo '<p>' . ($hotelData['Description']) . '</p>';
+                            echo '</div>';
+                        }
+
+                        echo '</div>';
+                    }
+                }
+                ?>
+
+        </div>
+
+    </div>
 
     <script>
         function htl() {
