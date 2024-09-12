@@ -254,3 +254,18 @@ h1 {
     font-family: 'Joti One', serif;
     font-size: 12px;
 }
+
+.explore-btn{
+    width: 4vw;
+    height: 3vh;
+    background-color: black;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: "Joti One", serif;
+    padding: 10px 10px 10px 10px;
+    margin-right: 1vw;
+    margin-top: 22vh;
+}

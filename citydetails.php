@@ -139,6 +139,8 @@
                             echo '</div>';
                         }
 
+                        echo '<a href="booking.php?city=' . urlencode($city) . '&country=' . urlencode($country) . '&hotel=' . urlencode($hotel) . '" class="explore-btn">Book</a>';
+
                         echo '</div>';
                     }
                 }
