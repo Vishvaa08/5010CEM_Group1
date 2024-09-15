@@ -79,7 +79,9 @@ h1 {
     height: 75px;
     width: 75px;
     border-radius: 50%;
-    background-color: red;
+    background-image: url('../images/user.png');
+    background-size: cover;
+    background-position: center;
     margin-right: 1vw;
 }
 
@@ -101,171 +103,332 @@ h1 {
     cursor: pointer;
 }
 
-#city-name{
-    display: flex;
-    justify-content: center;
-    position: relative;
-    top: 17vh;
-}
-
-.name{
-    font-family: 'Joti One', serif;
-    font-size: 60px;
-    color: white;
-}
-
-#container{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+#header-image{
     width: 100vw;
-    height: 60vh;
+    height: 20vh;
     position: relative;
-    top: 18vh;
-}
-
-.slider{
-    background-color: #282828;
-    width: 70vw;
-    height: 58vh;
-    margin: 15px;
-    border-radius: 20px;
+    top: 14vh;
     overflow: hidden;
-    border: solid 5px black;
 }
 
-.slides {
-    display: flex;
-    width: 100%;
-    animation: slide 13s infinite;
-}
-
-.slide {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-@keyframes slide {
-    0% { transform: translateX(0); }
-    16.66% { transform: translateX(-100%); }
-    33.33% { transform: translateX(-200%); }
-    50% { transform: translateX(-200%); }
-    66.66% { transform: translateX(-100%); }
-    83.33% { transform: translateX(0); }
-    100% { transform: translateX(0); }
-}
-
-.content{
-    background-color: black;
-    width: 30vw;
-    height: 58vh;
-    margin: 15px;
-    border-radius: 20px;
-    border: solid 5px black;
-}
-
-.content h2, p{
-    color: white;
-    font-family: 'Joti One', serif;
-    font-size: 20px;
-    margin-left: 1vw;
-}
-
-.content h2{
-    text-decoration: underline;
-}
-
-.content .itinerary{
-    font-size: 20px;
-}
-
-#btn{
+#city-name-container{
+    width: 17vw;
+    height: 20vh;
+    float: right;
+    background-color: rgb(0, 0, 0, 0.9);
+    position: absolute;
+    right: 0;
+    top: 0;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
-.hotel-btn{
-    background-color: black;
+.banner-image {
+    width: 100%;
+    height: 20vh;
+    max-height: 20vh;
+}
+
+#header-image, h2{
     color: white;
-    width: 10vw;
-    height: 6vh;
-    margin-top: 20vh;
-    border: none;
-    border-radius: 10px;
     font-family: 'Joti One', serif;
-    font-size: 20px;
-    cursor: pointer;
+    font-size: 50px;
 }
 
-#hotels{
-    background-color: #282828;
-    height: 100vh;
+#itineraries-container{
     width: 100vw;
-}
-
-#container2{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100vw;
-    height: 72vh;
+    height: auto;
+    background-color: #353535;
     position: relative;
-    top: 18vh;
+    top: 12vh;
 }
 
-.card {
-    background-color: #626262;
-    border-radius: 20px;
-    width: 45vw;
-    height: 30vh;
-    min-height: 30vh;
-    max-height: 30vh;
-    text-align: center;
-    border: solid 4px black;
-    margin-bottom: 20px;
+h3{
+    color: white;
+    font-family: 'Joti One', serif;
+    font-size: 45px;
+    margin-left: 1vw;
+    margin-bottom: 2vh;
+}
+
+#itineraries-list{
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .card-image {
-    width: 12vw;
-    height: 12vw;
-    margin-left: 1vw;
-    border-radius: 10px;
-    border: 2px solid black;
-}
-
-.content-container{
     width: 100%;
-    margin-right: 1vw;
+    height: 20vh;
+    max-height: 20vh;
+    border-radius: 13px 13px 0px 0px;
 }
 
-.content-container h2{
+.card {
+    background-color: #f4f4f4;
+    border-radius: 20px;
+    width: 20vw;
+    min-height: 40vh;
+    max-height: 40vh;
+    text-align: center;
+    border: solid 6px black;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    margin-bottom: 4vh;
+    position: relative;
+}
+
+.card h2 {
+    font-size: 24px;
+    font-family: "Josefin Sans", sans-serif;
     color: black;
-    font-family: 'Joti One', serif;
-    font-size: 25px;
+    margin-top: 0;
+    padding: 1vw;
+    text-align: left;
+}
+
+.price{
+    font-size: 22px !important;
+    font-family: "Josefin Sans", sans-serif !important;
+    float: right;
+    margin-right: 1vw;
+    margin-bottom: 0;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+#hotel-container{
+    width: 100vw;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 20vh;
+}
+
+#left{
+    width: 40vw;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+#right{
+    width: 60vw;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+#name-card{
+    height: 80vh;
+    width: 20vw;
+    margin-right: 1vw;
+    position: relative;
+}
+
+#icon-card{
+    width: 45vw;
+    height: 12vh;
+    display: flex;
+    flex-direction: row;
+}
+
+.banner2-image {
+    width: 100%;
+    height: 100%;
+    max-width: 20vw;
+    max-height: 80vh;
+    border-radius: 20px;
+}
+
+#city-name-container2{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0, 0.6);
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    border-radius: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.city-letter {
+    display: block;
+    font-size: 60px;
+    font-family: "Joti One", serif;
+    margin: 0;
+    color: white;
+}
+
+#icon1,
+#icon2,
+#icon3,
+#icon4{
+    width: 8vw;
+    height: 12vh;
+    background-color: black;
+    border-radius: 15px;
+    margin: 0vw 1vw 0vw 1vw;
+    position: relative;
+    text-align: center;
+}
+
+.icon1-img img{
+    width: 50%;
+    height: 50%;
+    object-fit: cover;
+}
+
+#icon-title{
+    width: 8vw;
+    height: 4vh;
+    background-color: #D9D9D9;
+    border-radius: 0px 0px 15px 15px;
+    position: absolute;
+    bottom: 0;
+    font-family: "Josefin Sans", sans-serif;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#hotel-list{
+    width: 50vw;
+    height: auto;
+}
+
+.card-hotel{
+    width: 40vw;
+    height: 34vh;
+    background-color: #D9D9D9;
+    margin: 2vh 0vh 0vh 2vh;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.hotel-image-container{
+    width: 15vw;
+    height: 100%;
+    border-radius: 15px 0px 0px 15px;
+}
+
+.card-image-hotel{
+    width: 100%;
+    height: 100%;
+    border-radius: 15px 0px 0px 15px;
+}
+
+.hotel-content{
+    width: 25vw;
+    height: 100%;
+    background-color: #D9D9D9;
+    border-radius: 0px 15px 15px 0px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.hotel-name h2,
+.hotel-description h2,
+.room-remaining h2{
+    color: black;
+    font-family: "Josefin Sans", sans-serif;
+    font-size: 26px;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    margin-bottom: 0;
     text-decoration: underline;
 }
 
-.content-container p{
-    color: black;
-    font-family: 'Joti One', serif;
-    font-size: 12px;
+.hotel-description h2{
+    font-size: 14px;
+    text-decoration: none;
 }
 
-.explore-btn{
-    width: 4vw;
-    height: 3vh;
-    background-color: black;
-    border-radius: 5px;
-    border: none;
-    color: white;
-    cursor: pointer;
+.room-remaining h2{
+    font-size: 18px;
     text-decoration: none;
-    font-family: "Joti One", serif;
-    padding: 10px 10px 10px 10px;
+}
+
+.rooms-container{
+    width: 100%;
+    height: 7vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1vh;
+}
+
+.single,
+.double,
+.suite{
+    width: 6vw;
+    height: 7vh;
+    background-color: #484848;
     margin-right: 1vw;
-    margin-top: 22vh;
+    margin-left: 1vw;
+    border-radius: 5px;
+    position: relative;
+    color: white;
+    text-align: center;
+    padding-top: 10px;
+    font-size: 20px;
+}
+
+.single-text,
+.double-text,
+.suite-text{
+    width: 6vw;
+    height: 3vh;
+    background-color: #292929;
+    position: absolute;
+    bottom: 0;
+    border-radius: 0px 0px 5px 5px;
+    color: white;
+    text-align: center;
+}
+
+.price{
+    width: 6vw;
+    height: 4vh;
+    color: black;
+    font-family: "Josefin Sans", sans-serif;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 1vh;
+    text-align: center;
+}
+
+.btn {
+    width: 6vw;
+    height: 4vh;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    padding-top: 10px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 1vh;
+    margin-right: 1vw;
+    cursor: pointer;
+    font-family: "Joti One", serif;
+    text-decoration: none;
 }
