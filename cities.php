@@ -18,18 +18,13 @@
     <?php
 
     include 'firebase_connection.php';
-
-    $country = isset($_GET['country']) ? $_GET['country'] : '';
-
-    $reference = $database->getReference('Packages/' . $country);  
-    $snapshot = $reference->getSnapshot();
-    $data = $snapshot->getValue();
+    include 'firebase_data.php';
 
     ?>
 
     <div id="header">
         <div id="left-nav">
-            <a href="index.html">
+            <a href="index.php">
                 <div class="logo-container">
                     <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
                 </div>
@@ -38,9 +33,9 @@
         </div>
 
         <div id="right-nav">
-            <a class="nav-link" href="index.html#home">Home</a>
-            <a class="nav-link" href="index.html#about">About</a>
-            <a class="nav-link" href="index.html#contact">Contact</a>
+            <a class="nav-link" href="index.php#home">Home</a>
+            <a class="nav-link" href="index.php#about">About</a>
+            <a class="nav-link" href="index.php#contact">Contact</a>
             <div class="user-profile"></div>
         </div>
     </div>
@@ -54,20 +49,22 @@
 
         <?php
         //
-        foreach ($data as $city => $cityData) {
+        foreach ($dataCity as $city => $cityData) {
             if (isset($cityData['City'])) {
                 echo '<div class="card">';
 
-                if (isset($cityData['image'])) {
-                    echo '<img src="' . $cityData['image'] . '" class="card-image">';
+                if (isset($cityData['CityImage'])) {
+                    echo '<img src="' . $cityData['CityImage'] . '" class="card-image">';
+                } else {
+                    echo '<img src="images/error.jpg" class="card-image">';
                 }
 
                 echo '<h2>' . ucfirst($cityData['City']) . '</h2>';
 
-                if (isset($cityData['PackageDetail'])) {
-                    echo '<p>' . ($cityData['PackageDetail']) . '</p>';
+                if (isset($cityData['CityDetail'])) {
+                    echo '<p>' . ($cityData['CityDetail']) . '</p>';
                 } else {
-                    echo '<p>No details available</p>';
+                    echo '<p>No city details available...</p>';
                 }
 
                 echo '<a href="citydetails.php?city=' . urlencode($city) . '&country=' . urlencode($country) . '" class="explore-btn">Explore More</a>';
