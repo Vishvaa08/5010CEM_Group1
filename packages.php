@@ -18,16 +18,13 @@
     <?php
 
     include 'firebase_connection.php';
-
-    $reference = $database->getReference('Packages');
-    $snapshot = $reference->getSnapshot();
-    $data = $snapshot->getValue();
+    include 'firebase_data.php';
 
     ?>
 
     <div id="header">
         <div id="left-nav">
-            <a href="index.html">
+            <a href="index.php">
                 <div class="logo-container">
                     <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
                 </div>
@@ -36,9 +33,9 @@
         </div>
 
         <div id="right-nav">
-            <a class="nav-link" href="index.html#home">Home</a>
-            <a class="nav-link" href="index.html#about">About</a>
-            <a class="nav-link" href="index.html#contact">Contact</a>
+            <a class="nav-link" href="index.php#home">Home</a>
+            <a class="nav-link" href="index.php#about">About</a>
+            <a class="nav-link" href="index.php#contact">Contact</a>
             <div class="user-profile"></div>
         </div>
     </div>
@@ -55,22 +52,21 @@
         foreach ($data as $country => $cities) {
             echo '<div class="card">';
 
-            if (isset($cities['image'])) {
-                echo '<img src="' . ($cities['image']) . ' Image" class="card-image">';
+            if (isset($cities['CountryImage'])) {
+                echo '<img src="' . ($cities['CountryImage']) . ' Image" class="card-image">';
+            } else {
+                echo '<img src="images/error.jpg" class="card-image">';
             }
 
             echo '<h2>' . ucfirst($country) . '</h2>';
 
-            if (isset($cities['PackageDetail'])) {
-                echo '<p>' . ($cities['PackageDetail']) . '</p>';
+            if (isset($cities['CountryDetail'])) {
+                echo '<p>' . ($cities['CountryDetail']) . '</p>';
             } else {
-                echo '<p>No details available</p>';
+                echo '<p>No country details available...</p>';
             }
 
             echo '<a href="cities.php?country=' . urlencode($country) . '" class="explore-btn">Explore Now</a>';
-            /*
-            echo '<a href="' . strtolower($country) . '.php" class="explore-btn">Explore Now' . '</a>';
-            */
 
             echo '</div>';
         }
