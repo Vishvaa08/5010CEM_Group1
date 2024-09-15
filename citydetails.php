@@ -18,145 +18,212 @@
     <?php
 
     include 'firebase_connection.php';
-
-    $city = isset($_GET['city']) ? $_GET['city'] : '';
-    $country = isset($_GET['country']) ? $_GET['country'] : '';
-
-    $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Images');
-    $snapshot = $reference->getSnapshot();
-    $data = $snapshot->getValue();
+    include 'firebase_data.php';
 
     ?>
 
-    <div id="itinerary-details">
-
-        <div id="header">
-            <div id="left-nav">
-                <a href="index.html">
-                    <div class="logo-container">
-                        <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
-                    </div>
-                </a>
-                <h1>TravelTrail</h1>
-            </div>
-
-            <div id="right-nav">
-                <a class="nav-link" href="index.html#home">Home</a>
-                <a class="nav-link" href="index.html#about">About</a>
-                <a class="nav-link" href="index.html#contact">Contact</a>
-                <div class="user-profile"></div>
-            </div>
+    <div id="header">
+        <div id="left-nav">
+            <a href="index.php">
+                <div class="logo-container">
+                    <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
+                </div>
+            </a>
+            <h1>TravelTrail</h1>
         </div>
 
-        <div id="city-name">
-
-            <div class="name"><?php echo $city; ?></div>
-
+        <div id="right-nav">
+            <a class="nav-link" href="index.php#home">Home</a>
+            <a class="nav-link" href="index.php#about">About</a>
+            <a class="nav-link" href="index.php#contact">Contact</a>
+            <div class="user-profile"></div>
         </div>
+    </div>
 
-        <div id="container">
+    <div id="header-image">
 
-            <div class="slider">
+        <?php
 
-                <?php
+        if (isset($dataCityImages['Banner'])) {
+            echo '<img src="' . ($dataCityImages['Banner']) . ' Image" class="banner-image">';
+        } else {
+            echo '<img src="images/error.jpg" class="banner-image">';
+        }
 
-                if (isset($data['Image1']) && isset($data['Image2']) && isset($data['Image3'])) {
-                    echo '<div class="slides">';
-                    echo '<img src="' . $data['Image1'] . '" class="slide">';
-                    echo '<img src="' . $data['Image2'] . '" class="slide">';
-                    echo '<img src="' . $data['Image3'] . '" class="slide">';
-                    echo '</div>';
+        ?>
+
+        <div id="city-name-container">
+            <?php echo $city ?>
+        </div>
+    </div>
+
+    <div id="itineraries-container">
+        <h3>Things To Do :</h3>
+
+        <div id="itineraries-list">
+
+            <?php
+
+            foreach ($dataCityItinerary as $city => $cities) {
+
+                if (empty($cities)) {
+                    continue;
                 }
-                ?>
 
-            </div>
-            <div class="content">
+                echo '<div class="card">';
 
-                <h2>Itinerary</h2>
-                <p>Day 1 :</p>
-                <p>
-                    <?php
+                if (isset($cities['ItineraryImage'])) {
+                    echo '<img src="' . ($cities['ItineraryImage']) . ' Image" class="card-image">';
+                } else {
+                    echo '<img src="images/error.jpg" class="card-image">';
+                }
 
-                    $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Itinerary');
-                    $snapshot = $reference->getSnapshot();
-                    $dataNew = $snapshot->getValue();
+                if (isset($cities['Itinerary'])) {
+                    echo '<h2 class="title">' . ($cities['Itinerary']) . '</h2>';
+                } else {
+                    echo '<h2 class="title">No country details available...</h2>';
+                }
 
-                    if (isset($dataNew['Itinerary1'])) {
-                        echo '<p class="itinerary">- ' . $dataNew['Itinerary1'] . '</p>';
-                    }
-                    if (isset($dataNew['Itinerary2'])) {
-                        echo '<p class="itinerary">- ' . $dataNew['Itinerary2'] . '</p><br>';
-                    }
-                    ?>
-                </p>
+                if (isset($cities['ItineraryPrice'])) {
+                    echo '<h2 class="price"> RM' . ($cities['ItineraryPrice']) . '</h2>';
+                } else {
+                    echo '<h2 class="price">XX</h2>';
+                }
 
-                <p>Day 2 :</p>
-                <p>
-                    <?php
-                    if (isset($dataNew['Itinerary3'])) {
-                        echo '<p class="itinerary">- ' . $dataNew['Itinerary3'] . '</p>';
-                    }
-                    if (isset($dataNew['Itinerary4'])) {
-                        echo '<p class="itinerary">- ' . $dataNew['Itinerary4'] . '</p>';
-                    }
-                    ?>
-                </p>
+                echo '</div>';
+            }
+            ?>
 
-            </div>
-
-        </div>
-
-        <div id="btn">
-            <button class="hotel-btn" onclick="htl()">Hotels</button>
         </div>
 
     </div>
 
-    <div id="hotels">
+    <div id="hotel-container">
 
-        <div id="container2">
+        <div id="left">
+            <div id="name-card">
 
                 <?php
 
-                $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Hotels');
-                $snapshot = $reference->getSnapshot();
-                $dataHotels = $snapshot->getValue();
+                if (isset($dataCityImages['Banner2'])) {
+                    echo '<img src="' . ($dataCityImages['Banner2']) . ' Image" class="banner2-image">';
+                } else {
+                    echo '<img src="images/error.jpg" class="banner2-image">';
+                }
+
+                ?>
+
+                <div id="city-name-container2">
+
+                    <?php
+                    $city = htmlspecialchars($_GET['city']);
+                    $city = strtoupper($city);
+                    $cityArray = str_split($city);
+                    ?>
+
+                    <?php foreach ($cityArray as $letter): ?>
+                        <div class="city-letter"><?php echo $letter; ?></div>
+                    <?php endforeach; ?>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div id="right">
+            <div id="icon-card">
+
+                <div id="icon1">
+                    <div class="icon1-img"><img src="images/cheap.png"></div>
+                    <div id="icon-title">Cheap</div>
+                </div>
+                <div id="icon2">
+                    <div class="icon1-img"><img src="images/quick.png"></div>
+                    <div id="icon-title">Quick</div>
+                </div>
+                <div id="icon3">
+                    <div class="icon1-img"><img src="images/cozy.png"></div>
+                    <div id="icon-title">Cozy</div>
+                </div>
+                <div id="icon4">
+                    <div class="icon1-img"><img src="images/modern.png"></div>
+                    <div id="icon-title">Modern</div>
+                </div>
+
+            </div>
+            <div id="hotel-list">
+
+                <?php
 
                 foreach ($dataHotels as $hotel => $hotelData) {
                     if (isset($hotelData['Hotel'])) {
-                        echo '<div class="card">';
+                        echo '<div class="card-hotel">';
+                        echo '<div class="hotel-image-container">';
 
                         if (isset($hotelData['Image'])) {
-                            echo '<div class="image-container">';
-                            echo '<img src="' . $hotelData['Image'] . '" class="card-image">';
-                            echo '</div>';
+                            echo '<img src="' . $hotelData['Image'] . '" class="card-image-hotel">';
                         }
+
+                        echo '</div>';
+                        echo '<div class="hotel-content">';
+
+                        echo '<div class="hotel-name">';
 
                         if (isset($hotelData['Hotel'])) {
-                            echo '<div class="content-container">';
-                            echo '<h2>' . ($hotelData['Hotel']) . '</h2>';
-                            echo '<p>' . ($hotelData['Description']) . '</p>';
-                            echo '</div>';
+                            echo '<h2>' . $hotelData['Hotel'] . '</h2>';
                         }
 
-                        echo '<a href="booking.php?city=' . urlencode($city) . '&country=' . urlencode($country) . '&hotel=' . urlencode($hotel) . '" class="explore-btn">Book</a>';
+                        echo '</div>';
+                        echo '<div class="hotel-description">';
 
+                        if (isset($hotelData['Description'])) {
+                            echo '<h2>' . $hotelData['Description'] . '</h2>';
+                        }
+
+                        echo '</div>';
+                        echo '<div class="room-remaining"><h2>Rooms Remaining :</h2></div>';
+                        echo '<div class="rooms-container">';
+
+                        echo '<div class="single">';
+                        if (isset($hotelData['Rooms']['Single'])) {
+                            $singleRoomAvailability = $hotelData['Rooms']['Single']['Availability'];
+                            echo '<div class="single-text">Single</div>';
+                            echo '<div>' . $singleRoomAvailability . '</div>';
+                        }
+                        echo '</div>';
+
+                        echo '<div class="double">';
+                        if (isset($hotelData['Rooms']['Double'])) {
+                            $doubleRoomAvailability = $hotelData['Rooms']['Double']['Availability'];
+                            echo '<div class="double-text">Double</div>';
+                            echo '<div>' . $doubleRoomAvailability . '</div>';
+                        }
+                        echo '</div>';
+
+                        echo '<div class="suite">';
+                        if (isset($hotelData['Rooms']['Suite'])) {
+                            $suiteRoomAvailability = $hotelData['Rooms']['Suite']['Availability'];
+                            echo '<div class="suite-text">Suite</div>';
+                            echo '<div>' . $suiteRoomAvailability . '</div>';
+                        }
+                        echo '</div>';
+
+                        echo '</div>';
+
+                        echo '<div class="price">RM' . $hotelData['CheapestRoom'] . '</div>';
+
+                        echo '<a href="booking.php?city=' . urlencode($city) . '&country=' . urlencode($country) . '&hotel=' . urlencode($hotel) . '" class="btn">Book</a>';
+
+                        echo '</div>';
                         echo '</div>';
                     }
                 }
                 ?>
 
+            </div>
         </div>
 
     </div>
-
-    <script>
-        function htl() {
-            document.getElementById('hotels').scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
-    </script>
 
 </body>
 
