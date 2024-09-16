@@ -212,7 +212,7 @@
 
                         echo '<div class="price">RM' . $hotelData['CheapestRoom'] . '</div>';
 
-                        echo '<a href="booking.php?city=' . urlencode($city) . '&country=' . urlencode($country) . '&hotel=' . urlencode($hotel) . '" class="btn">Book</a>';
+                        echo '<a href="booking.php?city=' . urlencode(ucfirst(strtolower($city))) . '&country=' . urlencode($country) . '&hotel=' . urlencode($hotel) . '&single=' . urlencode($singleRoomAvailability) . '&double=' . urlencode($doubleRoomAvailability) . '&suite=' . urlencode($suiteRoomAvailability) .'" class="btn">Book</a>';
 
                         echo '</div>';
                         echo '</div>';

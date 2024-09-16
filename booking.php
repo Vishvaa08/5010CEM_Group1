@@ -18,10 +18,7 @@
     <?php
 
     include 'firebase_connection.php';
-
-    $city = isset($_GET['city']) ? $_GET['city'] : '';
-    $country = isset($_GET['country']) ? $_GET['country'] : '';
-    $hotel = isset($_GET['hotel']) ? $_GET['hotel'] : '';
+    include 'firebase_data.php';
 
     $reference = $database->getReference('Packages/' . $country . '/' . $city);
     $snapshot = $reference->getSnapshot();
@@ -43,7 +40,7 @@
 
     <div id="header">
         <div id="left-nav">
-            <a href="index.html">
+            <a href="index.php">
                 <div class="logo-container">
                     <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
                 </div>
@@ -52,105 +49,199 @@
         </div>
 
         <div id="right-nav">
-            <a class="nav-link" href="index.html#home">Home</a>
-            <a class="nav-link" href="index.html#about">About</a>
-            <a class="nav-link" href="index.html#contact">Contact</a>
+            <a class="nav-link" href="index.php#home">Home</a>
+            <a class="nav-link" href="index.php#about">About</a>
+            <a class="nav-link" href="index.php#contact">Contact</a>
             <div class="user-profile"></div>
         </div>
     </div>
 
-    <div id="form-container">
+    <div id="form-background">
+        <div id="form-container">
+            <div id="banner">
 
-        <div class="container1">
+                <?php
 
-            <p class="title"><?php echo $city ?></p>
-            <p class="sub-title">Select your Itineraries :</p>
+                if (isset($dataCityImages['Banner2'])) {
+                    echo '<img src="' . ($dataCityImages['Banner2']) . ' Image" class="banner2-image">';
+                } else {
+                    echo '<img src="images/error.jpg" class="banner2-image">';
+                }
 
-            <label class="labels">
-                <input type="checkbox" name="Itinerary1" value="Itinerary1">
-                <?php if (isset($dataItinerary['Itinerary1'])) {
-                    echo $dataItinerary['Itinerary1'];
-                } ?>
-            </label>
-            <label class="labels">
-                <input type="checkbox" name="Itinerary2" value="Itinerary2">
-                <?php if (isset($dataItinerary['Itinerary2'])) {
-                    echo $dataItinerary['Itinerary2'];
-                } ?>
-            </label>
-            <label class="labels">
-                <input type="checkbox" name="Itinerary3" value="Itinerary3">
-                <?php if (isset($dataItinerary['Itinerary3'])) {
-                    echo $dataItinerary['Itinerary3'];
-                } ?>
-            </label>
-            <label class="labels">
-                <input type="checkbox" name="Itinerary4" value="Itinerary4">
-                <?php if (isset($dataItinerary['Itinerary4'])) {
-                    echo $dataItinerary['Itinerary4'];
-                } ?>
-            </label>
+                ?>
 
-            <p class="vehicle">Vehicle</p>
-            <p class="vehicle-select">Select your vehicle type :</p>
+                <div id="opacity">
 
-            <label class="vehicles">
-                <input type="radio" name="vehicle" value="4-Seater">
-                <?php if (isset($dataVehicle['Type1'])) {
-                    echo $dataVehicle['Type1'];
-                } ?>
-            </label>
+                    <?php
+                    $caps = strtoupper($city);
+                    echo '<h2 class="city-name">' . $caps . '</h2>';
+                    ?>
 
-            <label class="vehicles">
-                <input type="radio" name="vehicle" value="7-Seater">
-                <?php if (isset($dataVehicle['Type2'])) {
-                    echo $dataVehicle['Type2'];
-                } ?>
-            </label>
+                </div>
 
-            <label class="vehicles">
-                <input type="radio" name="vehicle" value="Van">
-                <?php if (isset($dataVehicle['Type3'])) {
-                    echo $dataVehicle['Type3'];
-                } ?>
-            </label>
+            </div>
+            <div id="content">
 
+                <h1>Itineraries :</h1>
+                <?php
+                echo '<div class="checkbox-container">';
+                foreach ($dataCityItinerary as $key => $itinerary) {
+                    if (isset($itinerary['Itinerary']) && isset($itinerary['ItineraryPrice'])) {
+                        echo '<label>';
+                        echo '<input type="checkbox" class="itinerary-checkbox" data-price="' . ($itinerary['ItineraryPrice']) . '" value="' . ($itinerary['Itinerary']) . '">';
+                        echo ($itinerary['Itinerary']) . ' - RM' . ($itinerary['ItineraryPrice']);
+                        echo '</label>';
+                    }
+                }
+                echo '</div>';
+                ?>
+
+                <hr>
+
+                <h1>Vehicle :</h1>
+                <label class="vehicles">
+                    <input type="radio" name="vehicle" value="4-Seater">
+                    <?php if (isset($dataVehicle['Type1'])) {
+                        echo $dataVehicle['Type1'];
+                    } ?>
+                </label>
+
+                <label class="vehicles">
+                    <input type="radio" name="vehicle" value="7-Seater">
+                    <?php if (isset($dataVehicle['Type2'])) {
+                        echo $dataVehicle['Type2'];
+                    } ?>
+                </label>
+
+                <label class="vehicles">
+                    <input type="radio" name="vehicle" value="Van">
+                    <?php if (isset($dataVehicle['Type3'])) {
+                        echo $dataVehicle['Type3'];
+                    } ?>
+                </label>
+
+                <hr>
+
+                <h1><?php if (isset($dataHotel['Hotel'])) {
+                        echo $dataHotel['Hotel'];
+                    } ?></p>
+                </h1>
+
+                <label>
+                    <input type="radio" name="room" value="Single"
+                        <?php echo ($single == 0) ? 'disabled' : ''; ?>>
+                    Single Room
+                </label>
+                <label>
+                    <input type="radio" name="room" value="Double"
+                        <?php echo ($double == 0) ? 'disabled' : ''; ?>>
+                    Double Room
+                </label>
+                <label>
+                    <input type="radio" name="room" value="Suite"
+                        <?php echo ($suite == 0) ? 'disabled' : ''; ?>>
+                    Suite Room
+                </label>
+
+                <div id="calendar-top">
+                    <div id="left">Check In</div>
+                    <div id="right">Check Out</div>
+                </div>
+                <div id="calendar-bottom">
+                    <div id="left"><input type="date" value="check-in-date"></div>
+                    <div id="right"><input type="date" value="check-in-date"></div>
+                </div>
+
+                <hr>
+
+                <h1>Flight :</h1>
+                <?php
+                $flightClasses = ['Economy', 'Business', 'First Class'];
+
+                foreach ($flightClasses as $class) {
+                    $seatsAvailable = isset($dataFlights[$class]['Seats']) ? $dataFlights[$class]['Seats'] : 0;
+                    $disabled = $seatsAvailable == 0 ? 'disabled' : '';
+                    echo '<label>';
+                    echo '<input type="radio" name="flight" value="' . $class . '" ' . $disabled . '>';
+                    echo $class . ' - Seats Available: ' . $seatsAvailable;
+                    echo '</label>';
+                }
+                ?>
+
+                <h1>Tickets :</h1>
+                <label class="ticket">
+                    <input type="radio" name="ticket" value="1">1-Way
+                </label>
+
+                <label class="ticket">
+                    <input type="radio" name="ticket" value="2">2-Way
+                </label>
+
+                <p class="seats">Number of seats : <input type="number" id="tickets" name="tickets" min="1" max="10" value="1" class="ticket-input"></p>
+
+                <hr>
+
+                <h1>Payment Methods :</h1>
+                <div id="payments">
+                    <div id="pay-left">
+                        <a href="card-payment.php" class="card">Card</a>
+                    </div>
+                    <div id="pay-right">
+                        <button class="bank-btn" id="bank-btn">Bank</button>
+                    </div>
+                </div>
+                <div id="bank-options" style="display: none;">
+                    <h2>Select Bank:</h2>
+                        <label class="bank-label">
+                            <input type="radio" name="bank" value="bank1">
+                            <img src="images/pbe.jpg" style="width: 3vh; height:3vh">
+                            Public Bank
+                        </label>
+                        <label class="bank-label">
+                            <input type="radio" name="bank" value="bank2">
+                            <img src="images/m2u.jpg" style="width: 3vh; height:3vh">
+                            Maybank2u
+                        </label>
+
+                        <div id="pay"><button class="pay" id="pay-btn">Payment</button></div>
+                </div>
+
+            </div>
         </div>
-        <div class="container2">
-
-            <p class="hotel-name"><?php if (isset($dataHotel['Hotel'])) {
-                                        echo $dataHotel['Hotel'];
-                                    } ?></p>
-            <p class="hotel-select">Select your room type :</p>
-
-            <label class="hotels">
-                <input type="radio" name="room" value="Single">Single
-            </label>
-
-            <label class="hotels">
-                <input type="radio" name="room" value="Double">Double
-            </label>
-
-            <label class="hotels">
-                <input type="radio" name="room" value="Suite">Suite
-            </label>
-
-            <br>
-            <br>
-            <br>
-
-            <label for="check-in" class="date-picker">Check In :</label>
-            <input type="date" class="date-picker">
-
-            <br>
-
-            <label for="check-in" class="date-picker">Check Out :</label>
-            <input type="date" class="date-picker">
-
-        </div>
-        <div class="container3"></div>
-
     </div>
+
+    <div id="footer"></div>
+
+    <script>
+        document.getElementById('bank-btn').addEventListener('click', function() {
+            var bankOptions = document.getElementById('bank-options');
+            if (bankOptions.style.display === 'none') {
+                bankOptions.style.display = 'block';
+                bankOptions.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            } else {
+                bankOptions.style.display = 'none';
+            }
+        });
+
+        document.getElementById('pay-btn').addEventListener('click', function() {
+        const selectedBank = document.querySelector('input[name="bank"]:checked');
+
+        if (selectedBank) {
+            const bankValue = selectedBank.value;
+
+            if (bankValue === 'bank1') {
+                window.location.href = 'pbe.php';
+            } else if (bankValue === 'bank2') {
+                window.location.href = 'm2u.php';
+            }
+        } else {
+            alert('Please select a bank before proceeding.');
+        }
+    });
+    </script>
 
 </body>
 
