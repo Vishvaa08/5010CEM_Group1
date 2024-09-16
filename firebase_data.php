@@ -1,18 +1,25 @@
 <?php
+
+$country = isset($_GET['country']) ? $_GET['country'] : '';
+$city = isset($_GET['city']) ? $_GET['city'] : '';
+$hotel = isset($_GET['hotel']) ? $_GET['hotel'] : '';
+
+$single = isset($_GET['single']) ? $_GET['single'] : '';
+$double = isset($_GET['double']) ? $_GET['double'] : '';
+$suite = isset($_GET['suite']) ? $_GET['suite'] : '';
+
 //data for all countries under Packages
 $reference = $database->getReference('Packages');
 $snapshot = $reference->getSnapshot();
 $data = $snapshot->getValue();
 
 //data for all cities under each country
-$country = isset($_GET['country']) ? $_GET['country'] : '';
 
 $reference = $database->getReference('Packages/' . $country);  
 $snapshot = $reference->getSnapshot();
 $dataCity = $snapshot->getValue();
 
 //data for all city images
-$city = isset($_GET['city']) ? $_GET['city'] : '';
 
 $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Images');  
 $snapshot = $reference->getSnapshot();
@@ -27,4 +34,9 @@ $dataCityItinerary = $snapshot->getValue();
 $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Hotels');  
 $snapshot = $reference->getSnapshot();
 $dataHotels = $snapshot->getValue();
+
+//data for city flights
+$reference = $database->getReference('Packages/' . $country . '/' . $city . '/Flights');  
+$snapshot = $reference->getSnapshot();
+$dataFlights = $snapshot->getValue();
 ?>
