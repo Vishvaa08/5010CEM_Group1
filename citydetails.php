@@ -85,9 +85,9 @@
                 }
 
                 if (isset($cities['ItineraryPrice'])) {
-                    echo '<h2 class="price"> RM' . ($cities['ItineraryPrice']) . '</h2>';
+                    echo '<h2 class="price-iti"> RM' . ($cities['ItineraryPrice']) . '</h2>';
                 } else {
-                    echo '<h2 class="price">XX</h2>';
+                    echo '<h2 class="price-iti">XX</h2>';
                 }
 
                 echo '</div>';
@@ -220,6 +220,41 @@
                 }
                 ?>
 
+            </div>
+        </div>
+
+    </div>
+    <div id="footer">
+
+        <div id="top">Why TravelTrail?</div>
+
+        <div id="bottom">
+            <div id="bot1">
+                <div id="bot-left">
+                    <div class="bot-icon"><img src="images/travel.png"></div>
+                </div>
+                <div id="bot-right">
+                    <div class="bot-top-title">Customised Travel Packages</div>
+                    <div class="bot-bot-subtitle">At TravelTrail, we offer fully customisable travel packages that cater to your preferences.</div>
+                </div>
+            </div>
+            <div id="bot2">
+            <div id="bot-left">
+                    <div class="bot-icon"><img src="images/travel-luggage.png"></div>
+                </div>
+                <div id="bot-right2">
+                    <div class="bot-top-title2">Hassle-Free Booking</div>
+                    <div class="bot-bot-subtitle2">Simple and fast booking process from start to finish.</div>
+                </div>
+            </div>
+            <div id="bot3">
+            <div id="bot-left">
+                    <div class="bot-icon"><img src="images/destination.png"></div>
+                </div>
+                <div id="bot-right">
+                    <div class="bot-top-title">Adventure & Relaxation</div>
+                    <div class="bot-bot-subtitle">Whether you're looking for excitement or calm, we've got options for every type of traveler.</div>
+                </div>
             </div>
         </div>
 

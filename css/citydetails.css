@@ -188,7 +188,7 @@ h3{
     text-align: left;
 }
 
-.price{
+.price-iti{
     font-size: 22px !important;
     font-family: "Josefin Sans", sans-serif !important;
     float: right;
@@ -205,7 +205,6 @@ h3{
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
     position: relative;
     top: 20vh;
 }
@@ -214,13 +213,12 @@ h3{
     width: 40vw;
     height: auto;
     display: flex;
-    align-items: center;
     justify-content: flex-end;
 }
 
 #right{
     width: 60vw;
-    height: 80vh;
+    height: auto;
     display: flex;
     justify-content: center;
     justify-content: flex-start;
@@ -404,6 +402,7 @@ h3{
 }
 
 .price{
+    font-size: 22px;
     width: 6vw;
     height: 4vh;
     color: black;
@@ -431,4 +430,105 @@ h3{
     cursor: pointer;
     font-family: "Joti One", serif;
     text-decoration: none;
+}
+
+#footer{
+    width: 100vw;
+    height: 30vh;
+    margin-top: 25vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #353535;
+}
+
+#top{
+    width: 100vw;
+    height: 11vh;
+    color: white;
+    font-size: 40px;
+    font-family: 'Joti One', serif;
+    text-align: center;
+}
+
+#bottom{
+    width: 100vw;
+    height: 19vh;
+    display: flex;
+    flex-direction: row;
+}
+
+#bot1,
+#bot2,
+#bot3{
+    width: 33vw;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+#bot2{
+    width: 34vw;
+}
+
+#bot-left{
+    width: 7vw;
+    height: 7vw;
+}
+
+#bot-right{
+    width: 26vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#bot-right2{
+    width: 27vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.bot-top-title{
+    width: 25vw;
+    height: 4vh;
+    color: white;
+    font-size: 20px;
+    font-family: "Joti One", serif;
+    text-decoration: underline;
+    padding-left: 1vw;
+}
+
+.bot-top-title2{
+    width: 26vw;
+    height: 4vh;
+    color: white;
+    font-size: 20px;
+    font-family: "Joti One", serif;
+    text-decoration: underline;
+    padding-left: 1vw;
+}
+
+.bot-bot-subtitle{
+    width: 25vw;
+    height: 9vh;
+    color: white;
+    font-size: 16px;
+    font-family: "Josefin Sans", sans-serif;
+    padding-top: 2vh;
+    padding-left: 1vw;
+}
+
+.bot-bot-subtitle2{
+    width: 26vw;
+    height: 9vh;
+    color: white;
+    font-size: 16px;
+    font-family: "Josefin Sans", sans-serif;
+    padding-top: 2vh;
+    padding-left: 1vw;
+}
+
+#bot-left img{
+    width: 7vw;
+    height: 7vw;
 }
