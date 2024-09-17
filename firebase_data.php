@@ -14,13 +14,11 @@ $snapshot = $reference->getSnapshot();
 $data = $snapshot->getValue();
 
 //data for all cities under each country
-
 $reference = $database->getReference('Packages/' . $country);  
 $snapshot = $reference->getSnapshot();
 $dataCity = $snapshot->getValue();
 
 //data for all city images
-
 $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Images');  
 $snapshot = $reference->getSnapshot();
 $dataCityImages = $snapshot->getValue();
@@ -35,8 +33,18 @@ $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Ho
 $snapshot = $reference->getSnapshot();
 $dataHotels = $snapshot->getValue();
 
+//data for vehicles
+$reference = $database->getReference('Packages/' . $country . '/' . $city . '/Vehicle');
+$snapshot = $reference->getSnapshot();
+$dataVehicle = $snapshot->getValue();
+
 //data for city flights
 $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Flights');  
 $snapshot = $reference->getSnapshot();
 $dataFlights = $snapshot->getValue();
+
+//data for hotel name
+$reference = $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotel);
+$snapshot = $reference->getSnapshot();
+$dataHotel = $snapshot->getValue();
 ?>

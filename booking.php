@@ -20,22 +20,6 @@
     include 'firebase_connection.php';
     include 'firebase_data.php';
 
-    $reference = $database->getReference('Packages/' . $country . '/' . $city);
-    $snapshot = $reference->getSnapshot();
-    $data = $snapshot->getValue();
-
-    $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Itinerary');
-    $snapshot = $reference->getSnapshot();
-    $dataItinerary = $snapshot->getValue();
-
-    $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Vehicle');
-    $snapshot = $reference->getSnapshot();
-    $dataVehicle = $snapshot->getValue();
-
-    $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotel);
-    $snapshot = $reference->getSnapshot();
-    $dataHotel = $snapshot->getValue();
-
     ?>
 
     <div id="header">
@@ -184,7 +168,9 @@
                 <h1>Payment Methods :</h1>
                 <div id="payments">
                     <div id="pay-left">
-                        <a href="card-payment.php" class="card">Card</a>
+                        <?php
+                        echo '<a href="card-payment.php?city=' . urlencode(ucfirst(strtolower($city))) .'" class="card">Card</a>';
+                        ?>
                     </div>
                     <div id="pay-right">
                         <button class="bank-btn" id="bank-btn">Bank</button>
@@ -238,7 +224,7 @@
                 window.location.href = 'm2u.php';
             }
         } else {
-            alert('Please select a bank before proceeding.');
+            alert('Please select a bank first!');
         }
     });
     </script>

@@ -279,6 +279,7 @@ input[type="date"]{
     margin-top: 20px;
     margin-left: 4vw;
     font-family: 'Josefin Sans', sans-serif;
+    padding-bottom: 5vh;
 }
 
 #bank-options label {
@@ -289,7 +290,7 @@ input[type="date"]{
 #footer{
     width: 100vw;
     height: 20vh;
-    margin-top: 200vh;
+    margin-top: 220vh;
 }
 
 .bank-label{
@@ -306,4 +307,7 @@ input[type="date"]{
     border: none;
     width: 10vw;
     height: 5vh;
+    font-family: 'Joti One', serif;
+    margin-left: 13vw;
+    cursor: pointer;
 }

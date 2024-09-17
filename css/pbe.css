@@ -1,0 +1,229 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #282828;
+    height: 100vh;
+}
+
+.joti-one-regular {
+    font-family: "Joti One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.josefin-sans {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+::-webkit-scrollbar{
+    display: none;
+}
+
+#header {
+    background-color: #161616;
+    height: 12vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 6;
+}
+
+#left-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 12vh;
+}
+
+#left-nav a {
+    text-decoration: none;
+}
+
+#right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.logo-container {
+    width: 60px;
+    height: 60px;
+    background-color: black;
+    margin-left: 2vw;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    margin-left: 2vw;
+    font-family: "Joti One", serif;
+    font-size: 40px;
+    color: white;
+}
+
+.user-profile {
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    background-image: url('../images/user.png');
+    background-position: center;
+    background-size: cover;
+    margin-right: 1vw;
+}
+
+#right-nav a {
+    text-decoration: none;
+    font-family: "Joti One", serif;
+    font-size: 30px;
+    color: white;
+    margin-right: 8vw;
+}
+
+#right-nav a:hover {
+    color: #929292;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.user-profile:hover {
+    cursor: pointer;
+}
+
+#pbe-container-bg{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#pbe-container{
+    width: 38vw;
+    height: 62vh;
+    background-color: white;
+}
+
+#top{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 10vh;
+}
+
+.logo-pbe{
+    width: 5vw;
+    height: 100%;
+}
+
+.logo-pbe img{
+    width: 100%;
+    height: 100%;
+}
+
+.pbe-title{
+    width: 18vw;
+    display: flex;
+    align-items: center;
+}
+
+.text-text{
+    font-family: 'Joti One', serif;
+    font-size: 31px;
+    color: red;
+    padding-left: 1vw;
+}
+
+.text-price{
+    width: 15vw;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.text-text2{
+    font-size: 28px;
+    font-family: 'Joti One', serif;
+    padding-right: 1vw;
+}
+
+#content{
+    width: 100%;
+    height: 56vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#text-title{
+    width: 34vw;
+    height: 7vh;
+}
+
+#text-title2{
+    width: 34vw;
+    height: 7vh;
+}
+
+.text-recipient{
+    display: flex;
+    align-items: center;
+}
+
+.recipient{
+    font-family: 'Joti One', serif;
+    font-size: 28px;
+    padding-left: 1vh;
+    margin-top: 2vh;
+}
+
+.recipient-input{
+    width: 32vw;
+    height: 6vh;
+    border: none;
+    border-radius: 10px;
+    padding-left: 1vw;
+    background-color: #929292;
+}
+
+.recipient-input::placeholder{
+    color: black;
+}
+
+#bg{
+    width: 33vw;
+    height: 7vh;
+    border-radius: 10px;
+    background-color: #929292;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload{
+    padding-left: 2vw;
+}
+
+#btn-container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.confirm-btn{
+    width: 7vw;
+    height: 5vh;
+    color: white;
+    font-family: 'Joti One', serif;
+    border-radius: 10px;
+    background-color: black;
+    border: none;
+    margin-top: 2vh;
+}
