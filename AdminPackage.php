@@ -17,11 +17,27 @@ include 'firebase_data.php';
 if (isset($_POST['submit'])) {
     $countryName = $_POST['countryName'];
     $countryImage = $_FILES['countryImage']['name'];
+    $tempImagePath = $_FILES['countryImage']['tmp_name'];
+
+    $bucket = $storage->getBucket(); 
     
-    move_uploaded_file($_FILES['countryImage']['tmp_name'], 'images/' . $countryImage);
+    $filePath = $countryImage; 
+
+    $bucket->upload(
+        fopen($tempImagePath, 'r'),
+        [
+            'name' => $filePath 
+        ]
+    );
+
+    $bucketName = 'traveltrail-39e23.appspot.com'; 
+    $imageUrl = sprintf('https://firebasestorage.googleapis.com/v0/b/%s/o/%s?alt=media', 
+        $bucketName, 
+        urlencode($filePath) 
+    );
 
     $postData = [
-        'CountryImage' => 'images/' . $countryImage
+        'CountryImage' => $imageUrl 
     ];
 
     $database->getReference('Packages/' . $countryName)->set($postData);
@@ -32,7 +48,6 @@ if (isset($_POST['submit'])) {
 
 </head>
 <body>
-
 
     <div class="sidebar">
         <div class="sidebar-header">
