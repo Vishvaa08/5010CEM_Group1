@@ -1,0 +1,63 @@
+name: Tests
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/tests.yml'
+      - 'composer.json'
+  push:
+    branches: ['5.x']
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/tests.yml'
+      - 'composer.json'
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: "PHP ${{ matrix.php }}, ${{ matrix.dependencies }} deps"
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php:
+          - "8.1"
+          - "8.2"
+          - "8.3"
+        dependencies:
+          - "lowest"
+          - "highest"
+        include:
+          - php: "8.4"
+            composer-options: "--ignore-platform-reqs"
+            dependencies: "highest"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer, pecl
+          coverage: xdebug
+
+      - uses: "ramsey/composer-install@v3"
+        with:
+          composer-options: "${{ matrix.composer-options }}"
+          dependency-versions: "${{ matrix.dependencies }}"
+
+      - name: Setup Problem Matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Lint code
+        run: vendor/bin/phpstan analyse --no-progress
+
+      - name: Run Tests
+        run: vendor/bin/phpunit --exclude-group=emulator --testdox

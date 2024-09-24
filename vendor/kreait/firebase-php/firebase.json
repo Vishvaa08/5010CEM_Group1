@@ -1,0 +1,17 @@
+{
+    "database": {
+        "rules": "tests/_fixtures/emulator/database.rules.json"
+    },
+    "emulators": {
+        "auth": {
+            "port": 9099
+        },
+        "database": {
+            "port": 9100
+        },
+        "ui": {
+            "enabled": true,
+            "port": 4000
+        }
+    }
+}
