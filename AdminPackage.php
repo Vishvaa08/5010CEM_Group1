@@ -30,7 +30,10 @@ if (isset($_POST['submit'])) {
 }
 ?>
 
-<div class="container-fluid d-flex flex-row">
+</head>
+<body>
+
+
     <div class="sidebar">
         <div class="sidebar-header">
             <h2>TravelTrail</h2>
@@ -59,22 +62,26 @@ if (isset($_POST['submit'])) {
         </ul>
     </div>
 
-    <div class="main-content flex-grow-1">
+
+    <div class="main-content">
         <header>
             <div class="header-left">
                 <h2>Dashboard / Travel Package</h2>
                 <p>Travel Package</p>
             </div>
+
             <div class="header-right d-flex align-items-center">
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="Search" onkeyup="filterCountries()">
                 </div>
+
                 <div class="user-wrapper">
                     <p>Hi, Admin</p>
                     <a href="AdminLogin.php"><img src="images/logout.png" alt="Logout Icon" class="logout-icon"></a>
                 </div>
             </div>
         </header>
+
 
         <div class="countries-display" id="countriesDisplay">
             <div class="country-grid">
@@ -133,6 +140,60 @@ function filterCountries() {
     });
 }
 </script>
+
+        <!-- Display existing countries -->
+        <div class="countries-display">
+            <div class="country-grid">
+                <?php
+                if ($countries) {
+                    foreach ($countries as $id => $country) {
+                        
+                        if (!empty($country['imagePath']) && !empty($country['countryName'])) {
+                            echo '<div class="country-card">';
+                            echo '<img src="' . htmlspecialchars($country['imagePath']) . '" alt="' . htmlspecialchars($country['countryName']) . '" style="width: 150px; height: 150px;">';
+                            echo '<h4>' . htmlspecialchars($country['countryName']) . '</h4>';
+                            echo '</div>';
+                        }
+                    }
+                } else {
+                    echo '<p>No countries found.</p>';
+                }
+                ?>
+            </div>
+        </div>
+
+
+        <!-- Add country button -->
+        <div class="add-package-btn">
+            <button onclick="openModal()">+</button>
+        </div>
+
+        <!-- Modal for adding a new country -->
+        <div id="addCountryModal" class="modal">
+            <div class="modal-content">
+                <h3>Add New Country</h3>
+                <form action="AdminPackage.php" method="POST" enctype="multipart/form-data">
+                    <label for="countryName">Country Name</label>
+                    <input type="text" id="countryName" name="countryName" required><br><br>
+                    <label for="countryImage">Upload Country Image</label>
+                    <input type="file" id="countryImage" name="countryImage" required><br><br>
+                    <button type="submit" name="submit">Submit Country</button>
+                </form>
+                <button class="close-modal" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('addCountryModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('addCountryModal').style.display = 'none';
+        }
+    </script>
 
 </body>
 </html>
