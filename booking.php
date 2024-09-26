@@ -64,120 +64,114 @@
                 </div>
 
             </div>
-            <div id="content">
+            <form id="form" method="GET">
+                <div id="content">
 
-                <h1>Itineraries :</h1>
-                <?php
-                echo '<div class="checkbox-container">';
-                foreach ($dataCityItinerary as $key => $itinerary) {
-                    if (isset($itinerary['Itinerary']) && isset($itinerary['ItineraryPrice'])) {
-                        echo '<label>';
-                        echo '<input type="checkbox" class="itinerary-checkbox" data-price="' . ($itinerary['ItineraryPrice']) . '" value="' . ($itinerary['Itinerary']) . '">';
-                        echo ($itinerary['Itinerary']) . ' - RM' . ($itinerary['ItineraryPrice']);
-                        echo '</label>';
+                    <h1>Itineraries :</h1>
+                    <?php
+                    echo '<div>';
+                    foreach ($dataCityItinerary as $key => $itinerary) {
+                        if (isset($itinerary['Itinerary']) && isset($itinerary['ItineraryPrice'])) {
+                            echo '<label>';
+                            echo '<input type="checkbox" class="itinerary-checkbox" name="itineraries[]" value="' . htmlspecialchars($itinerary['Itinerary']) . '|' . htmlspecialchars($itinerary['ItineraryPrice']) . '">';
+                            echo htmlspecialchars($itinerary['Itinerary']) . ' - <span style="color: white;">RM' . htmlspecialchars($itinerary['ItineraryPrice']);
+                            echo '</label>';
+                        }
                     }
-                }
-                echo '</div>';
-                ?>
+                    echo '</div>';
+                    ?>
 
-                <hr>
+                    <hr>
 
-                <h1>Vehicle :</h1>
-                <label class="vehicles">
-                    <input type="radio" name="vehicle" value="4-Seater">
-                    <?php if (isset($dataVehicle['Type1'])) {
-                        echo $dataVehicle['Type1'];
-                    } ?>
-                </label>
+                    <h1>Vehicle :</h1>
+                    <?php
+                    echo '<div>';
+                    foreach ($dataVehicle as $key => $vehicle1) {
+                        if (isset($vehicle1['Type']) && isset($vehicle1['Price'])) {
+                            echo '<label class="vehicles">';
+                            echo '<input type="radio" id="vehicle" name="vehicle" value="' . htmlspecialchars($vehicle1['Type']) . '|' . htmlspecialchars($vehicle1['Price']) . '">';
+                            echo htmlspecialchars($vehicle1['Type']) . ' - <span style="color: white;">RM' . htmlspecialchars($vehicle1['Price']);
+                            echo '</label>';
+                        }
+                    }
+                    echo '</div>';
+                    ?>
 
-                <label class="vehicles">
-                    <input type="radio" name="vehicle" value="7-Seater">
-                    <?php if (isset($dataVehicle['Type2'])) {
-                        echo $dataVehicle['Type2'];
-                    } ?>
-                </label>
+                    <hr>
 
-                <label class="vehicles">
-                    <input type="radio" name="vehicle" value="Van">
-                    <?php if (isset($dataVehicle['Type3'])) {
-                        echo $dataVehicle['Type3'];
-                    } ?>
-                </label>
+                    <h1><?php if (isset($dataHotel['Hotel'])) {
+                            echo $dataHotel['Hotel'];
+                        } ?></p>
+                    </h1>
 
-                <hr>
+                    <label>
+                        <input type="radio" name="room" value="Single|<?php echo $singlePrice; ?>"
+                            <?php echo ($single == 0) ? 'disabled' : ''; ?>>
+                        Single Room - <span style="color: white;">RM<?php echo $singlePrice ?></span>
+                    </label>
+                    <label>
+                        <input type="radio" name="room" value="Double|<?php echo $doublePrice; ?>"
+                            <?php echo ($double == 0) ? 'disabled' : ''; ?>>
+                        Double Room - <span style="color: white;">RM<?php echo $doublePrice ?></span>
+                    </label>
+                    <label>
+                        <input type="radio" name="room" value="Suite|<?php echo $suitePrice; ?>"
+                            <?php echo ($suite == 0) ? 'disabled' : ''; ?>>
+                        Suite Room - <span style="color: white;">RM<?php echo $suitePrice ?></span>
+                    </label>
 
-                <h1><?php if (isset($dataHotel['Hotel'])) {
-                        echo $dataHotel['Hotel'];
-                    } ?></p>
-                </h1>
-
-                <label>
-                    <input type="radio" name="room" value="Single"
-                        <?php echo ($single == 0) ? 'disabled' : ''; ?>>
-                    Single Room
-                </label>
-                <label>
-                    <input type="radio" name="room" value="Double"
-                        <?php echo ($double == 0) ? 'disabled' : ''; ?>>
-                    Double Room
-                </label>
-                <label>
-                    <input type="radio" name="room" value="Suite"
-                        <?php echo ($suite == 0) ? 'disabled' : ''; ?>>
-                    Suite Room
-                </label>
-
-                <div id="calendar-top">
-                    <div id="left">Check In</div>
-                    <div id="right">Check Out</div>
-                </div>
-                <div id="calendar-bottom">
-                    <div id="left"><input type="date" value="check-in-date"></div>
-                    <div id="right"><input type="date" value="check-in-date"></div>
-                </div>
-
-                <hr>
-
-                <h1>Flight :</h1>
-                <?php
-                $flightClasses = ['Economy', 'Business', 'First Class'];
-
-                foreach ($flightClasses as $class) {
-                    $seatsAvailable = isset($dataFlights[$class]['Seats']) ? $dataFlights[$class]['Seats'] : 0;
-                    $disabled = $seatsAvailable == 0 ? 'disabled' : '';
-                    echo '<label>';
-                    echo '<input type="radio" name="flight" value="' . $class . '" ' . $disabled . '>';
-                    echo $class . ' - Seats Available: ' . $seatsAvailable;
-                    echo '</label>';
-                }
-                ?>
-
-                <h1>Tickets :</h1>
-                <label class="ticket">
-                    <input type="radio" name="ticket" value="1">1-Way
-                </label>
-
-                <label class="ticket">
-                    <input type="radio" name="ticket" value="2">2-Way
-                </label>
-
-                <p class="seats">Number of seats : <input type="number" id="tickets" name="tickets" min="1" max="10" value="1" class="ticket-input"></p>
-
-                <hr>
-
-                <h1>Payment Methods :</h1>
-                <div id="payments">
-                    <div id="pay-left">
-                        <?php
-                        echo '<a href="card-payment.php?city=' . urlencode(ucfirst(strtolower($city))) .'" class="card">Card</a>';
-                        ?>
+                    <div id="calendar-top">
+                        <div id="left">Check In</div>
+                        <div id="right">Check Out</div>
                     </div>
-                    <div id="pay-right">
-                        <button class="bank-btn" id="bank-btn">Bank</button>
+                    <div id="calendar-bottom">
+                        <div id="left"><input type="date" id="check-in-date" name="check-in-date" value="check-in-date" min="<?php echo date('Y-m-d'); ?>" required></div>
+                        <div id="right"><input type="date" id="check-out-date" name="check-out-date" value="check-out-date" required></div>
                     </div>
-                </div>
-                <div id="bank-options" style="display: none;">
-                    <h2>Select Bank:</h2>
+
+                    <hr>
+
+                    <h1>Flight :</h1>
+                    <label>
+                        <input type="radio" name="flight" value="Economy|<?php echo $economyPrice; ?>"
+                            <?php echo ($economySeats == 0) ? 'disabled' : ''; ?>>
+                        Economy : Seats Available : <?php echo $economySeats ?> - <span style="color: white;">RM<?php echo $economyPrice ?></span>
+                    </label>
+                    <label>
+                        <input type="radio" name="flight" value="Business|<?php echo $businessPrice; ?>"
+                            <?php echo ($businessSeats == 0) ? 'disabled' : ''; ?>>
+                        Business : Seats Available : <?php echo $businessSeats ?> - <span style="color: white;">RM<?php echo $businessPrice ?></span>
+                    </label>
+                    <label>
+                        <input type="radio" name="flight" value="First|<?php echo $firstPrice; ?>"
+                            <?php echo ($firstSeats == 0) ? 'disabled' : ''; ?>>
+                        First Class : Seats Available : <?php echo $firstSeats ?> - <span style="color: white;">RM<?php echo $firstPrice ?></span>
+                    </label>
+
+                    <h1>Tickets :</h1>
+                    <label class="ticket">
+                        <input type="radio" name="ticket-type" value="1">1-Way
+                    </label>
+
+                    <label class="ticket">
+                        <input type="radio" name="ticket-type" value="2">2-Way <span style="color: white;">+RM150 per</span>
+                    </label>
+
+                    <p class="seats">Number of seats : <input type="number" id="tickets" name="tickets" min="1" max="10" value="1" class="ticket-input"></p>
+
+                    <hr>
+
+                    <h1>Payment Methods :</h1>
+                    <div id="payments">
+                        <div id="pay-left">
+                            <button type="button" class="card-btn" id="card-btn">Card</button>
+                        </div>
+                        <div id="pay-right">
+                            <button type="button" class="bank-btn" id="bank-btn">Bank</button>
+                        </div>
+                    </div>
+                    <div id="bank-options" style="display: none;">
+                        <h2>Select Bank:</h2>
                         <label class="bank-label">
                             <input type="radio" name="bank" value="bank1">
                             <img src="images/pbe.jpg" style="width: 3vh; height:3vh">
@@ -190,15 +184,36 @@
                         </label>
 
                         <div id="pay"><button class="pay" id="pay-btn">Payment</button></div>
-                </div>
+                    </div>
 
-            </div>
+                </div>
+                <input type="hidden" name="city" value="<?php echo htmlspecialchars($city); ?>">
+                <input type="hidden" name="country" value="<?php echo htmlspecialchars($country); ?>">
+            </form>
         </div>
     </div>
 
     <div id="footer"></div>
 
     <script>
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const yyyy = today.getFullYear();
+
+        const formattedDate = yyyy + '-' + mm + '-' + dd;
+
+        const checkinInput = document.getElementById('check-in-date');
+        checkinInput.setAttribute('min', formattedDate);
+
+        checkinInput.addEventListener('change', function() {
+            const checkinValue = new Date(checkinInput.value);
+            checkinValue.setDate(checkinValue.getDate() + 1);
+
+            const checkoutMinDate = checkinValue.toISOString().split('T')[0];
+            document.getElementById('check-out-date').setAttribute('min', checkoutMinDate);
+        });
+
         document.getElementById('bank-btn').addEventListener('click', function() {
             var bankOptions = document.getElementById('bank-options');
             if (bankOptions.style.display === 'none') {
@@ -212,22 +227,65 @@
             }
         });
 
-        document.getElementById('pay-btn').addEventListener('click', function() {
-        const selectedBank = document.querySelector('input[name="bank"]:checked');
+        document.getElementById('pay-btn').addEventListener('click', function(event) {
+            event.preventDefault();
+            const selectedBank = document.querySelector('input[name="bank"]:checked');
+            const selectedVehicle = document.querySelector('input[name="vehicle"]:checked');
+            const selectedRoom = document.querySelector('input[name="room"]:checked');
 
-        if (selectedBank) {
-            const bankValue = selectedBank.value;
+            if (selectedBank && selectedVehicle  && selectedRoom) {
+                var form = document.getElementById('form');
+                const bankValue = selectedBank.value;
 
-            if (bankValue === 'bank1') {
-                window.location.href = 'pbe.php';
-            } else if (bankValue === 'bank2') {
-                window.location.href = 'm2u.php';
+                const city = document.querySelector('input[name="city"]').value;
+                const country = document.querySelector('input[name="country"]').value;
+
+                const itineraries = document.querySelectorAll('input[name="itineraries[]"]:checked');
+                let itineraryParams = [];
+
+                itineraries.forEach(function(itinerary) {
+                    itineraryParams.push(itinerary.value);
+                });
+
+                if (bankValue === 'bank1') {
+                    form.action = 'pbe.php?city=' + city + '&country=' + country;
+                } else if (bankValue === 'bank2') {
+                    form.action = 'm2u.php?city=' + city + '&country=' + country;
+                }
+
+                form.submit();
+            } else {
+                alert('Please select a bank, vehicle and a room!');
             }
-        } else {
-            alert('Please select a bank first!');
-        }
-    });
+        });
+
+        document.getElementById('card-btn').addEventListener('click', function(event) {
+            event.preventDefault();
+            const selectedVehicle = document.querySelector('input[name="vehicle"]:checked');
+            const selectedRoom = document.querySelector('input[name="room"]:checked');
+
+            if (selectedVehicle  && selectedRoom) {
+                var form = document.getElementById('form');
+
+                const city = document.querySelector('input[name="city"]').value;
+                const country = document.querySelector('input[name="country"]').value;
+
+                const itineraries = document.querySelectorAll('input[name="itineraries[]"]:checked');
+                let itineraryParams = [];
+
+                itineraries.forEach(function(itinerary) {
+                    itineraryParams.push(itinerary.value);
+                });
+
+                form.action = 'card-payment.php?city=' + city + '&country=' + country;
+
+                form.submit();
+            } else {
+                alert('Please select a vehicle and a room!');
+            }
+        });
     </script>
+
 
 </body>
 

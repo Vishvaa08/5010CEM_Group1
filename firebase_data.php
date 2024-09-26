@@ -43,8 +43,29 @@ $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Fl
 $snapshot = $reference->getSnapshot();
 $dataFlights = $snapshot->getValue();
 
+//assigning flight prices to variables
+$economyPrice = isset($dataFlights['Economy']['Price']) ? $dataFlights['Economy']['Price'] : 0;
+$businessPrice = isset($dataFlights['Business']['Price']) ? $dataFlights['Business']['Price'] : 0;
+$firstPrice = isset($dataFlights['First Class']['Price']) ? $dataFlights['First Class']['Price'] : 0;
+
+//assigning flights seats to variables
+$economySeats = isset($dataFlights['Economy']['Seats']) ? $dataFlights['Economy']['Seats'] : 0;
+$businessSeats = isset($dataFlights['Business']['Seats']) ? $dataFlights['Business']['Seats'] : 0;
+$firstSeats = isset($dataFlights['First Class']['Seats']) ? $dataFlights['First Class']['Seats'] : 0;
+
 //data for hotel name
 $reference = $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotel);
 $snapshot = $reference->getSnapshot();
 $dataHotel = $snapshot->getValue();
+
+//data for hotel room price
+$reference = $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotel . '/Rooms/');
+$snapshot = $reference->getSnapshot();
+$dataRoomPrice = $snapshot->getValue();
+
+//assigning room prices to variables
+$singlePrice = isset($dataRoomPrice['Single']['Price']) ? $dataRoomPrice['Single']['Price'] : 0;
+$doublePrice = isset($dataRoomPrice['Double']['Price']) ? $dataRoomPrice['Double']['Price'] : 0;
+$suitePrice = isset($dataRoomPrice['Suite']['Price']) ? $dataRoomPrice['Suite']['Price'] : 0;
+
 ?>

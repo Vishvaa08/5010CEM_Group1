@@ -20,6 +20,60 @@
     include 'firebase_connection.php';
     include 'firebase_data.php';
 
+    $itineraries = isset($_GET['itineraries']) ? $_GET['itineraries'] : [];
+    $itineraryList = [];
+    $totalItineraryPrice = 0;
+
+    foreach ($itineraries as $itinerary) {
+        $itineraryData = explode('|', $itinerary);
+        if (isset($itineraryData[0]) && isset($itineraryData[1])) {
+            $itineraryName = $itineraryData[0];
+            $itineraryPrice = $itineraryData[1];
+            $itineraryList[] = ['name' => $itineraryName, 'price' => $itineraryPrice];
+            $totalItineraryPrice += $itineraryPrice;
+        }
+    }
+
+    if (isset($_GET['vehicle'])) {
+        $vehicleData = explode('|', $_GET['vehicle']);
+        $vehicleType = isset($vehicleData[0]) ? $vehicleData[0] : '';
+        $vehiclePrice = isset($vehicleData[1]) ? $vehicleData[1] : 0;
+    }
+
+    if (isset($_GET['room'])) {
+        $roomData = explode('|', $_GET['room']);
+        $roomType = isset($roomData[0]) ? $roomData[0] : '';
+        $roomPrice = isset($roomData[1]) ? $roomData[1] : 0;
+    }
+
+    if (isset($_GET['check-in-date'])) {
+        $checkInDate = $_GET['check-in-date'];
+    }
+
+    if (isset($_GET['check-out-date'])) {
+        $checkOutDate = $_GET['check-out-date'];
+    }
+
+    if (isset($_GET['flight'])) {
+        $dataFlights = explode('|', $_GET['flight']);
+        $flightType = isset($dataFlights[0]) ? $dataFlights[0] : '';
+        $flightPrice = isset($dataFlights[1]) ? $dataFlights[1] : 0;
+    }
+
+    if (isset($_GET['ticket-type'])) {
+        $ticketType = $_GET['ticket-type'];
+    }
+
+    if (isset($_GET['tickets'])) {
+        $numTickets = $_GET['tickets'];
+    }
+
+    if ($ticketType == 2) {
+        $calc = ($roomPrice + $vehiclePrice + $totalItineraryPrice) + (($flightPrice + 150) * $numTickets);
+    } else {
+        $calc = ($roomPrice + $vehiclePrice + $totalItineraryPrice) + ($flightPrice * $numTickets);
+    }
+
     ?>
 
     <div id="header">
@@ -48,7 +102,7 @@
                     <div class="text-text">Maybank</div>
                 </div>
                 <div class="text-price">
-                    <div class="text-text2"><?php echo 'RM6969' ?></div>
+                    <div class="text-text2"><?php echo 'RM ' . $calc ?></div>
                 </div>
             </div>
             <div id="content">
@@ -66,7 +120,8 @@
                     </div>
                 </div>
                 <div id="text-title">
-                <input type="text" placeholder="Your Account Number" class="recipient-input"></div>
+                    <input type="text" placeholder="Your Account Number" class="recipient-input">
+                </div>
                 <div id="text-title2"></div>
                 <div id="text-title">
                     <div id="bg"><input type="file" class="upload" accept=".png, .jpg, .jpeg"></div>
