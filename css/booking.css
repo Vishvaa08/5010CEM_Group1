@@ -246,7 +246,7 @@ input[type="date"]{
     justify-content: center;
 }
 
-.card{
+.card-btn{
     padding-left: 3vw;
     padding-right: 3vw;
     padding-top: 2vh;
@@ -256,6 +256,7 @@ input[type="date"]{
     background-color: black;
     text-decoration: none;
     cursor: pointer;
+    border: none;
 }
 
 .bank-btn{
