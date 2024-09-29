@@ -101,7 +101,7 @@
 
                     <h1><?php if (isset($dataHotel['Hotel'])) {
                             echo $dataHotel['Hotel'];
-                        } ?></p>
+                        } ?>
                     </h1>
 
                     <label>
@@ -189,6 +189,7 @@
                 </div>
                 <input type="hidden" name="city" value="<?php echo htmlspecialchars($city); ?>">
                 <input type="hidden" name="country" value="<?php echo htmlspecialchars($country); ?>">
+                <input type="hidden" name="hotel" value="<?php echo htmlspecialchars($hotel); ?>">
             </form>
         </div>
     </div>
@@ -269,6 +270,7 @@
 
                 const city = document.querySelector('input[name="city"]').value;
                 const country = document.querySelector('input[name="country"]').value;
+                const hotel = document.querySelector('input[name="hotel"]').value;
 
                 const itineraries = document.querySelectorAll('input[name="itineraries[]"]:checked');
                 let itineraryParams = [];
@@ -277,7 +279,7 @@
                     itineraryParams.push(itinerary.value);
                 });
 
-                form.action = 'card-payment.php?city=' + city + '&country=' + country;
+                form.action = 'card-payment.php?city=' + city + '&country=' + country + '&hotel' + hotel;
 
                 form.submit();
             } else {
