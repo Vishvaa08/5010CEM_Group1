@@ -120,7 +120,7 @@
                     </div>
                 </div>
                 <div id="text-title">
-                    <input type="text" placeholder="Your Account Number" class="recipient-input">
+                    <input type="text" id="accNum" placeholder="Your Account Number" class="recipient-input" maxlength="12" minlength="12" oninput="this.value = this.value.replace(/\D/g, '')">
                 </div>
                 <div id="text-title2"></div>
                 <div id="text-title">
@@ -134,6 +134,19 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.querySelector('.confirm-btn').addEventListener('click', function() {
+            const accNumber = document.getElementById('accNum').value;
+
+            if (accNumber.length < 12) {
+                alert('Account number must be at least 12 digits!');
+                return;
+            }
+
+            alert("All details are valid. Proceeding with confirmation.");
+        });
+    </script>
 
 </body>
 

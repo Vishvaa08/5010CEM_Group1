@@ -249,3 +249,7 @@ h1 {
     font-family: 'Joti One', serif;
     border: none;
 }
+
+.confirm-btn:hover{
+    cursor: pointer;
+}

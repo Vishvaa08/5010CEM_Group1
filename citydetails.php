@@ -212,7 +212,7 @@
 
                         echo '<div class="price">RM' . $hotelData['CheapestRoom'] . '</div>';
 
-                        echo '<a href="booking.php?city=' . urlencode(ucfirst(strtolower($city))) . '&country=' . urlencode($country) . '&hotel=' . urlencode($hotel) . '&single=' . urlencode($singleRoomAvailability) . '&double=' . urlencode($doubleRoomAvailability) . '&suite=' . urlencode($suiteRoomAvailability) .'" class="btn">Book</a>';
+                        echo '<a href="booking.php?city=' . urlencode(ucfirst(strtolower($city))) . '&country=' . urlencode($country) . '&hotel=' . urlencode($hotel) . '&single=' . urlencode($singleRoomAvailability) . '&double=' . urlencode($doubleRoomAvailability) . '&suite=' . urlencode($suiteRoomAvailability) . '" class="btn">Book</a>';
 
                         echo '</div>';
                         echo '</div>';
@@ -239,7 +239,7 @@
                 </div>
             </div>
             <div id="bot2">
-            <div id="bot-left">
+                <div id="bot-left">
                     <div class="bot-icon"><img src="images/travel-luggage.png"></div>
                 </div>
                 <div id="bot-right2">
@@ -248,7 +248,7 @@
                 </div>
             </div>
             <div id="bot3">
-            <div id="bot-left">
+                <div id="bot-left">
                     <div class="bot-icon"><img src="images/destination.png"></div>
                 </div>
                 <div id="bot-right">
