@@ -11,6 +11,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Joti+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
         rel="stylesheet">
+
+    <style>
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.3);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: black;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            font-family: 'Joti One', sans-serif;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -46,11 +70,11 @@
         $roomPrice = isset($roomData[1]) ? $roomData[1] : 0;
     }
 
-    if(isset($_GET['check-in-date'])){
+    if (isset($_GET['check-in-date'])) {
         $checkInDate = $_GET['check-in-date'];
     }
 
-    if(isset($_GET['check-out-date'])){
+    if (isset($_GET['check-out-date'])) {
         $checkOutDate = $_GET['check-out-date'];
     }
 
@@ -64,13 +88,13 @@
         $ticketType = $_GET['ticket-type'];
     }
 
-    if(isset($_GET['tickets'])){
+    if (isset($_GET['tickets'])) {
         $numTickets = $_GET['tickets'];
     }
 
-    if($ticketType == 2){
+    if ($ticketType == 2) {
         $calc = ($roomPrice + $vehiclePrice + $totalItineraryPrice) + (($flightPrice + 150) * $numTickets);
-    }else{
+    } else {
         $calc = ($roomPrice + $vehiclePrice + $totalItineraryPrice) + ($flightPrice * $numTickets);
     }
 
@@ -118,7 +142,7 @@
                     <div class="text-text">Card Number</div>
                 </div>
                 <div class="card-input">
-                    <input type="text" id="card-number-input" maxlength="14"
+                    <input type="text" id="card-number-input" minlength="12" maxlength="14"
                         oninput="this.value = this.value.replace(/\D/g, '').replace(/(.{4})(?=.)/g, '$1-').slice(0, 14);"
                         placeholder="xxxx-xxxx-xxxx" class="card-num-input">
                 </div>
@@ -133,17 +157,114 @@
             </div>
             <div id="middle">
                 <div class="expiry-input">
-                    <input type="text" id="card-expiry-input" maxlength="5" oninput="this.value = this.value.replace(/\D/g, '').slice(0,2) + (this.value.length >= 2 ? '/' : '') + this.value.replace(/\D/g, '').slice(2,4);" placeholder="MM/YY" class="expiry-num-input">
+                    <input type="text" id="card-expiry-input" maxlength="5" oninput="this.value = this.value.replace(/\D/g, '').slice(0,2) + (this.value.length >= 2 ? '/' : '') + this.value.replace(/\D/g, '').slice(2,4);" placeholder="MM/YY" class="expiry-num-input" required>
                 </div>
                 <div class="cvv-input">
-                    <input type="text" id="card-cvv-input" maxlength="3" oninput="this.value = this.value.replace(/\D/g, '').slice(0,3);" placeholder="XXX" class="cvv-num-input">
+                    <input type="text" id="card-cvv-input" maxlength="3" oninput="this.value = this.value.replace(/\D/g, '').slice(0,3);" placeholder="XXX" class="cvv-num-input" required>
                 </div>
             </div>
             <div id="button-container">
-                <button class="confirm-btn">Confirm</button>
+                <button class="confirm-btn" onclick="submit()">Confirm</button>
             </div>
         </div>
     </div>
+
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <h2>Order ID</h2>
+            <p><strong id="bookingId">1234</strong></p>
+            <p>We will notify you once your payment has been processed.</p>
+            <button class="close-popup" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function submit() {
+            const cardNumber = document.getElementById('card-number-input').value.replace(/\D/g, '');
+            const expiryNumber = document.getElementById('card-expiry-input').value;
+            const cvvNumber = document.getElementById('card-cvv-input').value;
+
+            <?php
+
+            $pointsEarned = ($calc) / 100;
+
+            ?>
+
+            if (cardNumber.length < 12) {
+                alert('Card number must be at least 12 digits!');
+                return;
+            }
+
+            if (expiryNumber === "" || expiryNumber.length !== 5 || !expiryNumber.includes('/')) {
+                alert('Expiry number must be 4 digits and not empty!');
+                return;
+            }
+
+            if (cvvNumber === "" || cvvNumber.length !== 3) {
+                alert('CVV number must be 3 digits and not empty!');
+                return;
+            }
+
+            const bookingData = {
+                country: '<?php echo $country; ?>',
+                city: '<?php echo $city; ?>',
+                vehicleType: '<?php echo $vehicleType; ?>',
+                vehiclePrice: '<?php echo $vehiclePrice; ?>',
+                roomType: '<?php echo $roomType; ?>',
+                roomPrice: '<?php echo $roomPrice; ?>',
+                flightType: '<?php echo $flightType; ?>',
+                flightPrice: '<?php echo $flightPrice; ?>',
+                itineraries: <?php echo json_encode($itineraryList); ?>,
+                totalPrice: '<?php echo $calc; ?>',
+                checkInDate: '<?php echo $checkInDate; ?>',
+                checkOutDate: '<?php echo $checkOutDate; ?>',
+                numTickets: '<?php echo $numTickets; ?>',
+                pointsEarned: '<?php echo $pointsEarned ?>',
+                hotelID: '<?php echo $hotel; ?>',
+                cardDetails: {
+                    cardNumber: cardNumber,
+                    expiry: expiryNumber,
+                    cvv: cvvNumber
+                }
+            };
+
+            fetch('pushBookingData.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(bookingData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Response from server:', data);
+                    if (data.bookingId) {
+                        openPopup(data.bookingId);
+                    } else {
+                        console.error('No booking ID returned:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while processing your booking.');
+                });
+        }
+
+        function openPopup(bookingId) {
+            document.getElementById('bookingId').textContent = bookingId;
+            document.getElementById('popupOverlay').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+            window.location.replace('index.php');
+        }
+    </script>
 
 
 </body>

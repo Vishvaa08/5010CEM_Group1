@@ -42,7 +42,7 @@
     </div>
 
     <div id="search-container">
-        <input type="text" name="search-bar" id="search-bar" placeholder="Search..." />
+        <input type="text" name="search-bar" id="search-bar" onkeyup="filterCity()" placeholder="Search..." />
     </div>
 
     <div id="packages" class="packages-container">
@@ -59,7 +59,7 @@
                     echo '<img src="images/error.jpg" class="card-image">';
                 }
 
-                echo '<h2>' . ucfirst($cityData['City']) . '</h2>';
+                echo '<h2 class="search-name">' . ucfirst($cityData['City']) . '</h2>';
 
                 if (isset($cityData['CityDetail'])) {
                     echo '<p>' . ($cityData['CityDetail']) . '</p>';
@@ -75,6 +75,20 @@
         ?>
 
     </div>
+
+    <script>
+
+        function filterCity(){
+            const userInput = document.getElementById('search-bar').value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                const cityName = card.querySelector('.search-name').textContent.toLowerCase();
+                card.style.display = cityName.includes(userInput) ? 'block' : 'none';
+            });
+        }
+
+    </script>
 
 </body>
 
