@@ -22,6 +22,8 @@
 
     ?>
 
+    <div id="loading-animation"></div>
+
     <div id="header">
         <div id="left-nav">
             <a href="index.php">
@@ -75,8 +77,13 @@
     </div>
 
     <script>
+        var loader = document.getElementById('loading-animation');
 
-        function filterCountry(){
+        window.addEventListener('load', function() {
+            loader.style.display = 'none';
+        });
+
+        function filterCountry() {
             const userInput = document.getElementById('search-bar').value.toLowerCase();
             const cards = document.querySelectorAll('.card');
 
@@ -85,7 +92,6 @@
                 card.style.display = countryName.includes(userInput) ? 'block' : 'none';
             });
         }
-
     </script>
 
 </body>
