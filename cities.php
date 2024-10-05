@@ -77,8 +77,7 @@
     </div>
 
     <script>
-
-        function filterCity(){
+        function filterCity() {
             const userInput = document.getElementById('search-bar').value.toLowerCase();
             const cards = document.querySelectorAll('.card');
 
@@ -87,7 +86,6 @@
                 card.style.display = cityName.includes(userInput) ? 'block' : 'none';
             });
         }
-
     </script>
 
 </body>
