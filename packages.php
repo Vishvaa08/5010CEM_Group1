@@ -52,25 +52,28 @@
         <?php
         //
         foreach ($data as $country => $cities) {
-            echo '<div class="card">';
 
-            if (isset($cities['CountryImage'])) {
-                echo '<img src="' . ($cities['CountryImage']) . ' Image" class="card-image">';
-            } else {
-                echo '<img src="images/error.jpg" class="card-image">';
+            if (isset($cities['Availability']) && $cities['Availability'] === 'Available') {
+                echo '<div class="card">';
+
+                if (isset($cities['CountryImage'])) {
+                    echo '<img src="' . ($cities['CountryImage']) . ' Image" class="card-image">';
+                } else {
+                    echo '<img src="images/error.jpg" class="card-image">';
+                }
+
+                echo '<h2 class="search-name">' . ucfirst($country) . '</h2>';
+
+                if (isset($cities['CountryDetail'])) {
+                    echo '<p>' . ($cities['CountryDetail']) . '</p>';
+                } else {
+                    echo '<p>No country details available...</p>';
+                }
+
+                echo '<a href="cities.php?country=' . urlencode($country) . '" class="explore-btn">Explore Now</a>';
+
+                echo '</div>';
             }
-
-            echo '<h2 class="search-name">' . ucfirst($country) . '</h2>';
-
-            if (isset($cities['CountryDetail'])) {
-                echo '<p>' . ($cities['CountryDetail']) . '</p>';
-            } else {
-                echo '<p>No country details available...</p>';
-            }
-
-            echo '<a href="cities.php?country=' . urlencode($country) . '" class="explore-btn">Explore Now</a>';
-
-            echo '</div>';
         }
         ?>
 
