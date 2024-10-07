@@ -21,7 +21,7 @@
 
         <div id="header">
             <div id="left-nav">
-                <a href="index.php">
+                <a href="#home">
                     <div class="logo-container">
                         <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
                     </div>
@@ -76,8 +76,8 @@
                     her desires and interests. Frustrated by the lack of flexibility, she envisioned a solution that
                     would empower travelers like herself to take control of their journeys.
 
-</br>
-</br>
+                    </br>
+                    </br>
 
                     This vision led to the creation of TravelTrail—a platform that offers truly customizable travel
                     packages. With TravelTrail, Jane's mission is to give travelers the freedom to design trips that
