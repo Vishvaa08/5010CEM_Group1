@@ -1,0 +1,74 @@
+name: Emulator Tests
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/tests.yml'
+      - 'composer.json'
+  push:
+    branches: ['5.x']
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/tests.yml'
+      - 'composer.json'
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: "PHP ${{ matrix.php }}, ${{ matrix.dependencies }} deps"
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php:
+          - "8.1"
+          - "8.2"
+          - "8.3"
+        dependencies:
+          - "lowest"
+          - "highest"
+        include:
+          - php: "8.4"
+            composer-options: "--ignore-platform-reqs"
+            dependencies: "highest"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer, pecl
+          coverage: xdebug
+
+      - uses: "ramsey/composer-install@v3"
+        with:
+          composer-options: "${{ matrix.composer-options }}"
+          dependency-versions: "${{ matrix.dependencies }}"
+
+      - name: Set Up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Firebase Tools
+        run: npm install -g firebase-tools
+
+      - name: Setup Problem Matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Run emulated Tests
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
+          FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
+        run: firebase emulators:exec --only auth --project demo-project 'vendor/bin/phpunit --group=emulator --testdox'
+
+      - name: Run Emulator Tests
+        run: vendor/bin/phpunit --group=emulator --testdox

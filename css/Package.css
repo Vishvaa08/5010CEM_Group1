@@ -127,6 +127,24 @@ header {
     vertical-align: middle;
 }
 
+
+.view-btn{
+    width: 10vw;
+    height: 10vh;
+    background-color: black;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.view-btn:hover{
+    background-color: #333333;
+    transition: 0.4s;
+}
+
 .add-package-btn {
     margin-top: 20px;
     text-align: right;
@@ -147,7 +165,6 @@ header {
         }
 
 
-/* Grid layout for displaying countries */
 .country-grid {
     display: flex;
     flex-wrap: wrap;
@@ -155,7 +172,6 @@ header {
     margin-top: 20px;
 }
 
-/* Individual country card */
 .country-card {
     background-color: #FFFFFF;
     border: 1px solid #ccc;
@@ -167,8 +183,13 @@ header {
 }
 
     .country-card img {
+
+        width: 200px;
+        height: 200px;
+
         width: 150px;
         height: 150px;
+
         object-fit: cover;
         border-radius: 10px;
     }
@@ -177,9 +198,4 @@ header {
         margin-top: 10px;
         font-size: 18px;
         color: #333;
-    }
-
-    .country-card p {
-        color: red; /* You can customize this to your desired style */
-        font-size: 14px;
     }

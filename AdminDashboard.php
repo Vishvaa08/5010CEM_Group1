@@ -25,15 +25,15 @@
             </li>
             <li>
                 <img src="images/users.png" alt="User Icon">
-                    <a href="#">User Management</a>
+                    <a href="AdminUser.php">User Management</a>
             </li>
             <li>
                 <img src="images/inventory.png" alt="Inventory Icon">
-                    <a href="#">Inventory Status</a>
+                    <a href="AdminInventory.php">Inventory Status</a>
             </li>
             <li>
                 <img src="images/report.png" alt="Report Icon">
-                    <a href="#">Report</a>
+                    <a href="AdminReport.php">Report</a>
             </li>
         </ul>
     </div>
