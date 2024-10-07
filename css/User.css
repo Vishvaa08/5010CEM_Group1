@@ -92,7 +92,8 @@ header {
 }
 
 .header-left {
-    display: block; 
+    display: flex;
+    flex-direction: column;
 }
 
 .header-right {
@@ -126,4 +127,43 @@ header {
     height: 24px; 
     margin-left: 5px; 
     vertical-align: middle;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    padding: 10px;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #000000;
+    -webkit-text-fill-color: white;
+
+}
+
+/* Status styling */
+.status.verified {
+    color: green;
+}
+
+.status.unverified {
+    color: red;
+}
+
+.btn-sm {
+    font-size: 14px;
+    color: green;
+}
+
+.btn-sm:hover {
+    color: darkgreen;
 }

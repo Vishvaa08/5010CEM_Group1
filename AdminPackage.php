@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Country Management</title>
-    <link rel="stylesheet" href="css/Package.css">
+    <link rel="stylesheet" href="css/package.css">
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 </head>
 <body>
 
@@ -118,22 +120,28 @@ if (isset($_POST['submit'])) {
             </div> 
         </div>
 
-        <div class="add-package-btn">
-            <button type="button" class="btn btn-primary" onclick="toggleForm()">Add Country</button>
-        </div>
+        <div class="add-package-btn text-center mt-4">
+    <button type="button" class="btn btn-primary btn-lg rounded-circle" onclick="toggleForm()">
+        <i class="fas fa-plus"></i>
+    </button>
+</div>
 
-        <div id="addCountryForm" style="display:none; margin-top: 20px;">
-            <h5>Add New Country</h5>
+<div id="addCountryForm" style="display:none; margin-top: 30px;" class="container">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title text-center mb-4">Add New Country</h5>
             <form action="AdminPackage.php" method="POST" enctype="multipart/form-data">
-                <div class="mb-3">
+                <div class="mb-4">
                     <label for="countryName" class="form-label">Country Name</label>
-                    <input type="text" class="form-control" id="countryName" name="countryName" required>
+                    <input type="text" class="form-control" id="countryName" name="countryName" placeholder="Enter country name" required>
                 </div>
-                <div class="mb-3">
+                <div class="mb-4">
                     <label for="countryImage" class="form-label">Upload Country Image</label>
                     <input type="file" class="form-control" id="countryImage" name="countryImage" accept="image/*" required>
                 </div>
-                <button type="submit" name="submit" class="btn btn-primary">Submit Country</button>
+                <div class="text-center">
+                    <button type="submit" name="submit" class="btn btn-success btn-lg w-100">Submit Country</button>
+                </div>
             </form>
         </div>
     </div>
