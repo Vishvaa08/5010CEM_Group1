@@ -1,0 +1,16 @@
+Array
+(
+    [country] => Japan
+    [city] => Kyoto
+    [cityImage] => https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/kyoto.jpg?alt=media&token=7d444b82-ec7e-4c7f-a036-cdc3b0662451
+    [hotels] => [{"Hotel":"Hotel Alza Kyoto","CheapestRoom":"450"},{"Hotel":"The Gate Hotel","CheapestRoom":"500"},{"Hotel":"The Thousand Kyoto","CheapestRoom":"600"},{"Hotel":"Hotel Resol Kyoto Kawaramachi Sanjo","CheapestRoom":"69"},{"Hotel":"Ryokan Sanga","CheapestRoom":"78"}]
+    [flights] => {"Hotel":{"Price":""},"CheapestRoom":{"Price":"78"},"Business":{"Price":"400"},"Economy":{"Price":"300"},"First Class":{"Price":"700"}}
+)
+Array
+(
+    [country] => Japan
+    [city] => Kyoto
+    [cityImage] => https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/kyoto.jpg?alt=media&token=7d444b82-ec7e-4c7f-a036-cdc3b0662451
+    [hotels] => [{"Hotel":"Hotel Alza Kyoto","CheapestRoom":"450"},{"Hotel":"The Gate Hotel","CheapestRoom":"500"},{"Hotel":"The Thousand Kyoto","CheapestRoom":"600"},{"Hotel":"Hotel Resol Kyoto Kawaramachi Sanjo","CheapestRoom":"69"},{"Hotel":"Ryokan Sanga","CheapestRoom":"78"}]
+    [flights] => {"Hotel":{"Price":""},"CheapestRoom":{"Price":"78"},"Business":{"Price":"400"},"Economy":{"Price":"300"},"First Class":{"Price":"700"}}
+)

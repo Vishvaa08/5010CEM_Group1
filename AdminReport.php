@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Report</title>
     <link rel="stylesheet" href="css/Report.css">
+
+edit inside here
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
 
     </head>
@@ -41,8 +43,8 @@
     <div class="main-content">
         <header>
             <div class="header-left">
-                <h2>Dashboard / Report</h2>
-                <p>Report</p>
+                <h2>Dashboard / PackageDetails</h2>
+                <p>Package</p>
             </div>
             <div class="header-right">
                 <div class="search-box">
