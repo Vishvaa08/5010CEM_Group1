@@ -45,7 +45,7 @@ $users = $usersRef->getValue();
     </div>
     <ul>
         <li>
-            <img src="images/home dark.jpg" alt="Dashboard Icon">
+            <img src="images/home.png" alt="Dashboard Icon">
             <a href="AdminDashboard.php">Dashboard</a>
         </li>
         <li>
@@ -53,7 +53,7 @@ $users = $usersRef->getValue();
             <a href="AdminPackage.php">Travel Packages</a>
         </li>
         <li class="active">
-            <img src="images/users.png" alt="User Icon">
+            <img src="images/users dark.jpg" alt="User Icon">
             <a href="AdminUser.php">User Management</a>
         </li>
         <li>
@@ -68,22 +68,23 @@ $users = $usersRef->getValue();
 </div>
 
 <div class="main-content">
-    <header>
-        <div class="header-left">
-            <h2>Dashboard / User Management</h2>
-            <p>User Management</p>
-        </div>
-        <div class="header-right d-flex align-items-center">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search by Name, Phone, Email, or Passport" onkeyup="filterUsers()">
+        <header>
+            <div class="header-left">
+                <h2>Dashboard / User Management</h2>
+                <p>User Management</p>
             </div>
-
-            <div class="user-wrapper">
-                <p>Hi, Admin</p>
-                <a href="AdminLogin.php"><img src="images/logout.png" alt="Logout Icon" class="logout-icon"></a>
+            <div class="header-right">
+                <div class="search-box">
+                    <input type="text" placeholder="Search">
+                </div>
+                <div class="user-wrapper">
+                    <p>Hi, Admin</p>
+                    <a href="AdminLogin.php">
+                        <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+                    </a>
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
 
     <table>
         <thead>
