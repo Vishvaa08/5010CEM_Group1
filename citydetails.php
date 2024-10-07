@@ -156,68 +156,70 @@
                 <?php
 
                 foreach ($dataHotels as $hotel => $hotelData) {
-                    if (isset($hotelData['Hotel'])) {
-                        echo '<div class="card-hotel">';
-                        echo '<div class="hotel-image-container">';
 
-                        if (isset($hotelData['Image'])) {
-                            echo '<img src="' . $hotelData['Image'] . '" class="card-image-hotel">';
+                        if (isset($hotelData['Hotel']) && isset($hotelData['Availability']) && $hotelData['Availability'] === 'Available') {
+                            echo '<div class="card-hotel">';
+                            echo '<div class="hotel-image-container">';
+
+                            if (isset($hotelData['Image'])) {
+                                echo '<img src="' . $hotelData['Image'] . '" class="card-image-hotel">';
+                            }
+
+                            echo '</div>';
+                            echo '<div class="hotel-content">';
+
+                            echo '<div class="hotel-name">';
+
+                            if (isset($hotelData['Hotel'])) {
+                                echo '<h2>' . $hotelData['Hotel'] . '</h2>';
+                            }
+
+                            echo '</div>';
+                            echo '<div class="hotel-description">';
+
+                            if (isset($hotelData['Description'])) {
+                                echo '<h2>' . $hotelData['Description'] . '</h2>';
+                            }
+
+                            echo '</div>';
+                            echo '<div class="room-remaining"><h2>Rooms Remaining :</h2></div>';
+                            echo '<div class="rooms-container">';
+
+                            echo '<div class="single">';
+                            if (isset($hotelData['Rooms']['Single'])) {
+                                $singleRoomAvailability = $hotelData['Rooms']['Single']['Availability'];
+                                echo '<div class="single-text">Single</div>';
+                                echo '<div>' . $singleRoomAvailability . '</div>';
+                            }
+                            echo '</div>';
+
+                            echo '<div class="double">';
+                            if (isset($hotelData['Rooms']['Double'])) {
+                                $doubleRoomAvailability = $hotelData['Rooms']['Double']['Availability'];
+                                echo '<div class="double-text">Double</div>';
+                                echo '<div>' . $doubleRoomAvailability . '</div>';
+                            }
+                            echo '</div>';
+
+                            echo '<div class="suite">';
+                            if (isset($hotelData['Rooms']['Suite'])) {
+                                $suiteRoomAvailability = $hotelData['Rooms']['Suite']['Availability'];
+                                echo '<div class="suite-text">Suite</div>';
+                                echo '<div>' . $suiteRoomAvailability . '</div>';
+                            }
+                            echo '</div>';
+
+                            echo '</div>';
+
+                            echo '<div class="price">RM' . $hotelData['CheapestRoom'] . '</div>';
+
+                            echo '<a href="booking.php?city=' . urlencode(ucfirst(strtolower($city))) . '&country=' . urlencode($country) . '&hotel=' . urlencode($hotel) . '&single=' . urlencode($singleRoomAvailability) . '&double=' . urlencode($doubleRoomAvailability) . '&suite=' . urlencode($suiteRoomAvailability) . '" class="btn">Book</a>';
+
+                            echo '</div>';
+                            echo '</div>';
                         }
-
-                        echo '</div>';
-                        echo '<div class="hotel-content">';
-
-                        echo '<div class="hotel-name">';
-
-                        if (isset($hotelData['Hotel'])) {
-                            echo '<h2>' . $hotelData['Hotel'] . '</h2>';
-                        }
-
-                        echo '</div>';
-                        echo '<div class="hotel-description">';
-
-                        if (isset($hotelData['Description'])) {
-                            echo '<h2>' . $hotelData['Description'] . '</h2>';
-                        }
-
-                        echo '</div>';
-                        echo '<div class="room-remaining"><h2>Rooms Remaining :</h2></div>';
-                        echo '<div class="rooms-container">';
-
-                        echo '<div class="single">';
-                        if (isset($hotelData['Rooms']['Single'])) {
-                            $singleRoomAvailability = $hotelData['Rooms']['Single']['Availability'];
-                            echo '<div class="single-text">Single</div>';
-                            echo '<div>' . $singleRoomAvailability . '</div>';
-                        }
-                        echo '</div>';
-
-                        echo '<div class="double">';
-                        if (isset($hotelData['Rooms']['Double'])) {
-                            $doubleRoomAvailability = $hotelData['Rooms']['Double']['Availability'];
-                            echo '<div class="double-text">Double</div>';
-                            echo '<div>' . $doubleRoomAvailability . '</div>';
-                        }
-                        echo '</div>';
-
-                        echo '<div class="suite">';
-                        if (isset($hotelData['Rooms']['Suite'])) {
-                            $suiteRoomAvailability = $hotelData['Rooms']['Suite']['Availability'];
-                            echo '<div class="suite-text">Suite</div>';
-                            echo '<div>' . $suiteRoomAvailability . '</div>';
-                        }
-                        echo '</div>';
-
-                        echo '</div>';
-
-                        echo '<div class="price">RM' . $hotelData['CheapestRoom'] . '</div>';
-
-                        echo '<a href="booking.php?city=' . urlencode(ucfirst(strtolower($city))) . '&country=' . urlencode($country) . '&hotel=' . urlencode($hotel) . '&single=' . urlencode($singleRoomAvailability) . '&double=' . urlencode($doubleRoomAvailability) . '&suite=' . urlencode($suiteRoomAvailability) . '" class="btn">Book</a>';
-
-                        echo '</div>';
-                        echo '</div>';
                     }
-                }
+                
                 ?>
 
             </div>
