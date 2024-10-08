@@ -306,37 +306,50 @@ $(document).ready(function() {
         }
     });
 
-    // Itinerary dropdown change event
-    $('.itinerary-dropdown').on('change', function() {
-        const itineraryIndex = $(this).val(); 
-        const cityCard = $(this).closest('.city-card');
-        const cityDetails = <?php echo json_encode($dataCities); ?>; 
-        const city = cityCard.data('city'); 
+   // Itinerary dropdown change event
+$('.itinerary-dropdown').on('change', function() {
+    const itineraryIndex = $(this).val(); 
+    const cityCard = $(this).closest('.city-card');
+    const cityDetails = <?php echo json_encode($dataCities); ?>; 
+    const city = cityCard.data('city'); 
 
-        cityCard.find('.itinerary-details').html(''); 
+    cityCard.find('.itinerary-details').html(''); // Clear previous details
 
-        if (itineraryIndex && cityDetails[city]['Itinerary'][itineraryIndex]) {
-            const itinerary = cityDetails[city]['Itinerary'][itineraryIndex];
+    // Check if a valid itinerary index is selected
+    if (itineraryIndex && cityDetails[city]['Itinerary'][itineraryIndex]) {
+        const itinerary = cityDetails[city]['Itinerary'][itineraryIndex];
 
-            const itineraryHtml = `
-                <div class="itinerary-item d-flex">
-                    <div class="itinerary-image-container">
-                        <img src="${itinerary.ItineraryImage || 'https://example.com/path/to/default_image.jpg'}" class="itinerary-image" alt="${itinerary.Itinerary}">
+        // Construct HTML for displaying itinerary details
+        const itineraryHtml = `
+            <div class="itinerary-item d-flex">
+                <div class="itinerary-image-container">
+                    <img src="${itinerary.Image || 'https://example.com/path/to/default_image.jpg'}" class="itinerary-image" alt="${itinerary.Itinerary}">
+                </div>
+                <div class="itinerary-details-container">
+                    <div class="mb-3">
+                        <label>Itinerary Name:</label>
+                        <input type="text" class="form-control" value="${itinerary.Itinerary}" readonly>
                     </div>
-                    <div class="itinerary-details-container">
-                        <div class="mb-3">
-                            <label>Itinerary Name:</label>
-                            <input type="text" class="form-control" value="${itinerary.Itinerary}" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label>Price:</label>
-                            <input type="number" class="form-control" value="${itinerary.ItineraryPrice}" readonly>
-                        </div>
+                    <div class="mb-3">
+                        <label>Price:</label>
+                        <input type="number" class="form-control" value="${itinerary.Price}" readonly>
                     </div>
-                </div>`;
-            cityCard.find('.itinerary-details').html(itineraryHtml); 
-        }
-    });
+                </div>
+            </div>`;
+        
+        // Update the itinerary details container with the new HTML
+        cityCard.find('.itinerary-details').html(itineraryHtml); 
+    }
+});
+
+
+
+    // Function to toggle the city form
+    function toggleCityForm() {
+        var form = document.getElementById('addCityForm');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+
 
     // Add New City - Form Submission
     $('#addCityForm').submit(function(e) {
@@ -375,153 +388,143 @@ $(document).ready(function() {
 
     // Edit button click event - handles saving all city data including itineraries
     $(document).on('click', '.edit-btn', function() {
-    const card = $(this).closest('.city-card'); // Correctly define the card variable
-    const country = card.data('country'); 
-    const city = card.find('[data-key="City"]').text().trim(); 
-    const cityDetail = card.find('[data-key="CityDetail"]').val().trim(); 
-    const hotels = {};
-    const flights = {};
-    const vehicles = {};
-    const itineraries = [];
+        const card = $(this).closest('.city-card'); // Correctly define the card variable
+        const country = card.data('country'); 
+        const city = card.find('[data-key="City"]').text().trim(); 
+        const cityDetail = card.find('[data-key="CityDetail"]').val().trim(); 
+        const hotels = {};
+        const itineraries = [];
 
-    // Collect hotel data
-    card.find('.hotel-item').each(function(index) {
-        const hotelName = $(this).find('[data-key="Hotel"]').val().trim(); 
-        const singleRooms = $(this).find('[data-key="SingleRooms"]').val() || '';
-        const singlePrice = $(this).find('[data-key="SinglePrice"]').val() || '';
-        const doubleRooms = $(this).find('[data-key="DoubleRooms"]').val() || '';
-        const doublePrice = $(this).find('[data-key="DoublePrice"]').val() || '';
-        const suiteRooms = $(this).find('[data-key="SuiteRooms"]').val() || '';
-        const suitePrice = $(this).find('[data-key="SuitePrice"]').val() || '';
-        const hotelImageFile = $(this).find('.hotel-image-upload')[0]?.files[0]; // Use optional chaining
+        // Collect hotel data
+        card.find('.hotel-item').each(function(index) {
+            const hotelName = $(this).find('[data-key="Hotel"]').val().trim(); 
+            const hotelDescription = $(this).find('[data-key="Description"]').val() || ''; 
+            const singleRooms = $(this).find('[data-key="SingleRooms"]').val() || '';
+            const singlePrice = $(this).find('[data-key="SinglePrice"]').val() || '';
+            const doubleRooms = $(this).find('[data-key="DoubleRooms"]').val() || '';
+            const doublePrice = $(this).find('[data-key="DoublePrice"]').val() || '';
+            const suiteRooms = $(this).find('[data-key="SuiteRooms"]').val() || '';
+            const suitePrice = $(this).find('[data-key="SuitePrice"]').val() || '';
+            const hotelImageFile = $(this).find('.hotel-image-upload')[0].files[0];
 
-        if (hotelName) {
-            let hotelId = index + 1; // or other logic for unique hotel ID
-            hotels[hotelId] = {
-                Hotel: hotelName,
-                Rooms: {
-                    Single: { Availability: singleRooms, Price: singlePrice },
-                    Double: { Availability: doubleRooms, Price: doublePrice },
-                    Suite: { Availability: suiteRooms, Price: suitePrice }
+            if (hotelName) {
+                let hotelId = index + 1; // or other logic for unique hotel ID
+                hotels[hotelId] = {
+                    Hotel: hotelName,
+                    Description: hotelDescription,
+                    Rooms: {
+                        Single: { Availability: singleRooms, Price: singlePrice },
+                        Double: { Availability: doubleRooms, Price: doublePrice },
+                        Suite: { Availability: suiteRooms, Price: suitePrice }
+                    }
+                };
+
+                // Upload the image first
+                if (hotelImageFile) {
+                    const imageFormData = new FormData();
+                    imageFormData.append('hotelImage', hotelImageFile);
+                    imageFormData.append('hotelId', hotelId);
+                    imageFormData.append('country', country);
+                    imageFormData.append('city', city);
+
+                    $.ajax({
+                        url: 'upload_hotel_image.php',
+                        type: 'POST',
+                        data: imageFormData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            const result = JSON.parse(response);
+                            if (result.success) {
+                                hotels[hotelId].Image = result.imageUrl;
+                            } else {
+                                alert('Failed to upload hotel image');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Image upload error:', error);
+                        }
+                    });
                 }
-            };
+            }
+        });
 
-            // Upload the image first
-            if (hotelImageFile) {
-                const imageFormData = new FormData();
-                imageFormData.append('hotelImage', hotelImageFile);
-                imageFormData.append('hotelId', hotelId);
-                imageFormData.append('country', country);
-                imageFormData.append('city', city);
+        // Collect itinerary data
+        card.find('.itinerary-item').each(function(index) {
+            const itineraryName = $(this).find('[data-key="Itinerary"]').text().trim() || '';
+            const itineraryImageFile = $(this).find('input[type="file"]')[0].files[0]; 
+            const itineraryPrice = $(this).find('[data-key="ItineraryPrice"]').val() || '0';
 
+            if (itineraryName) {
+                const itineraryObject = {
+                    Itinerary: itineraryName,
+                    ItineraryPrice: itineraryPrice,
+                };
+
+                // Prepare form data for uploading
+                const formData = new FormData();
+                formData.append('country', country);
+                formData.append('city', city);
+                formData.append('data', JSON.stringify(itineraryObject)); // Add the itinerary data
+                formData.append('itineraryImage', itineraryImageFile); // Add the image file
+
+                // Send the data via AJAX
                 $.ajax({
-                    url: 'upload_hotel_image.php',
+                    url: 'save_itinerary.php', // Your PHP file to handle saving
                     type: 'POST',
-                    data: imageFormData,
+                    data: formData,
                     contentType: false,
                     processData: false,
                     success: function(response) {
                         const result = JSON.parse(response);
                         if (result.success) {
-                            hotels[hotelId].Image = result.imageUrl;
+                            alert('Itinerary saved successfully!');
                         } else {
-                            alert('Failed to upload hotel image');
+                            alert('Error saving itinerary: ' + result.message);
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error('Image upload error:', error);
+                        console.error('Error:', error);
+                        alert('Failed to save itinerary.');
                     }
                 });
             }
-        }
-    });
+        });
 
-    // Collect itinerary data
-    card.find('.itinerary-item').each(function(index) {
-        const itineraryName = $(this).find('[data-key="Itinerary"]').text().trim() || '';
-        const itineraryImageFile = $(this).find('input[type="file"]')[0]?.files[0]; // Use optional chaining
-        const itineraryPrice = $(this).find('[data-key="ItineraryPrice"]').val() || '0';
+        // Prepare the AJAX request to save data
+        const dataToUpdate = {
+            CityDetail: cityDetail,
+            Hotels: hotels,
+            Itinerary: itineraries // Append new itineraries
+        };
 
-        if (itineraryName) {
-            const itineraryId = index + 1; // Starts from 1 for new itineraries
+        const formData = new FormData();
+        formData.append('country', country);
+        formData.append('city', city);
+        formData.append('data', JSON.stringify(dataToUpdate)); // Add the data here
 
-            const itineraryObject = {
-                id: itineraryId, // New ID
-                Itinerary: itineraryName,
-                ItineraryPrice: itineraryPrice,
-                ItineraryImage: null // Initialize the image property
-            };
-
-            // Handle image upload for itinerary
-            if (itineraryImageFile) {
-                const imageFormData = new FormData();
-                imageFormData.append('itineraryImage', itineraryImageFile);
-                imageFormData.append('itineraryId', itineraryId);
-                imageFormData.append('country', country);
-                imageFormData.append('city', city);
-
-                $.ajax({
-                    url: 'upload_itinerary_image.php', // PHP script to handle the image upload
-                    type: 'POST',
-                    data: imageFormData,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        const result = JSON.parse(response);
-                        if (result.success) {
-                            itineraryObject.ItineraryImage = result.imageUrl; // Assign the URL to the itinerary object
-                            itineraries.push(itineraryObject); // Add itinerary data to the array
-                        } else {
-                            alert('Failed to upload itinerary image');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Image upload error:', error);
-                    }
-                });
-            } else {
-                itineraries.push(itineraryObject); // Add itinerary data without image
+        // Send the data via AJAX
+        $.ajax({
+            url: 'save_to_firebase.php', // Your PHP file to handle saving
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    alert('City data saved successfully!');
+                    location.reload(); // Reload to see changes
+                } else {
+                    alert('Error saving city data: ' + result.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                alert('Failed to save city data.');
             }
-        }
+        });
     });
-
-    // Prepare the AJAX request to save data
-    const dataToUpdate = {
-        CityDetail: cityDetail,
-        Hotels: hotels,
-        Flights: flights,
-        Vehicle: vehicles, 
-        Itinerary: itineraries // Append new itineraries
-    };
-
-    const formData = new FormData();
-    formData.append('country', country);
-    formData.append('city', city);
-    formData.append('data', JSON.stringify(dataToUpdate)); // Add the itinerary data here
-
-    // Send the data via AJAX
-    $.ajax({
-        url: 'save_to_firebase.php', // Your PHP file to handle saving
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function(response) {
-            const result = JSON.parse(response);
-            if (result.success) {
-                alert('Itineraries saved successfully!');
-                location.reload(); // Reload to see changes
-            } else {
-                alert('Error saving itineraries: ' + result.message);
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error:', error);
-            alert('Failed to save itineraries.');
-        }
-    });
-});
-
 
     // Function to preview hotel image
     function previewHotelImage(input) {

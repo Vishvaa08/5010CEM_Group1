@@ -267,19 +267,18 @@ header {
 .description-text {
     width: 100%; 
     height: 80px; 
-  
+    resize: none;
     border-radius: 5px;
     border: 1px solid #ccc; 
     padding: 8px; 
     }
 
 .hotel-item input,
-.hotel-item textarea,
-.itinerary-item input,
-.itinerary-item textarea {
+.hotel-item textarea {
     padding: 8px;
     height: 38px;
     width: 100%;
+    resize: none;
     border: 1px solid #ccc;
     border-radius: 5px;
     text-align: center;
@@ -356,6 +355,25 @@ header {
 
 .action-buttons button:hover {
     background-color: #333;
+}
+
+.itinerary-details-container {
+    flex-grow: 1;
+    text-align: center; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    margin-left: 10px;         
+}
+
+.itinerary-details-container input {
+    padding: 8px; 
+    height: 38px; 
+    width: 100%; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    text-align: center; 
+    box-sizing: border-box;
 }
 
 .draggable-container {
