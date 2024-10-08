@@ -184,7 +184,8 @@
             const expiryNumber = document.getElementById('card-expiry-input').value;
             const cvvNumber = document.getElementById('card-cvv-input').value;
 
-            const dateToday = date();
+            const today = new Date();
+            const dateToday = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');
 
             <?php
 
