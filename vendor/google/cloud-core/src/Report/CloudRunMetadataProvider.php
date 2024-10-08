@@ -39,11 +39,6 @@ class CloudRunMetadataProvider implements MetadataProviderInterface
      */
     private $revisionId;
 
-    /**
-     * @var string
-     */
-    private $traceId;
-
     public function __construct(array $env)
     {
         $this->serviceId = isset($env['K_SERVICE'])
@@ -52,9 +47,6 @@ class CloudRunMetadataProvider implements MetadataProviderInterface
         $this->revisionId = isset($env['K_REVISION'])
             ? $env['K_REVISION']
             : 'unknown-revision';
-        $this->traceId = isset($env['HTTP_X_CLOUD_TRACE_CONTEXT'])
-            ? substr($env['HTTP_X_CLOUD_TRACE_CONTEXT'], 0, 32)
-            : null;
         $this->metadata = new Metadata();
     }
 
@@ -95,13 +87,11 @@ class CloudRunMetadataProvider implements MetadataProviderInterface
     }
 
     /**
-     * Return the labels. We need to evaluate $_SERVER for each request.
-     * @return array
+     * not implemented
+     * @TODO
      */
     public function labels()
     {
-        return !empty($this->traceId)
-            ? ['run.googleapis.com/trace_id' => $this->traceId ]
-            : [];
+        return [];
     }
 }
