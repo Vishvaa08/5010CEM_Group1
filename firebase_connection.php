@@ -11,5 +11,6 @@ $factory = (new Factory)
     ->withDatabaseUri('https://traveltrail-39e23-default-rtdb.firebaseio.com/');
 
 $database = $factory->createDatabase();
+$storage = $factory->createStorage(); 
 
 ?>
