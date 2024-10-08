@@ -41,9 +41,9 @@ $orders = $ordersRef->getValue();
                 <h1>TravelTrail</h1>
             </div>
             <div id="right-nav">
-                <a class="nav-link" href="#home">Home</a>
-                <a class="nav-link" href="#about">About</a>
-                <a class="nav-link" href="#contact">Contact</a>
+                <a class="nav-link" href="index.php#home">Home</a>
+                <a class="nav-link" href="index.php#about">About</a>
+                <a class="nav-link" href="index.php#contact">Contact</a>
                 <div class="user-profile"></div>
             </div>
         </div>
