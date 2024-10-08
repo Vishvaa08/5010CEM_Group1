@@ -1,3 +1,21 @@
+<?php
+require 'vendor/autoload.php'; 
+
+use Kreait\Firebase\Factory;
+
+$serviceAccount = __DIR__ . '/prvkey.json';
+
+$factory = (new Factory)
+    ->withServiceAccount($serviceAccount)
+    ->withDatabaseUri('https://traveltrail-39e23-default-rtdb.firebaseio.com/');
+
+$database = $factory->createDatabase();
+session_start();
+$userId = $_SESSION['user_id']; 
+$ordersRef = $database->getReference('orders/' . $userId); 
+$orders = $ordersRef->getValue();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,56 +49,37 @@
         </div>
 
         <div id="orders">
-            <h2>Your Orders <span class="order-count">2</span></h2>
+            <h2>Your Orders <span class="order-count"><?php echo is_array($orders) ? count($orders) : 0; ?></span></h2>
 
-            <div class="order-item">
-                <div class="order-info">
-                    <div class="order-details">
-                        <p><strong>Order Placed:</strong> August 2, 2024</p>
-                        <p><strong>Total:</strong> RM3050.00</p>
-                        <p><strong>Location:</strong> Japan, Tokyo</p>
+            <?php if (is_array($orders) && count($orders) > 0): ?>
+                <?php foreach ($orders as $orderId => $order): ?>
+                    <div class="order-item">
+                        <div class="order-info">
+                            <div class="order-details">
+                                <p><strong>Order Placed:</strong> <?php echo $order['orderPlaced']; ?></p>
+                                <p><strong>Total:</strong> RM<?php echo number_format($order['total'], 2); ?></p>
+                                <p><strong>Location:</strong> <?php echo $order['location']; ?></p>
+                            </div>
+                            <div class="order-actions">
+                                <p><strong>Order #:</strong> <?php echo $orderId; ?></p>
+                                <button onclick="toggleDetails(this)" class="action-link">View Details</button>
+                            </div>
+                        </div>
+                        <div class="order-details-expanded" style="display: none;">
+                            <img src="<?php echo $order['image']; ?>" alt="Order Image" class="order-img">
+                            <div class="order-booking-info">
+                                <p><strong>Hotel:</strong> <?php echo $order['hotel']; ?></p>
+                                <p><?php echo $order['rooms']; ?> rooms</p>
+                                <p><strong>Flight:</strong> <?php echo $order['flight']; ?></p>
+                                <p><strong>Vehicle:</strong> <?php echo $order['vehicle']; ?></p>
+                                <a href="booking.php" class="reorder-button">Order again</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="order-actions">
-                        <p><strong>Order #:</strong> 002356</p>
-                        <button onclick="toggleDetails(this)" class="action-link">View Details</button>
-                    </div>
-                </div>
-                <div class="order-details-expanded" style="display: none;">
-                    <img src="tokyo.jpg" alt="Tokyo" class="order-img">
-                    <div class="order-booking-info">
-                        <p><strong>Hotel:</strong> 3-Star, Double</p>
-                        <p>2 rooms</p>
-                        <p><strong>Flight:</strong> Economy, 1-way, 4 seats</p>
-                        <p><strong>Vehicle:</strong> 4-seater, September 5, 2024</p>
-                        <button class="reorder-button">Order again</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="order-item">
-                <div class="order-info">
-                    <div class="order-details">
-                        <p><strong>Order Placed:</strong> November 12, 2024</p>
-                        <p><strong>Total:</strong> RM5050.00</p>
-                        <p><strong>Location:</strong> Korea, Seoul</p>
-                    </div>
-                    <div class="order-actions">
-                        <p><strong>Order #:</strong> 004569</p>
-                        <button onclick="toggleDetails(this)" class="action-link">View Details</button>
-                    </div>
-                </div>
-                <div class="order-details-expanded" style="display: none;">
-                    <img src="seoul.jpg" alt="Seoul" class="order-img">
-                    <div class="order-booking-info">
-                        <p><strong>Hotel:</strong> 4-Star, Double</p>
-                        <p>1 room</p>
-                        <p><strong>Flight:</strong> Business, 1-way, 2 seats</p>
-                        <p><strong>Vehicle:</strong> 6-seater, November 20, 2024</p>
-                        <button class="reorder-button">Order again</button>
-                    </div>
-                </div>
-            </div>
-
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No orders found.</p>
+            <?php endif; ?>
         </div>
     </div>
 
