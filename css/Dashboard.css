@@ -236,8 +236,6 @@ header {
     border-radius: 3px;
 }
 
-
-
 .bar-chart {
     height: 160px;
     background-image: linear-gradient(to right, #FFD700 50%, #1E90FF 50%);
