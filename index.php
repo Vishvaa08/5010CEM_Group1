@@ -88,41 +88,43 @@
         </div>
     </div>
 
+    
+    <!-- Contact Form -->
     <div id="contact">
     <div class="contact-section">
         <h2>Get the Info you're looking for!</h2>
-
         <div class="info-item">
-            <button class="info-btn" data-id="info1">Delays and Cancellations</button>
+            <button class="info-btn" data-id="info1">What happens if my flight or hotel booking is delayed or canceled?</button>
             <div class="info-details" id="info1">
                 <p>As a third-party booking service, we are not responsible for delays or cancellations related to flights or hotels. 
                 For any issues with your tour guide, please contact us directly for assistance.</p>
             </div>
         </div>
-
         <div class="info-item">
-            <button class="info-btn" data-id="info2">Refunds</button>
+            <button class="info-btn" data-id="info2">Can I request a refund if my booking is canceled or delayed?</button>
             <div class="info-details" id="info2">
                 <p>Refunds are not provided through our service, as we act solely as a booking platform.
                 Please reach out to the airline, hotel, or service provider directly for any refund inquiries.</p>
             </div>
         </div>
-
         <div class="info-item">
-            <button class="info-btn" data-id="info3">No Change or Cancel Fees</button>
+            <button class="info-btn" data-id="info3">Are there any fees for changing or canceling my booking?</button>
             <div class="info-details" id="info3">
                 <p>We do not charge any fees for changing or cancelling your bookings. 
                 However, please refer to the policies of the respective airline, hotel, or service provider for any applicable charges.</p>
             </div>
         </div>
-
-        <div class="contact">
-        <p>Still Need HELP? <a href="#" class="contact-link" id="openModal">Contact Us</a></p>
-        </div>
     </div>
-</div>
+            <div class="contact">
+                <p>Still Need HELP? <a href="#" class="contact-link" id="openModal">Contact Us</a></p>
+            </div>
+        </div>
 
-    <!-- Modal structure -->
+        <div class="footer">
+            <p>Copyright © 1997 TravelTrail</p>
+        </div>
+
+
         <div id="contactModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
@@ -140,7 +142,6 @@
                 </form>
             </div>
         </div>
-
 
 <script>
         const buttons = document.querySelectorAll('.info-btn');
