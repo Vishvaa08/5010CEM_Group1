@@ -102,11 +102,11 @@ header {
 .header-right {
     display: flex;
     align-items: center;
-    gap: 15px; /* Add gap between search box and button */
+    gap: 15px; 
 }
 
 .search-box {
-    margin-right: 10px; /* Adjust margin as needed */
+    margin-right: 10px; 
 }
 
 .search-box input {
@@ -155,8 +155,8 @@ header {
     display: flex;
     flex-wrap: wrap;
     gap: 100px;
-    justify-content: center; /* Centers the city cards horizontally */
-    padding: 20px 0; /* Optional: Adds padding to the top and bottom */
+    justify-content: center; 
+    padding: 20px 0; 
 }
 
 
@@ -378,9 +378,9 @@ header {
 
 .draggable-container {
     display: flex;
-    gap: 10px; /* This is the space between the draggable buttons */
-    margin-bottom: 20px; /* This adds space between the draggable buttons and the city card */
-    margin-top: 20px; /* Optional: This adds some space above the buttons as well */
+    gap: 10px; 
+    margin-bottom: 20px; 
+    margin-top: 20px; 
 }
 
 
@@ -475,7 +475,7 @@ header {
 
 /* Add Button - City */
 .add-city-btn {
-    margin-top: 0; /* Remove top margin since it's inline */
+    margin-top: 0; 
     display: flex;
     align-items: center;
 }
@@ -487,10 +487,10 @@ header {
     width: 40px;
     height: 40px;
     font-size: 18px;
-    border-radius: 10%; /* Make it fully circular */
+    border-radius: 10%; 
     transition: all 0.3s ease;
     padding: 0;
-    margin-left: 10px; /* Space between search box and button */
+    margin-left: 10px; 
 }
 
 .add-city-btn button:hover {

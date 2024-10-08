@@ -181,369 +181,353 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    // Initialize draggable and droppable
-    $(".draggable").draggable({ helper: "clone" });
+    $(document).ready(function() {
+        $(".draggable").draggable({ helper: "clone" });
 
-    // Update the draggable drop logic to handle the hotel input form
-    $(".city-card").droppable({
-        accept: ".draggable",
-        hoverClass: "highlight",
-        drop: function(event, ui) {
-            const type = $(ui.draggable).data("type");
-            const cityCard = $(this);
+        $(".city-card").droppable({
+            accept: ".draggable",
+            hoverClass: "highlight",
+            drop: function(event, ui) {
+                const type = $(ui.draggable).data("type");
+                const cityCard = $(this);
 
-            if (type === "hotel") {
-                const hotelHtml = `
-                <div class="hotel-item">
-                    <input type="text" data-key="Hotel" placeholder="Enter Hotel Name" required>
-                    <input type="file" name="hotelImage[]" class="hotel-image-upload" accept="image/*" onchange="previewHotelImage(this)">
-                    <div class="image-container">
-                        <img src="" class="thumbnail hotel-thumbnail" alt="Hotel Image" style="display: none;">
-                    </div>
-                    <div class="room-item">
-                        <span>Single</span>
-                        <input type="number" data-key="SingleRooms" placeholder="Rooms" style="width: 40%;">
-                        <input type="number" data-key="SinglePrice" placeholder="Price" style="width: 40%;">
-                    </div>
-                    <div class="room-item">
-                        <span>Double</span>
-                        <input type="number" data-key="DoubleRooms" placeholder="Rooms" style="width: 40%;">
-                        <input type="number" data-key="DoublePrice" placeholder="Price" style="width: 40%;">
-                    </div>
-                    <div class="room-item">
-                        <span>Suite</span>
-                        <input type="number" data-key="SuiteRooms" placeholder="Rooms" style="width: 40%;">
-                        <input type="number" data-key="SuitePrice" placeholder="Price" style="width: 40%;">
-                    </div>
-                    <textarea data-key="Description" placeholder="Enter Hotel Description"></textarea>
-                </div>`;
-                cityCard.append(hotelHtml);
-            } else if (type === "flight") {
-                const flightHtml = `
-                    <div class="flight-item">
-                        <span contenteditable="true" data-key="Class">Flight Class</span>
-                        <input type="number" data-key="Price" value="" placeholder="Flight Price">
-                        <input type="number" data-key="TotalSeats" placeholder="Total Seats" style="width: 100%;">
+                if (type === "hotel") {
+                    const hotelHtml = `
+                    <div class="hotel-item">
+                        <input type="text" data-key="Hotel" placeholder="Enter Hotel Name" required>
+                        <input type="file" name="hotelImage[]" class="hotel-image-upload" accept="image/*" onchange="previewHotelImage(this)">
+                        <div class="image-container">
+                            <img src="" class="thumbnail hotel-thumbnail" alt="Hotel Image" style="display: none;">
+                        </div>
+                        <div class="room-item">
+                            <span>Single</span>
+                            <input type="number" data-key="SingleRooms" placeholder="Rooms" style="width: 40%;">
+                            <input type="number" data-key="SinglePrice" placeholder="Price" style="width: 40%;">
+                        </div>
+                        <div class="room-item">
+                            <span>Double</span>
+                            <input type="number" data-key="DoubleRooms" placeholder="Rooms" style="width: 40%;">
+                            <input type="number" data-key="DoublePrice" placeholder="Price" style="width: 40%;">
+                        </div>
+                        <div class="room-item">
+                            <span>Suite</span>
+                            <input type="number" data-key="SuiteRooms" placeholder="Rooms" style="width: 40%;">
+                            <input type="number" data-key="SuitePrice" placeholder="Price" style="width: 40%;">
+                        </div>
+                        <textarea data-key="Description" placeholder="Enter Hotel Description"></textarea>
                     </div>`;
-                cityCard.append(flightHtml);
-            } else if (type === "vehicle") {
-                const vehicleHtml = `
-                    <div class="vehicle-item">
-                        <select data-key="VehicleType" class="vehicle-type">
-                            <option value="TypeA">4-Seater</option>
-                            <option value="TypeB">7-Seater</option>
-                            <option value="TypeC">Van</option>
-                        </select>
-                        <input type="number" data-key="VehiclePrice" value="" placeholder="Vehicle Price">
-                        <button class="delete-vehicle-btn">Delete</button>
+                    cityCard.append(hotelHtml);
+                } else if (type === "flight") {
+                    const flightHtml = `
+                        <div class="flight-item">
+                            <span contenteditable="true" data-key="Class">Flight Class</span>
+                            <input type="number" data-key="Price" value="" placeholder="Flight Price">
+                            <input type="number" data-key="TotalSeats" placeholder="Total Seats" style="width: 100%;">
+                        </div>`;
+                    cityCard.append(flightHtml);
+                } else if (type === "vehicle") {
+                    const vehicleHtml = `
+                        <div class="vehicle-item">
+                            <select data-key="VehicleType" class="vehicle-type">
+                                <option value="TypeA">4-Seater</option>
+                                <option value="TypeB">7-Seater</option>
+                                <option value="TypeC">Van</option>
+                            </select>
+                            <input type="number" data-key="VehiclePrice" value="" placeholder="Vehicle Price">
+                            <button class="delete-vehicle-btn">Delete</button>
+                        </div>`;
+                    cityCard.append(vehicleHtml);
+                } else if (type === "itinerary") {
+                    const itineraryHtml = `
+                    <div class="itinerary-item">
+                        <strong contenteditable="true" data-key="Itinerary">New Itinerary</strong>
+                        <input type="file" name="itineraryImage[]" accept="image/*" multiple>
+                        <div class="image-container">
+                            <img src="" class="thumbnail itinerary-thumbnail" alt="Itinerary Image" style="display: none;">
+                        </div>
+                        <input type="number" data-key="ItineraryPrice" placeholder="Itinerary Price">
+                        <button class="delete-itinerary-btn">Delete</button>
                     </div>`;
-                cityCard.append(vehicleHtml);
-            } else if (type === "itinerary") {
-                const itineraryHtml = `
-                <div class="itinerary-item">
-                    <strong contenteditable="true" data-key="Itinerary">New Itinerary</strong>
-                    <input type="file" name="itineraryImage[]" accept="image/*" multiple>
-                    <div class="image-container">
-                        <img src="" class="thumbnail itinerary-thumbnail" alt="Itinerary Image" style="display: none;">
-                    </div>
-                    <input type="number" data-key="ItineraryPrice" placeholder="Itinerary Price">
-                    <button class="delete-itinerary-btn">Delete</button>
-                </div>`;
-                cityCard.append(itineraryHtml);
+                    cityCard.append(itineraryHtml);
+                }
             }
-        }
-    });
+        });
 
-    // Hotel dropdown change event
-    $('.hotel-dropdown').on('change', function() {
-        const hotelIndex = $(this).val(); 
+        // Hotel dropdown change event
+        $('.hotel-dropdown').on('change', function() {
+            const hotelIndex = $(this).val(); 
+            const cityCard = $(this).closest('.city-card');
+            const cityDetails = <?php echo json_encode($dataCities); ?>; 
+            const city = cityCard.data('city'); 
+            cityCard.find('.hotel-details').html(''); 
+
+            if (hotelIndex && cityDetails[city]['Hotels'][hotelIndex]) {
+                const hotel = cityDetails[city]['Hotels'][hotelIndex];
+
+                const hotelHtml = `
+                    <div class="hotel-item">
+                        <div class="hotel-image-container">
+                            <img src="${hotel.Image || 'https://example.com/path/to/default_image.jpg'}" class="hotel-image" alt="${hotel.Hotel}">
+                        </div>
+                        <div class="hotel-details-container">
+                            <div class="room-detail">
+                                <label>Double:</label>
+                                <input type="number" class="form-control" value="${hotel.Rooms.Double.Availability || 0}" readonly>
+                            </div>
+                            <div class="room-detail">
+                                <label>Price:</label>
+                                <input type="number" class="form-control" value="${hotel.Rooms.Double.Price || 0}" readonly>
+                            </div>
+                            <div class="room-detail">
+                                <label>Single:</label>
+                                <input type="number" class="form-control" value="${hotel.Rooms.Single.Availability || 0}" readonly>
+                            </div>
+                            <div class="room-detail">
+                                <label>Price:</label>
+                                <input type="number" class="form-control" value="${hotel.Rooms.Single.Price || 0}" readonly>
+                            </div>
+                            <div class="room-detail">
+                                <label>Suite:</label>
+                                <input type="number" class="form-control" value="${hotel.Rooms.Suite.Availability || 0}" readonly>
+                            </div>
+                            <div class="room-detail">
+                                <label>Price:</label>
+                                <input type="number" class="form-control" value="${hotel.Rooms.Suite.Price || 0}" readonly>
+                            </div>
+                        </div>
+                        <div class="description-container">
+                            <label>Hotel Description:</label>
+                            <textarea class="form-control description-textarea" readonly>${hotel.Description || ''}</textarea>
+                        </div>
+                    </div>`;
+                cityCard.find('.hotel-details').html(hotelHtml); 
+            }
+        });
+
+    // Itinerary dropdown change event
+    $('.itinerary-dropdown').on('change', function() {
+        const itineraryIndex = $(this).val(); 
         const cityCard = $(this).closest('.city-card');
         const cityDetails = <?php echo json_encode($dataCities); ?>; 
         const city = cityCard.data('city'); 
-        cityCard.find('.hotel-details').html(''); 
 
-        if (hotelIndex && cityDetails[city]['Hotels'][hotelIndex]) {
-            const hotel = cityDetails[city]['Hotels'][hotelIndex];
+        cityCard.find('.itinerary-details').html(''); 
 
-            const hotelHtml = `
-                <div class="hotel-item">
-                    <div class="hotel-image-container">
-                        <img src="${hotel.Image || 'https://example.com/path/to/default_image.jpg'}" class="hotel-image" alt="${hotel.Hotel}">
+        if (itineraryIndex && cityDetails[city]['Itinerary'][itineraryIndex]) {
+            const itinerary = cityDetails[city]['Itinerary'][itineraryIndex];
+
+            const itineraryHtml = `
+                <div class="itinerary-item d-flex">
+                    <div class="itinerary-image-container">
+                        <img src="${itinerary.Image || 'https://example.com/path/to/default_image.jpg'}" class="itinerary-image" alt="${itinerary.Itinerary}">
                     </div>
-                    <div class="hotel-details-container">
-                        <div class="room-detail">
-                            <label>Double:</label>
-                            <input type="number" class="form-control" value="${hotel.Rooms.Double.Availability || 0}" readonly>
+                    <div class="itinerary-details-container">
+                        <div class="mb-3">
+                            <label>Itinerary Name:</label>
+                            <input type="text" class="form-control" value="${itinerary.Itinerary}" readonly>
                         </div>
-                        <div class="room-detail">
+                        <div class="mb-3">
                             <label>Price:</label>
-                            <input type="number" class="form-control" value="${hotel.Rooms.Double.Price || 0}" readonly>
+                            <input type="number" class="form-control" value="${itinerary.Price}" readonly>
                         </div>
-                        <div class="room-detail">
-                            <label>Single:</label>
-                            <input type="number" class="form-control" value="${hotel.Rooms.Single.Availability || 0}" readonly>
-                        </div>
-                        <div class="room-detail">
-                            <label>Price:</label>
-                            <input type="number" class="form-control" value="${hotel.Rooms.Single.Price || 0}" readonly>
-                        </div>
-                        <div class="room-detail">
-                            <label>Suite:</label>
-                            <input type="number" class="form-control" value="${hotel.Rooms.Suite.Availability || 0}" readonly>
-                        </div>
-                        <div class="room-detail">
-                            <label>Price:</label>
-                            <input type="number" class="form-control" value="${hotel.Rooms.Suite.Price || 0}" readonly>
-                        </div>
-                    </div>
-                    <div class="description-container">
-                        <label>Hotel Description:</label>
-                        <textarea class="form-control description-textarea" readonly>${hotel.Description || ''}</textarea>
                     </div>
                 </div>`;
-            cityCard.find('.hotel-details').html(hotelHtml); 
+            
+            cityCard.find('.itinerary-details').html(itineraryHtml); 
         }
     });
 
-   // Itinerary dropdown change event
-$('.itinerary-dropdown').on('change', function() {
-    const itineraryIndex = $(this).val(); 
-    const cityCard = $(this).closest('.city-card');
-    const cityDetails = <?php echo json_encode($dataCities); ?>; 
-    const city = cityCard.data('city'); 
-
-    cityCard.find('.itinerary-details').html(''); // Clear previous details
-
-    // Check if a valid itinerary index is selected
-    if (itineraryIndex && cityDetails[city]['Itinerary'][itineraryIndex]) {
-        const itinerary = cityDetails[city]['Itinerary'][itineraryIndex];
-
-        // Construct HTML for displaying itinerary details
-        const itineraryHtml = `
-            <div class="itinerary-item d-flex">
-                <div class="itinerary-image-container">
-                    <img src="${itinerary.Image || 'https://example.com/path/to/default_image.jpg'}" class="itinerary-image" alt="${itinerary.Itinerary}">
-                </div>
-                <div class="itinerary-details-container">
-                    <div class="mb-3">
-                        <label>Itinerary Name:</label>
-                        <input type="text" class="form-control" value="${itinerary.Itinerary}" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label>Price:</label>
-                        <input type="number" class="form-control" value="${itinerary.Price}" readonly>
-                    </div>
-                </div>
-            </div>`;
-        
-        // Update the itinerary details container with the new HTML
-        cityCard.find('.itinerary-details').html(itineraryHtml); 
-    }
-});
-
-
-
-    // Function to toggle the city form
-    function toggleCityForm() {
-        var form = document.getElementById('addCityForm');
-        form.style.display = form.style.display === 'none' ? 'block' : 'none';
-    }
-
-
-    // Add New City - Form Submission
-    $('#addCityForm').submit(function(e) {
-        e.preventDefault();
-        
-        const country = '<?php echo htmlspecialchars($_GET["country"]); ?>'; // Get country from URL
-        const cityName = $('#cityName').val().trim();
-        const cityImageFile = $('#cityImage')[0].files[0];
-
-        if (!cityName || !cityImageFile) {
-            alert('Please fill all fields and select an image.');
-            return;
+        function toggleCityForm() {
+            var form = document.getElementById('addCityForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
         }
 
-        const formData = new FormData();
-        formData.append('country', country);
-        formData.append('cityName', cityName);
-        formData.append('cityImage', cityImageFile);
 
-        $.ajax({
-            url: 'add_new_city.php', // PHP script to handle city saving
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                alert('City added successfully!');
-                location.reload(); // Reload the page to display the new city
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-                alert('Error adding city: ' + error);
+        // Add New City 
+        $('#addCityForm').submit(function(e) {
+            e.preventDefault();
+            
+            const country = '<?php echo htmlspecialchars($_GET["country"]); ?>'; 
+            const cityName = $('#cityName').val().trim();
+            const cityImageFile = $('#cityImage')[0].files[0];
+
+            if (!cityName || !cityImageFile) {
+                alert('Please fill all fields and select an image.');
+                return;
             }
+
+            const formData = new FormData();
+            formData.append('country', country);
+            formData.append('cityName', cityName);
+            formData.append('cityImage', cityImageFile);
+
+            $.ajax({
+                url: 'add_new_city.php', 
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    alert('City added successfully!');
+                    location.reload(); 
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('Error adding city: ' + error);
+                }
+            });
         });
-    });
 
-    // Edit button click event - handles saving all city data including itineraries
-    $(document).on('click', '.edit-btn', function() {
-        const card = $(this).closest('.city-card'); // Correctly define the card variable
-        const country = card.data('country'); 
-        const city = card.find('[data-key="City"]').text().trim(); 
-        const cityDetail = card.find('[data-key="CityDetail"]').val().trim(); 
-        const hotels = {};
-        const itineraries = [];
+        $(document).on('click', '.edit-btn', function() {
+            const card = $(this).closest('.city-card'); 
+            const country = card.data('country'); 
+            const city = card.find('[data-key="City"]').text().trim(); 
+            const cityDetail = card.find('[data-key="CityDetail"]').val().trim(); 
+            const hotels = {};
+            const itineraries = [];
 
-        // Collect hotel data
-        card.find('.hotel-item').each(function(index) {
-            const hotelName = $(this).find('[data-key="Hotel"]').val().trim(); 
-            const hotelDescription = $(this).find('[data-key="Description"]').val() || ''; 
-            const singleRooms = $(this).find('[data-key="SingleRooms"]').val() || '';
-            const singlePrice = $(this).find('[data-key="SinglePrice"]').val() || '';
-            const doubleRooms = $(this).find('[data-key="DoubleRooms"]').val() || '';
-            const doublePrice = $(this).find('[data-key="DoublePrice"]').val() || '';
-            const suiteRooms = $(this).find('[data-key="SuiteRooms"]').val() || '';
-            const suitePrice = $(this).find('[data-key="SuitePrice"]').val() || '';
-            const hotelImageFile = $(this).find('.hotel-image-upload')[0].files[0];
+            // Collect hotel data
+            card.find('.hotel-item').each(function(index) {
+                const hotelName = $(this).find('[data-key="Hotel"]').val().trim(); 
+                const hotelDescription = $(this).find('[data-key="Description"]').val() || ''; 
+                const singleRooms = $(this).find('[data-key="SingleRooms"]').val() || '';
+                const singlePrice = $(this).find('[data-key="SinglePrice"]').val() || '';
+                const doubleRooms = $(this).find('[data-key="DoubleRooms"]').val() || '';
+                const doublePrice = $(this).find('[data-key="DoublePrice"]').val() || '';
+                const suiteRooms = $(this).find('[data-key="SuiteRooms"]').val() || '';
+                const suitePrice = $(this).find('[data-key="SuitePrice"]').val() || '';
+                const hotelImageFile = $(this).find('.hotel-image-upload')[0].files[0];
 
-            if (hotelName) {
-                let hotelId = index + 1; // or other logic for unique hotel ID
-                hotels[hotelId] = {
-                    Hotel: hotelName,
-                    Description: hotelDescription,
-                    Rooms: {
-                        Single: { Availability: singleRooms, Price: singlePrice },
-                        Double: { Availability: doubleRooms, Price: doublePrice },
-                        Suite: { Availability: suiteRooms, Price: suitePrice }
+                if (hotelName) {
+                    let hotelId = index + 1; 
+                    hotels[hotelId] = {
+                        Hotel: hotelName,
+                        Description: hotelDescription,
+                        Rooms: {
+                            Single: { Availability: singleRooms, Price: singlePrice },
+                            Double: { Availability: doubleRooms, Price: doublePrice },
+                            Suite: { Availability: suiteRooms, Price: suitePrice }
+                        }
+                    };
+
+                    if (hotelImageFile) {
+                        const imageFormData = new FormData();
+                        imageFormData.append('hotelImage', hotelImageFile);
+                        imageFormData.append('hotelId', hotelId);
+                        imageFormData.append('country', country);
+                        imageFormData.append('city', city);
+
+                        $.ajax({
+                            url: 'upload_hotel_image.php',
+                            type: 'POST',
+                            data: imageFormData,
+                            contentType: false,
+                            processData: false,
+                            success: function(response) {
+                                const result = JSON.parse(response);
+                                if (result.success) {
+                                    hotels[hotelId].Image = result.imageUrl;
+                                } else {
+                                    alert('Failed to upload hotel image');
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Image upload error:', error);
+                            }
+                        });
                     }
-                };
+                }
+            });
 
-                // Upload the image first
-                if (hotelImageFile) {
-                    const imageFormData = new FormData();
-                    imageFormData.append('hotelImage', hotelImageFile);
-                    imageFormData.append('hotelId', hotelId);
-                    imageFormData.append('country', country);
-                    imageFormData.append('city', city);
+            // Collect itinerary data
+            card.find('.itinerary-item').each(function(index) {
+                const itineraryName = $(this).find('[data-key="Itinerary"]').text().trim() || '';
+                const itineraryImageFile = $(this).find('input[type="file"]')[0].files[0]; 
+                const itineraryPrice = $(this).find('[data-key="ItineraryPrice"]').val() || '0';
+
+                if (itineraryName) {
+                    const itineraryObject = {
+                        Itinerary: itineraryName,
+                        ItineraryPrice: itineraryPrice,
+                    };
+
+                    const formData = new FormData();
+                    formData.append('country', country);
+                    formData.append('city', city);
+                    formData.append('data', JSON.stringify(itineraryObject)); 
+                    formData.append('itineraryImage', itineraryImageFile);
 
                     $.ajax({
-                        url: 'upload_hotel_image.php',
+                        url: 'save_itinerary.php', 
                         type: 'POST',
-                        data: imageFormData,
+                        data: formData,
                         contentType: false,
                         processData: false,
                         success: function(response) {
                             const result = JSON.parse(response);
                             if (result.success) {
-                                hotels[hotelId].Image = result.imageUrl;
+                                alert('Itinerary saved successfully!');
                             } else {
-                                alert('Failed to upload hotel image');
+                                alert('Error saving itinerary: ' + result.message);
                             }
                         },
                         error: function(xhr, status, error) {
-                            console.error('Image upload error:', error);
+                            console.error('Error:', error);
+                            alert('Failed to save itinerary.');
                         }
                     });
                 }
-            }
-        });
+            });
 
-        // Collect itinerary data
-        card.find('.itinerary-item').each(function(index) {
-            const itineraryName = $(this).find('[data-key="Itinerary"]').text().trim() || '';
-            const itineraryImageFile = $(this).find('input[type="file"]')[0].files[0]; 
-            const itineraryPrice = $(this).find('[data-key="ItineraryPrice"]').val() || '0';
-
-            if (itineraryName) {
-                const itineraryObject = {
-                    Itinerary: itineraryName,
-                    ItineraryPrice: itineraryPrice,
-                };
-
-                // Prepare form data for uploading
-                const formData = new FormData();
-                formData.append('country', country);
-                formData.append('city', city);
-                formData.append('data', JSON.stringify(itineraryObject)); // Add the itinerary data
-                formData.append('itineraryImage', itineraryImageFile); // Add the image file
-
-                // Send the data via AJAX
-                $.ajax({
-                    url: 'save_itinerary.php', // Your PHP file to handle saving
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        const result = JSON.parse(response);
-                        if (result.success) {
-                            alert('Itinerary saved successfully!');
-                        } else {
-                            alert('Error saving itinerary: ' + result.message);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                        alert('Failed to save itinerary.');
-                    }
-                });
-            }
-        });
-
-        // Prepare the AJAX request to save data
-        const dataToUpdate = {
-            CityDetail: cityDetail,
-            Hotels: hotels,
-            Itinerary: itineraries // Append new itineraries
-        };
-
-        const formData = new FormData();
-        formData.append('country', country);
-        formData.append('city', city);
-        formData.append('data', JSON.stringify(dataToUpdate)); // Add the data here
-
-        // Send the data via AJAX
-        $.ajax({
-            url: 'save_to_firebase.php', // Your PHP file to handle saving
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                const result = JSON.parse(response);
-                if (result.success) {
-                    alert('City data saved successfully!');
-                    location.reload(); // Reload to see changes
-                } else {
-                    alert('Error saving city data: ' + result.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                alert('Failed to save city data.');
-            }
-        });
-    });
-
-    // Function to preview hotel image
-    function previewHotelImage(input) {
-        const file = input.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                $(input).siblings('.image-container').find('.hotel-thumbnail').attr('src', e.target.result).show();
+            const dataToUpdate = {
+                CityDetail: cityDetail,
+                Hotels: hotels,
+                Itinerary: itineraries 
             };
-            reader.readAsDataURL(file);
-        }
-    }
 
-    // Function to toggle the city form
-    function toggleCityForm() {
-        var form = document.getElementById('addCityForm');
-        form.style.display = form.style.display === 'none' ? 'block' : 'none';
-    }
-});
+            const formData = new FormData();
+            formData.append('country', country);
+            formData.append('city', city);
+            formData.append('data', JSON.stringify(dataToUpdate)); 
+
+            $.ajax({
+                url: 'save_to_firebase.php', 
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    const result = JSON.parse(response);
+                    if (result.success) {
+                        alert('City data saved successfully!');
+                        location.reload(); 
+                    } else {
+                        alert('Error saving city data: ' + result.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('Failed to save city data.');
+                }
+            });
+        });
+
+        function previewHotelImage(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $(input).siblings('.image-container').find('.hotel-thumbnail').attr('src', e.target.result).show();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function toggleCityForm() {
+            var form = document.getElementById('addCityForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+    });
 </script>
 
 </body>

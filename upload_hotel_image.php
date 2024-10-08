@@ -3,7 +3,6 @@ require 'vendor/autoload.php';
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Exception\FirebaseException;
 
-// Include your Firebase connection details
 include 'firebase_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -21,18 +20,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fileType = $_FILES['hotelImage']['type'];
     $safeFileName = time() . '_' . preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', $fileName);
 
-    // Check file type (Allowing only certain types)
     $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if (in_array($fileType, $allowedTypes)) {
         try {
-            // Upload the image to Firebase Storage
             $bucket = $storage->getBucket();
             $bucket->upload(
                 fopen($fileTmpPath, 'r'),
                 ['name' => 'hotels/' . $safeFileName, 'metadata' => ['contentType' => $fileType]]
             );
 
-            // Generate public URL for the image
             $imageUrl = "https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/hotels%2F" . urlencode($safeFileName) . "?alt=media";
             echo json_encode(['success' => true, 'imageUrl' => $imageUrl]);
         } catch (Exception $e) {
