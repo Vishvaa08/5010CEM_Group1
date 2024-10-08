@@ -115,7 +115,7 @@ if (is_array($payments)) {
 
                 </div>
             </div>
-            <div class="card">
+            <div class="card-payment">
             <div class="icon-wrapper">
                 <img src="images/payment.jpg" alt="Payment Icon">
             </div>
@@ -143,7 +143,7 @@ if (is_array($payments)) {
                 </div>
             </div>
         </div>
-        <div class="chart bar">
+        <div class="chart bar inventory-chart">
             <h3>Inventory Status</h3>
             <div class="bar-chart">
                 <canvas id="inventoryChart"></canvas>
