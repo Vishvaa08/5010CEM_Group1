@@ -184,6 +184,8 @@
             const expiryNumber = document.getElementById('card-expiry-input').value;
             const cvvNumber = document.getElementById('card-cvv-input').value;
 
+            const dateToday = date();
+
             <?php
 
             $pointsEarned = ($calc) / 100;
@@ -221,6 +223,7 @@
                 numTickets: '<?php echo $numTickets; ?>',
                 pointsEarned: '<?php echo $pointsEarned ?>',
                 hotelID: '<?php echo $hotel; ?>',
+                orderDate: dateToday,
                 cardDetails: {
                     cardNumber: cardNumber,
                     expiry: expiryNumber,
