@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if (isset($_SESSION['userName'])) {
+    $name = $_SESSION['userName'];
+} else {
+    $name = 'Error:Name not found';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +21,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Joti+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
         rel="stylesheet">
+
+        <style>
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.3);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: black;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            font-family: 'Joti One', sans-serif;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -176,6 +210,10 @@
             const today = new Date();
             const dateToday = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');
 
+            <?php
+            $name = $_SESSION['userName'];
+            ?>
+
             if (accNumber === '') {
                 alert('Enter your Account Number!');
                 return;
@@ -227,9 +265,10 @@
                         numTickets: '<?php echo $numTickets; ?>',
                         pointsEarned: '<?php echo $pointsEarned ?>',
                         hotelID: '<?php echo $hotel; ?>',
+                        userName: '<?php echo $name; ?>',
                         orderDate: dateToday,
                         paymentProof: downloadURL,
-                        bankType: 'Maybank',
+                        bankType: 'MayBank',
                         bankDetails: {
                             accNumber: accNumber
                         }
@@ -255,6 +294,16 @@
                     console.error('Error:', error);
                     alert('An error occurred while processing your booking.');
                 });
+        }
+
+        function openPopup(bookingId) {
+            document.getElementById('bookingId').textContent = bookingId;
+            document.getElementById('popupOverlay').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+            window.location.replace('index.php');
         }
     </script>
 

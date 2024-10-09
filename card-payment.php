@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if (isset($_SESSION['userName'])) {
+    $name = $_SESSION['userName'];
+} else {
+    $name = 'Error:Name not found';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -164,7 +174,7 @@
                 </div>
             </div>
             <div id="button-container">
-                <button class="confirm-btn" onclick="submit()">Confirm</button>
+                <button class="confirm-btn">Confirm</button>
             </div>
         </div>
     </div>
@@ -179,10 +189,16 @@
     </div>
 
     <script>
+        document.querySelector('.confirm-btn').addEventListener('click', submit);
+
         function submit() {
             const cardNumber = document.getElementById('card-number-input').value.replace(/\D/g, '');
             const expiryNumber = document.getElementById('card-expiry-input').value;
             const cvvNumber = document.getElementById('card-cvv-input').value;
+
+            <?php
+            $name = $_SESSION['userName'];
+            ?>
 
             const today = new Date();
             const dateToday = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');
@@ -225,6 +241,7 @@
                 pointsEarned: '<?php echo $pointsEarned ?>',
                 hotelID: '<?php echo $hotel; ?>',
                 orderDate: dateToday,
+                userName: '<?php echo $name; ?>',
                 cardDetails: {
                     cardNumber: cardNumber,
                     expiry: expiryNumber,
