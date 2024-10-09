@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if (isset($_SESSION['userName'])) {
+    $name = $_SESSION['userName'];
+} else {
+    $name = 'Error:Name not found';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -200,6 +210,10 @@
             const today = new Date();
             const dateToday = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');
 
+            <?php
+            $name = $_SESSION['userName'];
+            ?>
+
             if (accNumber === '') {
                 alert('Enter your Account Number!');
                 return;
@@ -251,6 +265,7 @@
                         numTickets: '<?php echo $numTickets; ?>',
                         pointsEarned: '<?php echo $pointsEarned ?>',
                         hotelID: '<?php echo $hotel; ?>',
+                        userName: '<?php echo $name; ?>',
                         orderDate: dateToday,
                         paymentProof: downloadURL,
                         bankType: 'Public Bank',
