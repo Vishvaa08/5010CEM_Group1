@@ -30,18 +30,36 @@ if (isset($_SESSION['userName'])) {
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.7);
             justify-content: center;
             align-items: center;
+        }
+
+        .popup-overlay h2{
+            margin-bottom: 3vh;
+            font-size: 40px;
+        }
+
+        .orderID{
+            font-size: 60px;
+            margin-bottom: 0;
+            margin-top: 5px;
+        }
+
+        .orderText{
+            padding-right: 10px;
+            padding-left: 10px;
         }
 
         .popup-content {
             background: black;
             color: white;
             padding: 20px;
-            border-radius: 5px;
+            border-radius: 10px;
             text-align: center;
             font-family: 'Joti One', sans-serif;
+            font-size: 20px;
+            height: 40vh;
         }
     </style>
 
@@ -182,8 +200,8 @@ if (isset($_SESSION['userName'])) {
     <div class="popup-overlay" id="popupOverlay">
         <div class="popup-content">
             <h2>Order ID</h2>
-            <p><strong id="bookingId">1234</strong></p>
-            <p>We will notify you once your payment has been processed.</p>
+            <p class="orderID"><strong id="bookingId">1234</strong></p>
+            <p class="orderText">We will notify you once your payment has been processed.</p>
             <button class="close-popup" onclick="closePopup()">Close</button>
         </div>
     </div>
