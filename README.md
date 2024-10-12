@@ -1,5 +1,5 @@
 Downloading Instructions:
-1. Create a new project in your computer.
-2. Download this project ZIP folder.
-3. Extract everything from the ZIP into your new folder.
-4. Run index.html on your computer using xampp localhost.
+1. Download the project ZIP file.
+2. Open project in IDE and create a new file called prvkey.json
+3. Copy & paste the json code below into the file.
+4. You are now connected to the database!
