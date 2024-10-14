@@ -1,6 +1,10 @@
-﻿body {
+﻿html{
+    scroll-behavior: smooth;
+}
+
+body {
     font-family: Arial, sans-serif;
-    background-color: #E8E8E8;
+    background-color: rgb(232, 232, 232);
     margin: 0;
     padding: 0;
 }
@@ -20,51 +24,51 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-    .sidebar ul {
-        list-style: none;
-        padding: 10px;
-        margin: 0;
-        flex-grow: 1;
-    }
+.sidebar ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+    flex-grow: 1;
+}
 
-    .sidebar li {
-        margin-bottom: 30px;
-        display: flex;
-        align-items: center;
-        color: #333333;
-        font-size: 17px;
-    }
+.sidebar li {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    color: #333333;
+    font-size: 17px;
+}
 
-        .sidebar li img {
-            width: 26px;
-            height: 26px;
-            margin-right: 15px;
-            vertical-align: middle;
-        }
+.sidebar li img {
+    width: 26px;
+    height: 26px;
+    margin-right: 15px;
+    vertical-align: middle;
+}
 
-        .sidebar li a {
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            align-items: center
-        }
+.sidebar li a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+}
 
-        .sidebar li:hover {
-            background-color: #E8E8E8;
-            padding: 10px;
-            border-radius: 10px;
-        }
+.sidebar li:hover {
+    background-color: #E8E8E8;
+    padding: 10px;
+    border-radius: 10px;
+}
 
-        .sidebar li.active {
-            background-color: black;
-            color: #FFFFFF;
-            padding: 10px;
-            border-radius: 10px;
-        }
+.sidebar li.active {
+    background-color: black;
+    color: #FFFFFF;
+    padding: 10px;
+    border-radius: 10px;
+}
 
-            .sidebar li.active a {
-                color: #FFFFFF;
-            }
+.sidebar li.active a {
+    color: #FFFFFF;
+}
 
 .sidebar-header {
     display: flex;
@@ -74,10 +78,10 @@
     padding: 20px;
 }
 
-    .sidebar-header h2 {
-        margin: 0;
-        text-align: center;
-    }
+.sidebar-header h2 {
+    margin: 0;
+    text-align: center;
+}
 
 .main-content {
     margin-left: 300px;
@@ -91,63 +95,41 @@ header {
 }
 
 .header-left {
-    display: block;
+    display: flex;
+    flex-direction: column;
 }
 
 .header-right {
     display: flex;
     align-items: center;
+    gap: 15px; /* Add gap between search box and button */
 }
 
 .search-box {
-    margin-right: 20px;
+    margin-right: 10px; /* Adjust margin as needed */
 }
 
-
-    .search-box input {
-        padding: 10px;
-        width: 200px;
-        border-radius: 15px;
-        margin-right: 10px;
-        border: none;
-        background-color: #FFF;
-    }
+.search-box input {
+    padding: 10px;
+    width: 200px;
+    border-radius: 15px;
+    border: none;
+    background-color: #ffffff;
+}
 
 .user-wrapper {
     color: #282828;
     font-weight: bold;
     display: flex;
-    align-items: center;
+    align-items: center; 
 }
 
 .logout-icon {
-    width: 24px;
-    height: 24px;
-    margin-left: 5px;
+    width: 24px; 
+    height: 24px; 
+    margin-left: 5px; 
     vertical-align: middle;
 }
-
-.add-package-btn {
-    margin-top: 20px;
-    text-align: right;
-}
-
-    .add-package-btn button {
-        background-color: black;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
-        .add-package-btn button:hover {
-            background-color: #333;
-        }
-
-
-/* Grid layout for displaying countries */
 .country-grid {
     display: flex;
     flex-wrap: wrap;
@@ -155,31 +137,391 @@ header {
     margin-top: 20px;
 }
 
-/* Individual country card */
-.country-card {
+.country-card,
+.city-card {
     background-color: #FFFFFF;
     border: 1px solid #ccc;
     border-radius: 10px;
-    padding: 20px;
-    width: 200px;
+    padding: 10px;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-    .country-card img {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 10px;
+.country-card {
+    width: 200px;
+}
+
+.city-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 100px;
+    justify-content: center; /* Centers the city cards horizontally */
+    padding: 20px 0; /* Optional: Adds padding to the top and bottom */
+}
+
+
+.city-card {
+    width: 450px;
+    box-sizing: border-box;
+    flex-direction: column;
+}
+
+.city-card img,
+.country-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.hotel-dropdown,
+.itinerary-dropdown {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.hotel-item,
+.itinerary-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.hotel-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 80%; 
+}
+
+.hotel-image-container {
+    width: 100%; 
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.hotel-image {
+    width: 100%; 
+    height: 200px; 
+    object-fit: cover; 
+    border-radius: 10px;
+}
+
+.hotel-details-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 15px; 
+    margin-bottom: 20px; 
+}
+
+.room-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.description-container {
+    width: 100%; 
+    display: flex;
+    flex-direction: column;
+}
+
+.description-textarea {
+    width: 100%; 
+    resize: none; 
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    box-sizing: border-box;
+    max-width: 100%; 
+}
+
+.description {
+    width: 100%; 
+    margin-bottom: 15px; 
+}
+
+.description label {
+    font-weight: bold; 
+    margin-bottom: 5px; 
+    display: block; 
+}
+
+.description-text {
+    width: 100%; 
+    height: 80px; 
+  
+    border-radius: 5px;
+    border: 1px solid #ccc; 
+    padding: 8px; 
     }
 
-    .country-card h4 {
-        margin-top: 10px;
-        font-size: 18px;
-        color: #333;
-    }
+.hotel-item input,
+.hotel-item textarea,
+.itinerary-item input,
+.itinerary-item textarea {
+    padding: 8px;
+    height: 38px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    box-sizing: border-box;
+}
 
-    .country-card p {
-        color: red; /* You can customize this to your desired style */
-        font-size: 14px;
+.hotel-item span,
+.itinerary-item span {
+    text-align: left;
+    padding: 5px;
+}
+
+.flight-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.flight-item input {
+    padding: 5px;
+    height: 38px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.flight-item span {
+    text-align: left;
+    padding: 5px;
+}
+
+.vehicle-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.vehicle-item input,
+.vehicle-item select {
+    padding: 5px;
+    height: 38px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.vehicle-item span {
+    text-align: left;
+    padding: 5px;
+}
+
+/* Action buttons */
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.action-buttons button {
+    width: 30%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.action-buttons button:hover {
+    background-color: #333;
+}
+
+.draggable-container {
+    display: flex;
+    gap: 10px; /* This is the space between the draggable buttons */
+    margin-bottom: 20px; /* This adds space between the draggable buttons and the city card */
+    margin-top: 20px; /* Optional: This adds some space above the buttons as well */
+}
+
+
+.draggable {
+    width: 100px;
+    height: 50px;
+    padding: 5px;
+    padding-bottom: 10px;
+    background-color: #9f9d9d;
+    border: 1px solid #9a9999;
+    border-radius: 7px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: move;
+}
+
+/* Add Button - Country */
+.add-package-btn {
+    text-align: right;
+    margin-top: 10px;
+}
+.add-package-btn button {
+    background-color: #000000; 
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    border-radius: 10%;
+    transition: all 0.3s ease;
+    padding: 0;
+    align-items: right;
+}
+
+.add-package-btn button:hover {
+    background-color: #848687; 
+    transform: scale(1.1); 
+}
+
+#addCountryForm .card {
+    border: none;
+    border-radius: 10px;
+    background-color: #f8f9fa; 
+}
+
+#addCountryForm .card-title {
+    font-weight: bold;
+    color: #343a40; 
+}
+
+#addCountryForm .card-body {
+    padding: 30px;
+}
+
+#addCountryForm .form-control {
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ced4da; 
+    transition: border-color 0.3s ease;
+}
+
+#addCountryForm .form-control:focus {
+    border-color: #5e5e5e; 
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25); 
+}
+
+#addCountryForm .btn-success {
+    background-color: #28a745;
+    border: none;
+    padding: 5px;
+    font-size: 18px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+#addCountryForm .btn-success:hover {
+    background-color: #218838; 
+}
+
+#addCountryForm {
+    margin-bottom: 40px;
+}
+
+@media (max-width: 768px) {
+    #addCountryForm .card-body {
+        padding: 20px;
     }
+}
+
+/* Add Button - City */
+.add-city-btn {
+    margin-top: 0; /* Remove top margin since it's inline */
+    display: flex;
+    align-items: center;
+}
+
+.add-city-btn button {
+    background-color: #000000; 
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    border-radius: 10%; /* Make it fully circular */
+    transition: all 0.3s ease;
+    padding: 0;
+    margin-left: 10px; /* Space between search box and button */
+}
+
+.add-city-btn button:hover {
+    background-color: #848687; 
+    transform: scale(1.1); 
+}
+
+/* City Form Styling */
+#addCityForm .card {
+    border: none;
+    border-radius: 10px;
+    background-color: #f8f9fa; 
+}
+
+#addCityForm .card-title {
+    font-weight: bold;
+    color: #343a40; 
+}
+
+#addCityForm .card-body {
+    padding: 30px;
+}
+
+#addCityForm .form-control {
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ced4da; 
+    transition: border-color 0.3s ease;
+}
+
+#addCityForm .form-control:focus {
+    border-color: #5e5e5e; 
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25); 
+}
+
+#addCityForm .btn-success {
+    background-color: #28a745;
+    border: none;
+    padding: 5px;
+    font-size: 18px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+#addCityForm .btn-success:hover {
+    background-color: #218838; 
+}
+
+#addCityForm {
+    margin-bottom: 40px;
+}

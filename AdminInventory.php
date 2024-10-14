@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="css/Dashboard.css">
+    <title>Admin Inventory</title>
+    <link rel="stylesheet" href="css/Inventory.css">
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
 
     </head>
@@ -15,7 +15,7 @@
             <h2>TravelTrail</h2>
         </div>
         <ul>
-            <li class="active">
+            <li>
                 <img src="images/home dark.jpg" alt="Dashboard Icon">
                     <a href="AdminDashboard.php">Dashboard</a>
             </li>
@@ -27,8 +27,8 @@
                 <img src="images/users.png" alt="User Icon">
                     <a href="AdminUser.php">User Management</a>
             </li>
-            <li>
-                <img src="images/inventory.png" alt="Inventory Icon">
+            <li class="active">
+                <img src="images/inventory dark.jpg" alt="Inventory Icon">
                     <a href="AdminInventory.php">Inventory Status</a>
             </li>
             <li>
@@ -41,8 +41,8 @@
     <div class="main-content">
         <header>
             <div class="header-left">
-                <h2>Dashboard / Home</h2>
-                <p>Dashboard</p>
+                <h2>Dashboard / Inventory</h2>
+                <p>Inventory</p>
             </div>
             <div class="header-right">
                 <div class="search-box">
@@ -57,43 +57,6 @@
             </div>
         </header>
 
-
-        <div class="cards">
-            <div class="card">
-                <div class="icon-wrapper1">
-                    <img src="images/new user.jpg" alt="User Icon">
-                </div>
-                <div class="card-info">
-                    <h3>Unverified Users</h3>
-                    <p>3</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="icon-wrapper">
-                    <img src="images/payment.jpg" alt="Payment Icon">
-                </div>
-                <div class="card-info">
-                    <h3>New Payments</h3>
-                    <p>3</p>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="charts">
-            <div class="chart pie">
-                <h3>Total Earnings</h3>
-                <div class="pie-chart">
-                    <span>12.6k</span>
-                </div>
-            </div>
-            <div class="chart bar">
-                <h3>Inventory Status</h3>
-                <div class="bar-chart">
-
-                </div>
-            </div>
-        </div>
 
     </div>
 

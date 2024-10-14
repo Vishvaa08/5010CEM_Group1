@@ -1,0 +1,197 @@
+html{
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #4b4b4b;
+}
+
+body::-webkit-scrollbar{
+    display: none;
+}
+
+.joti-one-regular {
+    font-family: "Joti One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.josefin-sans {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+#header {
+    background-color: rgba(0, 0, 0, 0.4);
+    height: 12vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 6;
+}
+
+#left-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 12vh;
+}
+
+#left-nav a {
+    text-decoration: none;
+}
+
+#right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.logo-container {
+    width: 60px;
+    height: 60px;
+    background-color: black;
+    margin-left: 2vw;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    margin-left: 2vw;
+    font-family: "Joti One", serif;
+    font-size: 40px;
+    color: #fff;
+}
+
+.user-profile {
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    background-image: url('../images/user.png');
+    background-size: cover;
+    background-position: center;
+    margin-right: 1vw;
+}
+
+#right-nav a {
+    text-decoration: none;
+    font-family: "Joti One", serif;
+    font-size: 30px;
+    color: white;
+    margin-right: 8vw;
+}
+
+#right-nav a:hover {
+    color: #929292;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.user-profile:hover {
+    cursor: pointer;
+}
+#orders {
+    margin-top: 100px;
+    width: 90%; 
+    max-width: 1200px; 
+    padding: 0 20px; 
+    padding-left: 80px; 
+}
+
+
+h2 {
+    font-size: 24px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;  
+}
+
+.order-count {
+    background-color: #000;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.order-item {
+    background-color: #fff; 
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    color: #000;
+}
+
+.order-info {
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.order-details,
+.order-actions {
+    flex-basis: 45%;
+}
+
+.order-details p,
+.order-actions p {
+    margin: 5px 0;
+    color: #000; 
+    font-size: 22px;
+}
+
+.order-details-expanded {
+    display: none; 
+    flex-direction: row;
+    margin-top: 15px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.order-img {
+    max-width: 150px;
+    margin-right: 20px;
+    border-radius: 5px;
+}
+
+.order-booking-info p {
+    margin: 5px 0;
+    color: #000;
+    font-size: 22px;
+}
+
+.reorder-button {
+    background-color: #0d6efd; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.reorder-button:hover {
+    background-color: #004fca; 
+}
+
+.action-link {
+    background: none;
+    border: none;
+    color: #4c4cff; 
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.action-link:hover {
+    text-decoration: underline;
+}

@@ -233,13 +233,24 @@
             const selectedBank = document.querySelector('input[name="bank"]:checked');
             const selectedVehicle = document.querySelector('input[name="vehicle"]:checked');
             const selectedRoom = document.querySelector('input[name="room"]:checked');
+            const selectedFlight = document.querySelector('input[name="flight"]:checked');
+            const itineraries = document.querySelectorAll('input[name="itineraries[]"]:checked');
+            const ticketType = document.querySelector('input[name="ticket-type"]:checked');
 
-            if (selectedBank && selectedVehicle  && selectedRoom) {
+            if (selectedBank && selectedVehicle && selectedRoom && selectedFlight && itineraries.length > 0 && ticketType) {
                 var form = document.getElementById('form');
                 const bankValue = selectedBank.value;
 
                 const city = document.querySelector('input[name="city"]').value;
                 const country = document.querySelector('input[name="country"]').value;
+
+                const checkinDate = document.getElementById('check-in-date').value;
+                const checkoutDate = document.getElementById('check-out-date').value;
+
+                if (!checkinDate || !checkoutDate) {
+                    alert('Please select both check-in and check-out dates.');
+                    return;
+                }
 
                 const itineraries = document.querySelectorAll('input[name="itineraries[]"]:checked');
                 let itineraryParams = [];
@@ -256,7 +267,15 @@
 
                 form.submit();
             } else {
-                alert('Please select a bank, vehicle and a room!');
+                let alertMessage = 'Please select the following:\n';
+                if (itineraries.length === 0) alertMessage += '- Itineraries\n';
+                if (!selectedVehicle) alertMessage += '- Vehicle\n';
+                if (!selectedRoom) alertMessage += '- Room\n';
+                if (!selectedFlight) alertMessage += '- Flight\n';
+                if (!ticketType) alertMessage += '- Ticket Type\n';
+                if (!selectedBank) alertMessage += '- Bank\n';
+
+                alert(alertMessage);
             }
         });
 
@@ -264,8 +283,11 @@
             event.preventDefault();
             const selectedVehicle = document.querySelector('input[name="vehicle"]:checked');
             const selectedRoom = document.querySelector('input[name="room"]:checked');
+            const selectedFlight = document.querySelector('input[name="flight"]:checked');
+            const itineraries = document.querySelectorAll('input[name="itineraries[]"]:checked');
+            const ticketType = document.querySelector('input[name="ticket-type"]:checked');
 
-            if (selectedVehicle  && selectedRoom) {
+            if (selectedVehicle && selectedRoom && selectedFlight && itineraries.length > 0 && ticketType) {
                 var form = document.getElementById('form');
 
                 const city = document.querySelector('input[name="city"]').value;
@@ -279,11 +301,26 @@
                     itineraryParams.push(itinerary.value);
                 });
 
+                const checkinDate = document.getElementById('check-in-date').value;
+                const checkoutDate = document.getElementById('check-out-date').value;
+
+                if (!checkinDate || !checkoutDate) {
+                    alert('Please select both check-in and check-out dates.');
+                    return;
+                }
+
                 form.action = 'card-payment.php?city=' + city + '&country=' + country + '&hotel' + hotel;
 
                 form.submit();
             } else {
-                alert('Please select a vehicle and a room!');
+                let alertMessage = 'Please select the following:\n';
+                if (itineraries.length === 0) alertMessage += '- Itineraries\n';
+                if (!selectedVehicle) alertMessage += '- Vehicle\n';
+                if (!selectedRoom) alertMessage += '- Room\n';
+                if (!selectedFlight) alertMessage += '- Flight\n';
+                if (!ticketType) alertMessage += '- Ticket Type\n';
+
+                alert(alertMessage);
             }
         });
     </script>

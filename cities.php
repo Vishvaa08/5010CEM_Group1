@@ -22,6 +22,8 @@
 
     ?>
 
+    <div id="loading-animation"></div>
+
     <div id="header">
         <div id="left-nav">
             <a href="index.php">
@@ -50,7 +52,7 @@
         <?php
         //
         foreach ($dataCity as $city => $cityData) {
-            if (isset($cityData['City'])) {
+            if (isset($cityData['City']) && isset($cityData['Availability']) && $cityData['Availability'] === 'Available') {
                 echo '<div class="card">';
 
                 if (isset($cityData['CityImage'])) {
@@ -77,8 +79,13 @@
     </div>
 
     <script>
+        var loader = document.getElementById('loading-animation');
 
-        function filterCity(){
+        window.addEventListener('load', function() {
+            loader.style.display = 'none';
+        });
+
+        function filterCity() {
             const userInput = document.getElementById('search-bar').value.toLowerCase();
             const cards = document.querySelectorAll('.card');
 
@@ -87,7 +94,6 @@
                 card.style.display = cityName.includes(userInput) ? 'block' : 'none';
             });
         }
-
     </script>
 
 </body>

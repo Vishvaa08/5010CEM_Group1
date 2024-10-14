@@ -448,6 +448,7 @@ h3{
     font-size: 40px;
     font-family: 'Joti One', serif;
     text-align: center;
+    padding-top: 1vh;
 }
 
 #bottom{
@@ -460,14 +461,18 @@ h3{
 #bot1,
 #bot2,
 #bot3{
-    width: 33vw;
+    width: 32vw;
     height: 100%;
     display: flex;
     flex-direction: row;
 }
 
-#bot2{
-    width: 34vw;
+#bot1{
+    margin-left: 10px;
+}
+
+#bot3{
+    margin-left: 25px;
 }
 
 #bot-left{
