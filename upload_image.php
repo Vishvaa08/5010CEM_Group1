@@ -3,24 +3,19 @@ require 'vendor/autoload.php';
 
 use Kreait\Firebase\Factory;
 
-// Enable error reporting for debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Load the service account
 $serviceAccount = __DIR__ . '/prvkey.json';
-
 $factory = (new Factory)
     ->withServiceAccount($serviceAccount)
     ->withDatabaseUri('https://traveltrail-39e23-default-rtdb.firebaseio.com/');
 
 $storage = $factory->createStorage();
 $database = $factory->createDatabase();
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['image'])) {
-        // Check for upload errors
         if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
             echo json_encode([
                 'success' => false,
@@ -33,13 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fileType = $_FILES['image']['type'];
         $originalFileName = $_FILES['image']['name'];
 
-        // Ensure the filename is safe
         $safeFileName = preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', $originalFileName);
-        $uniqueFileName = time() . '_' . $safeFileName; // Create unique name using timestamp
+        $uniqueFileName = time() . '_' . $safeFileName;
 
-        // Set dynamic path for Firebase Storage
-        $country = isset($_POST['country']) ? $_POST['country'] : ''; // Dynamically get country
-        $city = isset($_POST['city']) ? $_POST['city'] : ''; // Dynamically get city
+        $country = isset($_POST['country']) ? $_POST['country'] : '';
+        $city = isset($_POST['city']) ? $_POST['city'] : '';
 
         if (empty($country) || empty($city)) {
             echo json_encode([
@@ -50,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         try {
-            // Check file type
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
             if (!in_array($fileType, $allowedTypes)) {
                 echo json_encode([
@@ -60,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
 
-            // Upload the new image to Firebase Storage
             $bucket = $storage->getBucket();
             $bucket->upload(
                 fopen($file, 'r'),
@@ -70,10 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]
             );
 
-            // Get the public URL of the new image
             $newImageUrl = "https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/" . urlencode($uniqueFileName) . "?alt=media";
 
-            // Update the CityImage with the new image URL (overwriting the old one)
             $database->getReference('Packages/' . $country . '/' . $city . '/CityImage')
                 ->set($newImageUrl);
 
@@ -101,7 +90,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ]);
 }
 
-// Check if cityImage was uploaded and handle it
 if (isset($_FILES['cityImage']) && $_FILES['cityImage']['error'] === UPLOAD_ERR_OK) {
     $fileTmpPath = $_FILES['cityImage']['tmp_name'];
     $fileName = $_FILES['cityImage']['name'];
@@ -110,11 +98,9 @@ if (isset($_FILES['cityImage']) && $_FILES['cityImage']['error'] === UPLOAD_ERR_
     $fileNameCmps = explode(".", $fileName);
     $fileExtension = strtolower(end($fileNameCmps));
 
-    // Specify your upload directory
     $uploadFileDir = './uploaded_images/';
     $dest_path = $uploadFileDir . $fileName;
 
-    // Move the uploaded file to the desired location
     if (move_uploaded_file($fileTmpPath, $dest_path)) {
         echo json_encode([
             'success' => true,
