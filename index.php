@@ -24,7 +24,7 @@
     <!-- End of splash screen -->
 
     <!--Beginning of home section of homepage including navigation-->
-    <div id="home">
+    <div id="home">xx
 
         <div id="header">
             <div id="left-nav">
