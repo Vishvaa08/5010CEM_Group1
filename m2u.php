@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if (isset($_SESSION['userName'])) {
+    $name = $_SESSION['userName'];
+} else {
+    $name = 'Error:Name not found';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +21,48 @@
     <link href="https://fonts.googleapis.com/css2?family=Joti+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
         rel="stylesheet">
+
+        <style>
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-overlay h2{
+            margin-bottom: 3vh;
+            font-size: 40px;
+        }
+
+        .orderID{
+            font-size: 60px;
+            margin-bottom: 0;
+            margin-top: 5px;
+        }
+
+        .orderText{
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+
+        .popup-content {
+            background: black;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Joti One', sans-serif;
+            font-size: 20px;
+            height: 40vh;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -135,17 +187,142 @@
         </div>
     </div>
 
-    <script>
-        document.querySelector('.confirm-btn').addEventListener('click', function() {
-            const accNumber = document.getElementById('accNum').value;
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <h2>Order ID</h2>
+            <p class="orderID"><strong id="bookingId">1234</strong></p>
+            <p class="orderText">We will notify you once your payment has been processed.</p>
+            <button class="close-popup">Close</button>
+        </div>
+    </div>
 
-            if (accNumber.length < 12) {
-                alert('Account number must be at least 12 digits!');
+    <script type="module">
+        document.querySelector('.confirm-btn').addEventListener('click', submit);
+        document.querySelector('.close-popup').addEventListener('click', closePopup);
+
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import {
+            getStorage,
+            ref,
+            uploadBytes,
+            getDownloadURL
+        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAef9-sjwyQL-MAiUYLUgBO0p68QuRGRNI",
+            projectId: "traveltrail-39e23",
+            storageBucket: "gs://traveltrail-39e23.appspot.com",
+            appId: "1:91519152452:web:422ee3957f7b21778fa711"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const storage = getStorage(app);
+
+        function submit() {
+            const accNumber = document.getElementById('accNum').value;
+            const fileInput = document.querySelector('.upload');
+            const file = fileInput.files[0];
+
+            const today = new Date();
+            const dateToday = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');
+
+            <?php
+            $name = $_SESSION['userName'];
+            ?>
+
+            if (accNumber === '') {
+                alert('Enter your Account Number!');
                 return;
             }
 
-            alert("All details are valid. Proceeding with confirmation.");
-        });
+            if (accNumber.length < 12) {
+                alert('Account Number should be exactly 12 digits!');
+                return;
+            }
+
+            if (!file) {
+                alert('Please select an image file!');
+                return;
+            }
+
+            const allowedExtensions = ['image/png', 'image/jpg', 'image/jpeg'];
+            if (!allowedExtensions.includes(file.type)) {
+                alert('Invalid file type. Please select a PNG, JPG, or JPEG image.');
+                return;
+            }
+
+            const imageName = `FPXpayments/${Date.now()}_${file.name}`;
+            const imageRef = ref(storage, imageName);
+
+            <?php
+
+            $pointsEarned = ($calc) / 100;
+
+            ?>
+
+            uploadBytes(imageRef, file)
+                .then(snapshot => {
+                    return getDownloadURL(imageRef);
+                })
+                .then(downloadURL => {
+                    const bookingData = {
+                        country: '<?php echo $country; ?>',
+                        city: '<?php echo $city; ?>',
+                        vehicleType: '<?php echo $vehicleType; ?>',
+                        vehiclePrice: '<?php echo $vehiclePrice; ?>',
+                        roomType: '<?php echo $roomType; ?>',
+                        roomPrice: '<?php echo $roomPrice; ?>',
+                        flightType: '<?php echo $flightType; ?>',
+                        flightPrice: '<?php echo $flightPrice; ?>',
+                        itineraries: <?php echo json_encode($itineraryList); ?>,
+                        totalPrice: '<?php echo $calc; ?>',
+                        checkInDate: '<?php echo $checkInDate; ?>',
+                        checkOutDate: '<?php echo $checkOutDate; ?>',
+                        numTickets: '<?php echo $numTickets; ?>',
+                        pointsEarned: '<?php echo $pointsEarned ?>',
+                        hotelID: '<?php echo $hotel; ?>',
+                        userName: '<?php echo $name; ?>',
+                        orderDate: dateToday,
+                        paymentProof: downloadURL,
+                        bankType: 'MayBank',
+                        bankDetails: {
+                            accNumber: accNumber
+                        }
+                    };
+
+                    return fetch('pushBookingData.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(bookingData)
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.bookingId) {
+                        openPopup(data.bookingId);
+                    } else {
+                        console.error('No booking ID returned:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while processing your booking.');
+                });
+        }
+
+        function openPopup(bookingId) {
+            document.getElementById('bookingId').textContent = bookingId;
+            document.getElementById('popupOverlay').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+            window.location.replace('index.php');
+        }
     </script>
 
 </body>

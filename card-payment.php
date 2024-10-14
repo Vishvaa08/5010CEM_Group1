@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if (isset($_SESSION['userName'])) {
+    $name = $_SESSION['userName'];
+} else {
+    $name = 'Error:Name not found';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,18 +30,36 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.7);
             justify-content: center;
             align-items: center;
+        }
+
+        .popup-overlay h2{
+            margin-bottom: 3vh;
+            font-size: 40px;
+        }
+
+        .orderID{
+            font-size: 60px;
+            margin-bottom: 0;
+            margin-top: 5px;
+        }
+
+        .orderText{
+            padding-right: 10px;
+            padding-left: 10px;
         }
 
         .popup-content {
             background: black;
             color: white;
             padding: 20px;
-            border-radius: 5px;
+            border-radius: 10px;
             text-align: center;
             font-family: 'Joti One', sans-serif;
+            font-size: 20px;
+            height: 40vh;
         }
     </style>
 
@@ -164,7 +192,7 @@
                 </div>
             </div>
             <div id="button-container">
-                <button class="confirm-btn" onclick="submit()">Confirm</button>
+                <button class="confirm-btn">Confirm</button>
             </div>
         </div>
     </div>
@@ -172,17 +200,26 @@
     <div class="popup-overlay" id="popupOverlay">
         <div class="popup-content">
             <h2>Order ID</h2>
-            <p><strong id="bookingId">1234</strong></p>
-            <p>We will notify you once your payment has been processed.</p>
+            <p class="orderID"><strong id="bookingId">1234</strong></p>
+            <p class="orderText">We will notify you once your payment has been processed.</p>
             <button class="close-popup" onclick="closePopup()">Close</button>
         </div>
     </div>
 
     <script>
+        document.querySelector('.confirm-btn').addEventListener('click', submit);
+
         function submit() {
             const cardNumber = document.getElementById('card-number-input').value.replace(/\D/g, '');
             const expiryNumber = document.getElementById('card-expiry-input').value;
             const cvvNumber = document.getElementById('card-cvv-input').value;
+
+            <?php
+            $name = $_SESSION['userName'];
+            ?>
+
+            const today = new Date();
+            const dateToday = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');
 
             <?php
 
@@ -221,6 +258,8 @@
                 numTickets: '<?php echo $numTickets; ?>',
                 pointsEarned: '<?php echo $pointsEarned ?>',
                 hotelID: '<?php echo $hotel; ?>',
+                orderDate: dateToday,
+                userName: '<?php echo $name; ?>',
                 cardDetails: {
                     cardNumber: cardNumber,
                     expiry: expiryNumber,

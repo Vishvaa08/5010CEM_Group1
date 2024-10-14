@@ -264,7 +264,7 @@ class ResumableUploader extends AbstractUploader
         $request = new Request(
             'PUT',
             $this->resumeUri,
-            ['Content-Range' => 'bytes */' . $this->data->getSize()]
+            ['Content-Range' => 'bytes */*']
         );
 
         return $this->requestWrapper->send($request, $this->requestOptions);
@@ -274,13 +274,12 @@ class ResumableUploader extends AbstractUploader
      * Gets the starting range for the upload.
      *
      * @param string $rangeHeader
-     * @return int
+     * @return int|null
      */
     protected function getRangeStart($rangeHeader)
     {
         if (!$rangeHeader) {
-            // assume no bytes are uploaded if no range header is present
-            return 0;
+            return null;
         }
 
         return (int) explode('-', $rangeHeader)[1] + 1;
