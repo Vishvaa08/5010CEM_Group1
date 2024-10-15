@@ -19,6 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: AdminDashboard.php");
         exit;
     }
+    
 }
 ?>
 <!DOCTYPE html>

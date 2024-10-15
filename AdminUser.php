@@ -13,14 +13,17 @@ $factory = (new Factory)
 $database = $factory->createDatabase();
 $storage = $factory->createStorage(); 
 
-// Handle verification when form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userId = $_POST['user_id'];
-    $userRef = $database->getReference('Users/' . $userId);
-    $userRef->update(['status' => 'verified']);
+    $action = $_POST['action'];
+
+    if ($action === 'verify') {
+        $database->getReference('users/' . $userId)->update(['status' => 'verified']);
+    } elseif ($action === 'reject') {
+        $database->getReference('users/' . $userId)->update(['status' => 'rejected']);
+    }
 }
 
-// Fetch users from Firebase
 $usersRef = $database->getReference('users');
 $users = $usersRef->getValue();
 ?>
@@ -41,46 +44,47 @@ $users = $usersRef->getValue();
         <h2>TravelTrail</h2>
     </div>
     <ul>
-            <li>
-                <img src="images/home dark.jpg" alt="Dashboard Icon">
-                    <a href="AdminDashboard.php">Dashboard</a>
-            </li>
-            <li>
-                <img src="images/package.png" alt="Packages Icon">
-                    <a href="AdminPackage.php">Travel Packages</a>
-            </li>
-            <li class="active">
-                <img src="images/users.png" alt="User Icon">
-                    <a href="AdminUser.php">User Management</a>
-            </li>
-            <li>
-                <img src="images/inventory.png" alt="Inventory Icon">
-                    <a href="AdminInventory.php">Inventory Status</a>
-            </li>
-            <li>
-                <img src="images/report.png" alt="Report Icon">
-                    <a href="AdminReport.php">Report</a>
-            </li>
-        </ul>
+        <li>
+            <img src="images/home.png" alt="Dashboard Icon">
+            <a href="AdminDashboard.php">Dashboard</a>
+        </li>
+        <li>
+            <img src="images/package.png" alt="Packages Icon">
+            <a href="AdminPackage.php">Travel Packages</a>
+        </li>
+        <li class="active">
+            <img src="images/users dark.jpg" alt="User Icon">
+            <a href="AdminUser.php">User Management</a>
+        </li>
+        <li>
+            <img src="images/inventory.png" alt="Inventory Icon">
+            <a href="AdminInventory.php">Inventory Status</a>
+        </li>
+        <li>
+            <img src="images/report.png" alt="Report Icon">
+            <a href="AdminReport.php">Report</a>
+        </li>
+    </ul>
 </div>
 
 <div class="main-content">
-    <header>
-        <div class="header-left">
-            <h2>Dashboard / User Management</h2>
-            <p>User Management</p>
-        </div>
-        <div class="header-right d-flex align-items-center">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search by Name, Phone, Email, or Passport" onkeyup="filterUsers()">
+        <header>
+            <div class="header-left">
+                <h2>Dashboard / User Management</h2>
+                <p>User Management</p>
             </div>
-
-            <div class="user-wrapper">
-                <p>Hi, Admin</p>
-                <a href="AdminLogin.php"><img src="images/logout.png" alt="Logout Icon" class="logout-icon"></a>
+            <div class="header-right">
+                <div class="search-box">
+                    <input type="text" placeholder="Search">
+                </div>
+                <div class="user-wrapper">
+                    <p>Hi, Admin</p>
+                    <a href="AdminLogin.php">
+                        <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+                    </a>
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
 
     <table>
         <thead>
@@ -98,21 +102,32 @@ $users = $usersRef->getValue();
                 <?php foreach ($users as $key => $user): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($user['name']); ?></td>
-                        <td><?php echo htmlspecialchars($user['passport']); ?></td>
+                        <td><?php echo !empty($user['passport']) ? htmlspecialchars($user['passport']) : 'N/A'; ?></td>
                         <td><?php echo htmlspecialchars($user['phone']); ?></td>
                         <td><?php echo htmlspecialchars($user['email']); ?></td>
                         <td>
-                            <?php if ($user['status'] == 'verified'): ?>
+                            <?php 
+                                $status = isset($user['status']) ? $user['status'] : 'unverified';
+                                if ($status === 'verified'): 
+                            ?>
                                 <span class="status verified">Verified</span>
+                            <?php elseif ($status === 'rejected'): ?>
+                                <span class="status rejected">Rejected</span>
                             <?php else: ?>
                                 <span class="status unverified">Unverified</span>
                             <?php endif; ?>
                         </td>
                         <td>
-                            <?php if ($user['status'] !== 'verified'): ?>
+                            <?php if ($status !== 'verified' && $status !== 'rejected'): ?>
                                 <form method="POST" style="display:inline;">
                                     <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($key); ?>">
+                                    <input type="hidden" name="action" value="verify">
                                     <button type="submit" class="btn btn-success">✔️ Verify</button>
+                                </form>
+                                <form method="POST" style="display:inline;">
+                                    <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($key); ?>">
+                                    <input type="hidden" name="action" value="reject">
+                                    <button type="submit" class="btn btn-danger">❌ Reject</button>
                                 </form>
                             <?php endif; ?>
                         </td>
@@ -129,29 +144,25 @@ $users = $usersRef->getValue();
 
 <script>
     function filterUsers() {
-        // Get the search input value
         const searchInput = document.getElementById('searchInput').value.toLowerCase();
-        // Get all table rows
         const rows = document.querySelectorAll('tbody tr');
 
         rows.forEach(row => {
-            // Get the text content of each cell in the row
             const cells = row.querySelectorAll('td');
             const name = cells[0].textContent.toLowerCase();
             const passport = cells[1].textContent.toLowerCase();
             const phone = cells[2].textContent.toLowerCase();
             const email = cells[3].textContent.toLowerCase();
 
-            // Check if the search input is found in any of the relevant fields
             if (
                 name.includes(searchInput) ||
                 passport.includes(searchInput) ||
                 phone.includes(searchInput) ||
                 email.includes(searchInput)
             ) {
-                row.style.display = ''; // Show the row
+                row.style.display = ''; 
             } else {
-                row.style.display = 'none'; // Hide the row
+                row.style.display = 'none'; 
             }
         });
     }
