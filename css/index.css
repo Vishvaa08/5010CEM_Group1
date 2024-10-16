@@ -338,51 +338,74 @@ h1 {
     bottom: 0;
 }
 
-
 .modal {
-    display: none; 
-    position: fixed; 
-    z-index: 1; 
+    display: none;
+    position: fixed;
+    z-index: 1;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); 
+    background-color: rgba(0, 0, 0, 0.5);
     justify-content: center;
     align-items: center;
 }
 
 .modal-content {
     background-color: #fff;
-    padding: 20px;
+    padding: 30px;
     border-radius: 15px;
     max-width: 500px;
-    width: 100%;
+    width: 90%;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
 }
 
 .modal-content h2 {
     font-family: 'Itim', cursive;
     font-size: 1.8rem;
     margin-bottom: 10px;
+    color: #333;
 }
 
 .modal-content p {
     font-family: 'Josefin Sans', sans-serif;
     font-size: 1.1rem;
     margin-bottom: 20px;
+    color: #555;
+}
+
+/* Input Fields for Name and Email */
+.modal-content input[type="text"],
+.modal-content input[type="email"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: 'Josefin Sans', sans-serif;
+    color: #333;
+    box-sizing: border-box;
+}
+
+.modal-content input[type="text"]::placeholder,
+.modal-content input[type="email"]::placeholder {
+    color: #aaa;
+    font-style: italic;
 }
 
 .modal-content textarea {
-        width: 100%; 
-        height: 150px; 
-        resize: none;
-        border-radius: 5px;
-        padding: 0px;
-        border: 1px solid #ccc;
-        font-family: 'Josefin Sans', sans-serif;
-        font-size: 1rem;
+    width: 100%;
+    height: 120px;
+    resize: none;
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1rem;
+    color: #333;
 }
 
 .submit-btn {

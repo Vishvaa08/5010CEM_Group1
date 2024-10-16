@@ -113,9 +113,17 @@ if (isset($_POST['submit'])) {
                     }
                     
                     echo '<h4 class="country-name">' . ucfirst($country) . '</h4>';
+
+                    // Availability checkbox
+                    $availability = isset($cities['Availability']) ? $cities['Availability'] : 'Not Available';
+                    echo '<div class="form-check">';
+                    echo '<input type="checkbox" class="form-check-input" id="availabilityCheckbox_' . htmlspecialchars($country) . '" ' . ($availability === 'Available' ? 'checked' : '') . '>';
+                    echo '<label class="form-check-label" for="availabilityCheckbox_' . htmlspecialchars($country) . '">Available</label>';
+                    echo '</div>';
+
                     echo '<a href="PackageDetails.php?country=' . urlencode($country) . '" class="view-btn">View More</a>';
                     echo '</div>';
-                }
+                        }
                 ?>
             </div> 
         </div>
@@ -148,6 +156,39 @@ if (isset($_POST['submit'])) {
 </div>
 
 <script>
+
+document.querySelectorAll('.form-check-input').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        const country = this.id.split('_')[1]; 
+        const availability = this.checked ? 'Available' : 'Not Available'; 
+
+        fetch('update_country.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                country: country, 
+                availability: availability 
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Country availability updated successfully!');
+            } else {
+                alert('Error updating availability: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to update availability.');
+        });
+    });
+});
+
+
+
 function toggleForm() {
     const form = document.getElementById('addCountryForm');
     form.style.display = form.style.display === 'none' ? 'block' : 'none';
