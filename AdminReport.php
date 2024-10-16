@@ -11,8 +11,6 @@ $factory = (new Factory)
     ->withDatabaseUri('https://traveltrail-39e23-default-rtdb.firebaseio.com/');
 
 $database = $factory->createDatabase();
-
-// Fetch booking data
 $bookingsRef = $database->getReference('Admin/newBookings');
 $bookings = $bookingsRef->getValue();
 
@@ -129,11 +127,11 @@ $totalEarnings = 0;
                     <?php if (is_array($bookings) && !empty($bookings)): ?>
                         <?php foreach ($bookings as $booking): ?>
                             <tr>
-                                <td><?php echo isset($booking['user_name']) ? htmlspecialchars($booking['user_name']) : 'N/A'; ?></td>
+                                <td><?php echo isset($booking['userName']) ? htmlspecialchars($booking['userName']) : 'N/A'; ?></td>
                                 <td><?php echo isset($booking['checkInDate']) ? htmlspecialchars($booking['checkInDate']) : 'N/A'; ?></td>
                                 <td>
-                                    <?php if (!empty($booking['receipt_url'])): ?>
-                                        <a href="<?php echo htmlspecialchars($booking['receipt_url']); ?>" target="_blank">Attachment</a>
+                                    <?php if (!empty($booking['paymentProof'])): ?>
+                                        <a href="<?php echo htmlspecialchars($booking['paymentProof']); ?>" target="_blank">Attachment</a>
                                     <?php else: ?>
                                         N/A
                                     <?php endif; ?>
