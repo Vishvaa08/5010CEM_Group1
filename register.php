@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" type="text/css" href="register.css">
+    <link rel="stylesheet" type="text/css" href="css/userRegister.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Joti+One&display=swap" rel="stylesheet">
@@ -15,15 +16,16 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
 </head>
+
 <body>
-    
-    <?php 
+
+    <?php
     include 'firebase_connection.php';
     ?>
-    
+
     <div id="header">
         <div id="left-nav">
-            <a href="index.html">
+            <a href="index.php">
                 <div class="logo-container">
                     <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
                 </div>
@@ -34,7 +36,7 @@
             <a class="nav-link" href="login.php">Login</a>
         </div>
     </div>
-    
+
     <div class="container-1">
         <div class="container">
             <h2>Register</h2>
@@ -60,6 +62,13 @@
                     <input type="text" id="address" name="address" placeholder="Enter your address" required>
                 </div>
                 <div class="form-group">
+                    <label for="role">Role</label>
+                    <select id="role" name="role" required>
+                        <option value="user">User</option>
+                        <option value="adminREQUEST">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" placeholder="Enter your password" required>
                 </div>
@@ -67,13 +76,13 @@
                     <label for="confirmPassword">Confirm Password</label>
                     <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
                 </div>
+
                 <button type="submit">Register</button>
             </form>
         </div>
     </div>
 
     <script>
-       
         const firebaseConfig = {
             // Add your Firebase configuration here
             apiKey: "AIzaSyAef9-sjwyQL-MAiUYLUgBO0p68QuRGRNI",
@@ -85,16 +94,16 @@
             appId: "1:91519152452:web:422ee3957f7b21778fa711"
         };
 
-        
+
         firebase.initializeApp(firebaseConfig);
 
-        
+
         const auth = firebase.auth();
 
-       
+
         const db = firebase.database();
 
-       
+
         const storage = firebase.storage();
 
         document.getElementById('registerForm').addEventListener('submit', function(e) {
@@ -106,30 +115,32 @@
             const phone = document.getElementById('phone').value;
             const address = document.getElementById('address').value;
             const profileImage = document.getElementById('profileImage').files[0];
+            const role = document.getElementById('role').value;
 
-            
+
             auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                  
+
                     const user = userCredential.user;
 
-                   
+
                     const storageRef = storage.ref('profile_images/' + user.uid);
                     return storageRef.put(profileImage).then(() => {
-                        
+
                         return storageRef.getDownloadURL();
                     }).then((downloadURL) => {
-                        
+
                         return db.ref('users/' + user.uid).set({
                             name: name,
                             email: email,
                             phone: phone,
                             address: address,
-                            profileImageUrl: downloadURL
+                            profileImageUrl: downloadURL,
+                            role: role
                         });
                     }).then(() => {
                         console.log('User registered successfully');
-                        
+
                         window.location.href = 'login.php';
                     });
                 })
@@ -141,4 +152,5 @@
         });
     </script>
 </body>
+
 </html>
