@@ -47,6 +47,40 @@ if (is_array($payments)) {
     }
 }
 
+$countryInventoryStatus = [];
+
+$countriesData = $database->getReference('Packages')->getValue() ?: [];
+
+foreach ($countriesData as $countryName => $countryData) {
+    $totalAvailableRooms = 0;
+    $totalAvailableSeats = 0;
+
+    foreach ($countryData as $cityName => $cityData) {
+        if (isset($cityData['Hotels'])) {
+            foreach ($cityData['Hotels'] as $hotelIndex => $hotelData) {
+                if (isset($hotelData['Rooms'])) {
+                    foreach ($hotelData['Rooms'] as $roomType => $roomData) {
+                        $availability = isset($roomData['Availability']) ? (int)$roomData['Availability'] : 0;
+                        $totalAvailableRooms += $availability;
+                    }
+                }
+            }
+        }
+
+        if (isset($cityData['Flights'])) {
+            foreach ($cityData['Flights'] as $class => $flightData) {
+                $seats = isset($flightData['Seats']) ? (int)$flightData['Seats'] : 0;
+                $totalAvailableSeats += $seats;
+            }
+        }
+    }
+
+    $countryInventoryStatus[$countryName] = [
+        'totalAvailableRooms' => $totalAvailableRooms,
+        'totalAvailableSeats' => $totalAvailableSeats
+    ];
+}
+
 ?>
 
 
@@ -144,42 +178,77 @@ if (is_array($payments)) {
             </div>
         </div>
         <div class="chart bar inventory-chart">
-            <h3>Inventory Status</h3>
-            <div class="bar-chart">
-                <canvas id="inventoryChart"></canvas>
-            </div>
+        <h3>Inventory Status by Country</h3>
+        <div class="bar-chart">
+            <canvas id="inventoryChart"></canvas>
         </div>
     </div>
+</div>
 
 
 <script>
-        const cardEarnings = <?php echo $cardEarnings; ?>;
-        const fpxEarnings = <?php echo $fpxEarnings; ?>;
-        const minDisplayValue = 0.01;
-        const adjustedCardEarnings = cardEarnings < minDisplayValue ? minDisplayValue : cardEarnings;
-        const adjustedFpxEarnings = fpxEarnings < minDisplayValue ? minDisplayValue : fpxEarnings;
-        const ctx = document.getElementById('earningsChart').getContext('2d');
-        const earningsChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Card', 'Bank Transfer (FPX)'],
-                datasets: [{
-                    label: 'Total Earnings',
-                    data: [adjustedCardEarnings, adjustedFpxEarnings],
-                    backgroundColor: ['#FFCD56', '#4BC0C0'],
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false 
-                    }
+    const cardEarnings = <?php echo $cardEarnings; ?>;
+    const fpxEarnings = <?php echo $fpxEarnings; ?>;
+    const minDisplayValue = 0.01;
+    
+    const adjustedCardEarnings = cardEarnings < minDisplayValue ? minDisplayValue : cardEarnings;
+    const adjustedFpxEarnings = fpxEarnings < minDisplayValue ? minDisplayValue : fpxEarnings;
+
+    const ctx = document.getElementById('earningsChart').getContext('2d');
+    const earningsChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Card', 'Bank Transfer (FPX)'],
+            datasets: [{
+                label: 'Total Earnings',
+                data: [adjustedCardEarnings, adjustedFpxEarnings],
+                backgroundColor: ['#FFCD56', '#4BC0C0'],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false 
                 }
             }
-        });
+        }
+    });
+
+    const countryLabels = <?php echo json_encode(array_keys($countryInventoryStatus)); ?>;
+    const availableRoomsData = <?php echo json_encode(array_column($countryInventoryStatus, 'totalAvailableRooms')); ?>;
+    const availableSeatsData = <?php echo json_encode(array_column($countryInventoryStatus, 'totalAvailableSeats')); ?>;
+
+    const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+    const inventoryChart = new Chart(inventoryCtx, {
+        type: 'bar',
+        data: {
+            labels: countryLabels,
+            datasets: [
+                {
+                    label: 'Available Hotel Rooms',
+                    data: availableRoomsData,
+                    backgroundColor: 'rgba(255, 205, 86, 0.7)', 
+                },
+                {
+                    label: 'Available Flight Seats',
+                    data: availableSeatsData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)', 
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 </script>
+
 
 </body>
 </html>

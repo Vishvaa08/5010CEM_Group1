@@ -269,9 +269,3 @@ header {
     margin-right: 5px;
     border-radius: 3px;
 }
-
-.bar-chart {
-    height: 160px;
-    background-image: linear-gradient(to right, #FFD700 50%, #1E90FF 50%);
-    border-radius: 5px;
-}
