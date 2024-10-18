@@ -8,10 +8,10 @@ if (isset($_SESSION['userName'])) {
 } else {
     $pic = 'images/user.png';
 }
-=======
+
 $isLoggedIn = isset($_SESSION['user_id']);
-$userName = $isLoggedIn ? $_SESSION['user_name'] : '';
-$userEmail = $isLoggedIn ? $_SESSION['user_email'] : '';
+$userName = $isLoggedIn ? $_SESSION['userName'] : '';
+$userEmail = $isLoggedIn ? $_SESSION['userEmail'] : '';
 
 ?>
 
@@ -112,7 +112,6 @@ $userEmail = $isLoggedIn ? $_SESSION['user_email'] : '';
         </div>
     </div>
 
-
     <!-- Contact Form -->
 <div id="contact">
     <div class="contact-section">
@@ -121,24 +120,21 @@ $userEmail = $isLoggedIn ? $_SESSION['user_email'] : '';
         <div class="info-item">
             <button class="info-btn" data-id="info1">Delays and Cancellations</button>
             <div class="info-details" id="info1">
-                <p>As a third-party booking service, we are not responsible for delays or cancellations related to flights or hotels.
-                    For any issues with your tour guide, please contact us directly for assistance.</p>
+                <p>As a third-party booking service, we are not responsible for delays or cancellations related to flights or hotels. For any issues with your tour guide, please contact us directly for assistance.</p>
             </div>
         </div>
 
         <div class="info-item">
             <button class="info-btn" data-id="info2">Refunds</button>
             <div class="info-details" id="info2">
-                <p>Refunds are not provided through our service, as we act solely as a booking platform.
-                    Please reach out to the airline, hotel, or service provider directly for any refund inquiries.</p>
+                <p>Refunds are not provided through our service, as we act solely as a booking platform. Please reach out to the airline, hotel, or service provider directly for any refund inquiries.</p>
             </div>
         </div>
 
         <div class="info-item">
             <button class="info-btn" data-id="info3">No Change or Cancel Fees</button>
             <div class="info-details" id="info3">
-                <p>We do not charge any fees for changing or cancelling your bookings.
-                    However, please refer to the policies of the respective airline, hotel, or service provider for any applicable charges.</p>
+                <p>We do not charge any fees for changing or cancelling your bookings. However, please refer to the policies of the respective airline, hotel, or service provider for any applicable charges.</p>
             </div>
         </div>
 
@@ -149,113 +145,42 @@ $userEmail = $isLoggedIn ? $_SESSION['user_email'] : '';
 </div>
 
 <div id="contactModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Contact Us</h2>
-            <p>Got any questions or suggestions? Fill out this form to reach out!</p>
-            <form id="contactForm">
-                <?php if (!$isLoggedIn): ?>
-                    <input type="text" id="userName" placeholder="Enter your name" required>
-                    <input type="email" id="userEmail" placeholder="Enter your email" required>
-                <?php endif; ?>
-                <textarea placeholder="Enter your message" required></textarea>
-                <button type="submit" class="submit-btn">Submit</button>
-            </form>
-
-            <div class="contact-section">
-                <h2>Get the Info you're looking for!</h2>
-                <div class="info-item">
-                    <button class="info-btn" data-id="info1">What happens if my flight or hotel booking is delayed or canceled?</button>
-                    <div class="info-details" id="info1">
-                        <p>As a third-party booking service, we are not responsible for delays or cancellations related to flights or hotels.
-                            For any issues with your tour guide, please contact us directly for assistance.</p>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <button class="info-btn" data-id="info2">Can I request a refund if my booking is canceled or delayed?</button>
-                    <div class="info-details" id="info2">
-                        <p>Refunds are not provided through our service, as we act solely as a booking platform.
-                            Please reach out to the airline, hotel, or service provider directly for any refund inquiries.</p>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <button class="info-btn" data-id="info3">Are there any fees for changing or canceling my booking?</button>
-                    <div class="info-details" id="info3">
-                        <p>We do not charge any fees for changing or cancelling your bookings.
-                            However, please refer to the policies of the respective airline, hotel, or service provider for any applicable charges.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="contact">
-                <p>Still Need HELP? <a href="#" class="contact-link" id="openModal">Contact Us</a></p>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>Copyright © 1997 TravelTrail</p>
-        </div>
-
-        </div>
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Contact Us</h2>
+        <p>Got any questions or suggestions? Fill out this form to reach out!</p>
+        <form id="contactForm" action="submit_contact.php" method="POST">
+            <?php if ($isLoggedIn): ?>
+                <p>Hi, <?php echo htmlspecialchars($userName); ?>!</p>
+                <input type="hidden" id="userName" name="userName" value="<?php echo htmlspecialchars($userName); ?>">
+                <input type="hidden" id="userEmail" name="userEmail" value="<?php echo htmlspecialchars($userEmail); ?>">
+            <?php else: ?>
+                <input type="text" id="userName" name="userName" placeholder="Enter your name" required>
+                <input type="email" id="userEmail" name="userEmail" placeholder="Enter your email" required>
+            <?php endif; ?>
+            <textarea name="userMessage" placeholder="Enter your message" required></textarea>
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
     </div>
-
-
-    <script>
-        const isLoggedIn = <?php echo json_encode($isLoggedIn); ?>;
-        const userName = <?php echo json_encode($userName); ?>;
-        const userEmail = <?php echo json_encode($userEmail); ?>;
-
-        if (isLoggedIn) {
-            document.getElementById('contactForm').insertAdjacentHTML('afterbegin', `
-                <input type="hidden" id="userName" value="${userName}">
-                <input type="hidden" id="userEmail" value="${userEmail}">
-            `);
-        }
-    </script>
-
-
-        <div id="contactModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Contact Us</h2>
-                <p>Got any questions or suggestions? Fill out this form to reach out!</p>
-                <form id="contactForm">
-
-                    <div id="user-info" style="display: none;">
-                        <input type="text" id="userName" placeholder="Enter your name" required>
-                        <input type="email" id="userEmail" placeholder="Enter your email" required>
-                    </div>
-
-                    <textarea placeholder="Enter your message" required></textarea>
-                    <button type="submit" class="submit-btn">Submit</button>
-                </form>
-            </div>
-
-<div class="footer">
-    <p>Copyright © 1997 TravelTrail</p>
 </div>
-
 
 
 
     <script src="js/index.js"></script>
 
-
     <script>
         const buttons = document.querySelectorAll('.info-btn');
-
         buttons.forEach(button => {
             button.addEventListener('click', function() {
                 const infoId = this.getAttribute('data-id');
                 const infoDetails = document.getElementById(infoId);
-
-                if (infoDetails.style.display === 'block') {
-                    infoDetails.style.display = 'none';
-                } else {
-                    document.querySelectorAll('.info-details').forEach(detail => {
-                        detail.style.display = 'none';
-                    });
-                    infoDetails.style.display = 'block';
-                }
+                const isVisible = infoDetails.style.display === 'block';
+                
+                document.querySelectorAll('.info-details').forEach(detail => {
+                    detail.style.display = 'none';
+                });
+                
+                infoDetails.style.display = isVisible ? 'none' : 'block';
             });
         });
 
@@ -278,6 +203,11 @@ $userEmail = $isLoggedIn ? $_SESSION['user_email'] : '';
             }
         });
     </script>
+
+    <div class="footer">
+        <p>Copyright © 1997 TravelTrail</p>
+    </div>
+
 
 </body>
 
