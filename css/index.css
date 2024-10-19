@@ -235,7 +235,7 @@ h1 {
 
 /* Contact CSS */
 #contact {
-    background: #3c3c3c;
+    background: linear-gradient(to bottom, #F4E2D8, #D2B48C, #B2A589, #CC7752);
     height: 100vh;
     text-align: center;
     font-family: 'Josefin Sans', sans-serif;
@@ -256,7 +256,7 @@ h1 {
 .contact-section h2 {
     font-size: 2.2rem;
     margin-bottom: 20px;
-    color: #fff;
+    color: #000000;
 }
 
 .info-item {
@@ -284,12 +284,12 @@ h1 {
 }
 
 .info-btn:hover {
-    background-color: #e0e0e0;
+    background-color: #CC7752;
 }
 
 .info-details {
     display: none;
-    background-color: #6d6d6d;
+    background-color: #CC7752;
     padding: 15px;
     border-radius: 10px;
     color: #f0f0f0;
@@ -308,7 +308,7 @@ h1 {
 
 .contact p {
     font-size: 1.2rem;
-    color: #e0e0e0;
+    color: #000000;
     margin: 0;
     display: flex;
     justify-content: flex-end; 
@@ -316,20 +316,20 @@ h1 {
 }
 
 .contact-link {
-    color: #008cff;
+    color: #6b270a;
     text-decoration: none;
     font-weight: bold;
     margin-left: 5px;
 }
 
 .contact-link:hover {
-    color: #00aaff;
+    color: #CC7752;
     text-decoration: underline;
 }
 
 .footer {
-    background: #2a2a2a;
-    color: #e0e0e0;
+    background: #CC7752;
+    color: #000000;
     padding: 10px 0;
     text-align: center;
     font-size: 0.9rem;
@@ -376,7 +376,6 @@ h1 {
     color: #555;
 }
 
-/* Input Fields for Name and Email */
 .modal-content input[type="text"],
 .modal-content input[type="email"] {
     width: 100%;
@@ -409,7 +408,7 @@ h1 {
 }
 
 .submit-btn {
-    background-color: #0000ff;
+    background-color: #CC7752;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -420,11 +419,11 @@ h1 {
 }
 
 .submit-btn:hover {
-    background-color: #000099;
+    background-color: #ebab8f;
 }
 
 .close {
-    color: #aaa;
+    color: #CC7752;
     font-size: 28px;
     font-weight: bold;
     position: absolute;
@@ -434,7 +433,30 @@ h1 {
 }
 
 .close:hover, .close:focus {
-    color: black;
+    color: #ebab8f;
+}
+
+.toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #ebab8f;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    border-radius: 5px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    font-size: 17px;
+    opacity: 0; 
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
 }
 
 .splash-screen{

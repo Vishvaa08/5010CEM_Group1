@@ -1,23 +1,22 @@
 <?php
 session_start();
 
-$pic = '';
+$pic = 'images/user.png'; // Default profile image
+$isLoggedIn = false; // Default to false
+$userName = 'Guest'; // Default user name
+$userEmail = ''; // Initialize an empty string to avoid undefined variable warning
 
+// Check if the user is logged in by verifying if 'userName' is set in the session
 if (isset($_SESSION['userName'])) {
-    $pic = $_SESSION['profileImage'];
-} else {
-    $pic = 'images/user.png';
+    $pic = $_SESSION['profileImage'] ?? $pic; // Use session image or default
+    $isLoggedIn = true;
+    $userName = $_SESSION['userName']; // Set the userName from session
+    $userEmail = $_SESSION['userEmail'] ?? ''; // Set email from session
 }
-
-$isLoggedIn = isset($_SESSION['user_id']);
-$userName = $isLoggedIn ? $_SESSION['userName'] : '';
-$userEmail = $isLoggedIn ? $_SESSION['userEmail'] : '';
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,11 +25,9 @@ $userEmail = $isLoggedIn ? $_SESSION['userEmail'] : '';
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Joti+One&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-
 <body>
     <!-- Splash screen for when website is first opened -->
     <div class="splash-screen">
@@ -41,7 +38,7 @@ $userEmail = $isLoggedIn ? $_SESSION['userEmail'] : '';
     <!-- End of splash screen -->
 
     <!--Beginning of home section of homepage including navigation-->
-    <div id="home">xx
+    <div id="home">
 
         <div id="header">
             <div id="left-nav">
@@ -57,7 +54,7 @@ $userEmail = $isLoggedIn ? $_SESSION['userEmail'] : '';
                 <a class="nav-link" href="#home">Home</a>
                 <a class="nav-link" href="#about">About</a>
                 <a class="nav-link" href="#contact">Contact</a>
-                <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo $pic; ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
+                <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo htmlspecialchars($pic, ENT_QUOTES, 'UTF-8'); ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
             </div>
         </div>
 
@@ -112,48 +109,49 @@ $userEmail = $isLoggedIn ? $_SESSION['userEmail'] : '';
         </div>
     </div>
 
+
     <!-- Contact Form -->
-<div id="contact">
-    <div class="contact-section">
-        <h2>Get the Info you're looking for!</h2>
+    <div id="contact">
+        <div class="contact-section">
+            <h2>Get the Info you're looking for!</h2>
 
-        <div class="info-item">
-            <button class="info-btn" data-id="info1">Delays and Cancellations</button>
-            <div class="info-details" id="info1">
-                <p>As a third-party booking service, we are not responsible for delays or cancellations related to flights or hotels. For any issues with your tour guide, please contact us directly for assistance.</p>
+            <div class="info-item">
+                <button class="info-btn" data-id="info1">Delays and Cancellations</button>
+                <div class="info-details" id="info1">
+                    <p>As a third-party booking service, we are not responsible for delays or cancellations related to flights or hotels. For any issues with your tour guide, please contact us directly for assistance.</p>
+                </div>
             </div>
-        </div>
 
-        <div class="info-item">
-            <button class="info-btn" data-id="info2">Refunds</button>
-            <div class="info-details" id="info2">
-                <p>Refunds are not provided through our service, as we act solely as a booking platform. Please reach out to the airline, hotel, or service provider directly for any refund inquiries.</p>
+            <div class="info-item">
+                <button class="info-btn" data-id="info2">Refunds</button>
+                <div class="info-details" id="info2">
+                    <p>Refunds are not provided through our service, as we act solely as a booking platform. Please reach out to the airline, hotel, or service provider directly for any refund inquiries.</p>
+                </div>
             </div>
-        </div>
 
-        <div class="info-item">
-            <button class="info-btn" data-id="info3">No Change or Cancel Fees</button>
-            <div class="info-details" id="info3">
-                <p>We do not charge any fees for changing or cancelling your bookings. However, please refer to the policies of the respective airline, hotel, or service provider for any applicable charges.</p>
+            <div class="info-item">
+                <button class="info-btn" data-id="info3">No Change or Cancel Fees</button>
+                <div class="info-details" id="info3">
+                    <p>We do not charge any fees for changing or cancelling your bookings. However, please refer to the policies of the respective airline, hotel, or service provider for any applicable charges.</p>
+                </div>
             </div>
-        </div>
 
-        <div class="contact">
-            <p>Still Need HELP? <a href="#" class="contact-link" id="openModal">Contact Us</a></p>
+            <div class="contact">
+                <p>Still Need HELP? <a href="#" class="contact-link" id="openModal">Contact Us</a></p>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="contactModal" class="modal">
+    <div id="contactModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Contact Us</h2>
         <p>Got any questions or suggestions? Fill out this form to reach out!</p>
-        <form id="contactForm" action="submit_contact.php" method="POST">
+        <form id="contactForm" method="POST">
             <?php if ($isLoggedIn): ?>
-                <p>Hi, <?php echo htmlspecialchars($userName); ?>!</p>
-                <input type="hidden" id="userName" name="userName" value="<?php echo htmlspecialchars($userName); ?>">
-                <input type="hidden" id="userEmail" name="userEmail" value="<?php echo htmlspecialchars($userEmail); ?>">
+                <p>Hi, <?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?>!</p>
+                <input type="hidden" id="userName" name="userName" value="<?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" id="userEmail" name="userEmail" value="<?php echo htmlspecialchars($userEmail, ENT_QUOTES, 'UTF-8'); ?>">
             <?php else: ?>
                 <input type="text" id="userName" name="userName" placeholder="Enter your name" required>
                 <input type="email" id="userEmail" name="userEmail" placeholder="Enter your email" required>
@@ -161,54 +159,14 @@ $userEmail = $isLoggedIn ? $_SESSION['userEmail'] : '';
             <textarea name="userMessage" placeholder="Enter your message" required></textarea>
             <button type="submit" class="submit-btn">Submit</button>
         </form>
+        <div id="toast" class="toast">Message successfully sent!</div>
     </div>
 </div>
 
-
-
     <script src="js/index.js"></script>
 
-    <script>
-        const buttons = document.querySelectorAll('.info-btn');
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-                const infoId = this.getAttribute('data-id');
-                const infoDetails = document.getElementById(infoId);
-                const isVisible = infoDetails.style.display === 'block';
-                
-                document.querySelectorAll('.info-details').forEach(detail => {
-                    detail.style.display = 'none';
-                });
-                
-                infoDetails.style.display = isVisible ? 'none' : 'block';
-            });
-        });
-
-        const modal = document.getElementById("contactModal");
-        const openModal = document.getElementById("openModal");
-        const closeBtn = document.querySelector(".close");
-
-        openModal.addEventListener("click", function(event) {
-            event.preventDefault();
-            modal.style.display = "flex";
-        });
-
-        closeBtn.addEventListener("click", function() {
-            modal.style.display = "none";
-        });
-
-        window.addEventListener("click", function(event) {
-            if (event.target === modal) {
-                modal.style.display = "none";
-            }
-        });
-    </script>
-
     <div class="footer">
-        <p>Copyright © 1997 TravelTrail</p>
+        <p>TravelTrail</p>
     </div>
-
-
 </body>
-
 </html>
