@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
                             },
-                            body: 'name=' + encodeURIComponent(userData.name) + '&profileImageUrl=' + encodeURIComponent(userData.profileImageUrl)
+                            body: 'name=' + encodeURIComponent(userData.name) + '&profileImageUrl=' + encodeURIComponent(userData.profileImageUrl) + '&email=' + encodeURIComponent(userData.email)
                         });
 
                         const userProfileDiv = document.getElementById('userProfile');
