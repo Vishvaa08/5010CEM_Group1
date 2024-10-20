@@ -170,9 +170,9 @@ if (isset($_SESSION['userName'])) {
                     <div class="text-text">Card Number</div>
                 </div>
                 <div class="card-input">
-                    <input type="text" id="card-number-input" minlength="12" maxlength="14"
-                        oninput="this.value = this.value.replace(/\D/g, '').replace(/(.{4})(?=.)/g, '$1-').slice(0, 14);"
-                        placeholder="xxxx-xxxx-xxxx" class="card-num-input">
+                    <input type="text" id="card-number-input" minlength="19" maxlength="19"
+                        oninput="this.value = this.value.replace(/\D/g, '').replace(/(.{4})(?=.)/g, '$1-').slice(0, 19);"
+                        placeholder="xxxx-xxxx-xxxx-xxxx" class="card-num-input">
                 </div>
             </div>
             <div id="middle">

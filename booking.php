@@ -2,11 +2,14 @@
 session_start();
 
 $pic = '';
+$userLoggedIn = false;
 
 if (isset($_SESSION['userName'])) {
     $pic = $_SESSION['profileImage'];
+    $userLoggedIn = true;
 } else {
     $pic = 'images/user.png';
+    $userLoggedIn = false;
 }
 ?>
 
@@ -249,6 +252,13 @@ if (isset($_SESSION['userName'])) {
             const itineraries = document.querySelectorAll('input[name="itineraries[]"]:checked');
             const ticketType = document.querySelector('input[name="ticket-type"]:checked');
 
+            const userLoggedIn = <?php echo json_encode($userLoggedIn); ?>;
+
+            if (!userLoggedIn) {
+                alert("Please log in before booking.");
+                return;
+            }
+
             if (selectedBank && selectedVehicle && selectedRoom && selectedFlight && itineraries.length > 0 && ticketType) {
                 var form = document.getElementById('form');
                 const bankValue = selectedBank.value;
@@ -298,6 +308,13 @@ if (isset($_SESSION['userName'])) {
             const selectedFlight = document.querySelector('input[name="flight"]:checked');
             const itineraries = document.querySelectorAll('input[name="itineraries[]"]:checked');
             const ticketType = document.querySelector('input[name="ticket-type"]:checked');
+
+            const userLoggedIn = <?php echo json_encode($userLoggedIn); ?>;
+
+            if (!userLoggedIn) {
+                alert("Please log in before making a booking.");
+                return;
+            }
 
             if (selectedVehicle && selectedRoom && selectedFlight && itineraries.length > 0 && ticketType) {
                 var form = document.getElementById('form');
