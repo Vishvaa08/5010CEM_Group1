@@ -132,6 +132,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             window.location.href = 'adminWait.php';
                         } else {
                             window.location.href = 'index.php';
+                            window.onload = function() {
+                                window.location.reload(true);
+                            };
                         }
                     });
                 })
