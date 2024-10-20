@@ -1,20 +1,25 @@
 <?php
+include 'firebase_connection.php'; 
+session_start();
+$userId = $_SESSION['user_id'] ?? null;
 
-require 'vendor/autoload.php';
+if (!$userId) {
+    header('Location: AdminLogin.php');
+    exit();
+}
 
-use Kreait\Firebase\Factory;
+$userSnapshot = $database->getReference('users/' . $userId)->getValue();
+if (!$userSnapshot || $userSnapshot['role'] !== 'admin' || $userSnapshot['status'] !== 'approved') {
+    header('Location: index.php');
+    exit();
+}
 
-$serviceAccount = __DIR__ . '/prvkey.json';
+$adminName = $userSnapshot['name'] ?? 'Admin';
 
-$factory = (new Factory)
-    ->withServiceAccount($serviceAccount)
-    ->withDatabaseUri('https://traveltrail-39e23-default-rtdb.firebaseio.com/');
-
-$database = $factory->createDatabase();
+// Fetch user data
 $usersRef = $database->getReference('users');
 $users = $usersRef->getValue();
 $newUsersCount = 0;
-
 if (is_array($users)) {
     foreach ($users as $user) {
         if (!array_key_exists('status', $user)) {
@@ -23,6 +28,7 @@ if (is_array($users)) {
     }
 }
 
+// Fetch payment data
 $paymentsRef = $database->getReference('Admin/newBookings');
 $payments = $paymentsRef->getValue();
 $newPaymentsCount = 0;
@@ -47,8 +53,8 @@ if (is_array($payments)) {
     }
 }
 
+// Fetch inventory data by country
 $countryInventoryStatus = [];
-
 $countriesData = $database->getReference('Packages')->getValue() ?: [];
 
 foreach ($countriesData as $countryName => $countryData) {
@@ -57,9 +63,9 @@ foreach ($countriesData as $countryName => $countryData) {
 
     foreach ($countryData as $cityName => $cityData) {
         if (isset($cityData['Hotels'])) {
-            foreach ($cityData['Hotels'] as $hotelIndex => $hotelData) {
+            foreach ($cityData['Hotels'] as $hotelData) {
                 if (isset($hotelData['Rooms'])) {
-                    foreach ($hotelData['Rooms'] as $roomType => $roomData) {
+                    foreach ($hotelData['Rooms'] as $roomData) {
                         $availability = isset($roomData['Availability']) ? (int)$roomData['Availability'] : 0;
                         $totalAvailableRooms += $availability;
                     }
@@ -68,7 +74,7 @@ foreach ($countriesData as $countryName => $countryData) {
         }
 
         if (isset($cityData['Flights'])) {
-            foreach ($cityData['Flights'] as $class => $flightData) {
+            foreach ($cityData['Flights'] as $flightData) {
                 $seats = isset($flightData['Seats']) ? (int)$flightData['Seats'] : 0;
                 $totalAvailableSeats += $seats;
             }
@@ -81,8 +87,10 @@ foreach ($countriesData as $countryName => $countryData) {
     ];
 }
 
+// Fetch notifications
+$reference = $database->getReference('adminNotifications');
+$messages = $reference->getValue();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -90,7 +98,7 @@ foreach ($countriesData as $countryName => $countryData) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/Dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -129,8 +137,36 @@ foreach ($countriesData as $countryName => $countryData) {
                 <h2>Dashboard / Home</h2>
                 <p>Dashboard</p>
             </div>
+            <div class="header-right d-flex align-items-center">
+                <a href="AdminApproval.php" class="icon-wrapper">
+                    <img src="images/admin_approval.png" alt="Admin Approval Icon" class="admin-approval-icon">
+                </a>
+                <div class="notification-container">
+                    <img src="images/notifications.png" alt="Notifications Icon" class="notification-icon" id="notificationIcon">
+                    <div class="notification-dropdown" id="notificationDropdown">
+                        <div class="notification-header">
+                            <h4>Notifications</h4>
+                        </div>
+                        <div class="notification-list">
+                            <?php if ($messages): ?>
+                                <?php foreach ($messages as $message): ?>
+                                    <div class="notification-item">
+                                        <div class="notification-details">
+                                            <p class="notification-title"><?php echo htmlspecialchars($message['userName']); ?></p> 
+                                            <p class="notification-email"><?php echo htmlspecialchars($message['userEmail']); ?></p> 
+                                            <p class="notification-message"><?php echo htmlspecialchars($message['userMessage']); ?></p> 
+                                            <p class="notification-timestamp"><?php echo htmlspecialchars($message['timestamp']); ?></p> 
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <p class="no-notifications">No notifications available.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
                 <div class="user-wrapper">
-                    <p>Hi, Admin</p>
+                    <p>Hi, <?php echo htmlspecialchars($adminName); ?>!</p> 
                     <a href="AdminLogin.php">
                         <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
                     </a>
@@ -138,117 +174,106 @@ foreach ($countriesData as $countryName => $countryData) {
             </div>
         </header>
 
-        <div class="cards">
-            <div class="card">
-                <div class="icon-wrapper1">
-                    <img src="images/new user.jpg" alt="User Icon">
-                </div>
-                <div class="card-info">
-                    <h3>Unverified Users</h3>
-                    <p><?php echo $newUsersCount; ?></p>
-
-                </div>
-            </div>
-            <div class="card-payment">
-            <div class="icon-wrapper">
-                <img src="images/payment.jpg" alt="Payment Icon">
-            </div>
-            <div class="card-info">
-                <h3>New Payments</h3>
-                <p><?php echo $newPaymentsCount; ?></p>
-            </div>
-        </div>
-        </div>
-
         <div class="charts">
-        <div class="chart pie">
-            <h3>Total Earnings</h3>
-            <div class="pie-chart">
-                <canvas id="earningsChart"></canvas>
-            </div>
-            <div class="chart-legend">
-                <div>
-                    <div class="color-box" style="background-color: #FFCD56;"></div>
-                    <span>Card</span>
+            <div class="chart pie">
+                <h3>Total Earnings</h3>
+                <div class="pie-chart">
+                    <canvas id="earningsChart"></canvas>
                 </div>
-                <div>
-                    <div class="color-box" style="background-color: #4BC0C0;"></div>
-                    <span>Bank Transfer (FPX)</span>
+                <div class="chart-legend">
+                    <div>
+                        <div class="color-box" style="background-color: #FFCD56;"></div>
+                        <span>Card</span>
+                    </div>
+                    <div>
+                        <div class="color-box" style="background-color: #4BC0C0;"></div>
+                        <span>Bank Transfer (FPX)</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="chart bar inventory-chart">
-        <h3>Inventory Status by Country</h3>
-        <div class="bar-chart">
-            <canvas id="inventoryChart"></canvas>
+            <div class="chart bar inventory-chart">
+                <h3>Inventory Status by Country</h3>
+                <div class="bar-chart">
+                    <canvas id="inventoryChart"></canvas>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
+    <script>
+        const cardEarnings = <?php echo $cardEarnings; ?>;
+        const fpxEarnings = <?php echo $fpxEarnings; ?>;
+        const minDisplayValue = 0.01;
 
-<script>
-    const cardEarnings = <?php echo $cardEarnings; ?>;
-    const fpxEarnings = <?php echo $fpxEarnings; ?>;
-    const minDisplayValue = 0.01;
-    
-    const adjustedCardEarnings = cardEarnings < minDisplayValue ? minDisplayValue : cardEarnings;
-    const adjustedFpxEarnings = fpxEarnings < minDisplayValue ? minDisplayValue : fpxEarnings;
+        const adjustedCardEarnings = cardEarnings < minDisplayValue ? minDisplayValue : cardEarnings;
+        const adjustedFpxEarnings = fpxEarnings < minDisplayValue ? minDisplayValue : fpxEarnings;
 
-    const ctx = document.getElementById('earningsChart').getContext('2d');
-    const earningsChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Card', 'Bank Transfer (FPX)'],
-            datasets: [{
-                label: 'Total Earnings',
-                data: [adjustedCardEarnings, adjustedFpxEarnings],
-                backgroundColor: ['#FFCD56', '#4BC0C0'],
-                hoverOffset: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false 
+        const ctx = document.getElementById('earningsChart').getContext('2d');
+        const earningsChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Card', 'Bank Transfer (FPX)'],
+                datasets: [{
+                    label: 'Total Earnings',
+                    data: [adjustedCardEarnings, adjustedFpxEarnings],
+                    backgroundColor: ['#FFCD56', '#4BC0C0'],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false 
+                    }
                 }
             }
-        }
-    });
+        });
 
-    const countryLabels = <?php echo json_encode(array_keys($countryInventoryStatus)); ?>;
-    const availableRoomsData = <?php echo json_encode(array_column($countryInventoryStatus, 'totalAvailableRooms')); ?>;
-    const availableSeatsData = <?php echo json_encode(array_column($countryInventoryStatus, 'totalAvailableSeats')); ?>;
+        const countryLabels = <?php echo json_encode(array_keys($countryInventoryStatus)); ?>;
+        const availableRoomsData = <?php echo json_encode(array_column($countryInventoryStatus, 'totalAvailableRooms')); ?>;
+        const availableSeatsData = <?php echo json_encode(array_column($countryInventoryStatus, 'totalAvailableSeats')); ?>;
 
-    const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
-    const inventoryChart = new Chart(inventoryCtx, {
-        type: 'bar',
-        data: {
-            labels: countryLabels,
-            datasets: [
-                {
-                    label: 'Available Hotel Rooms',
-                    data: availableRoomsData,
-                    backgroundColor: 'rgba(255, 205, 86, 0.7)', 
-                },
-                {
-                    label: 'Available Flight Seats',
-                    data: availableSeatsData,
-                    backgroundColor: 'rgba(54, 162, 235, 0.7)', 
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
+        const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+        const inventoryChart = new Chart(inventoryCtx, {
+            type: 'bar',
+            data: {
+                labels: countryLabels,
+                datasets: [
+                    {
+                        label: 'Available Hotel Rooms',
+                        data: availableRoomsData,
+                        backgroundColor: 'rgba(255, 205, 86, 0.7)', 
+                    },
+                    {
+                        label: 'Available Flight Seats',
+                        data: availableSeatsData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)', 
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
-</script>
+        });
 
+        const notificationIcon = document.getElementById('notificationIcon');
+        const notificationDropdown = document.getElementById('notificationDropdown');
 
+        notificationIcon.addEventListener('click', function() {
+            notificationDropdown.classList.toggle('show');
+        });
+
+        window.addEventListener('click', function(event) {
+            if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
+                notificationDropdown.classList.remove('show');
+            }
+        });
+    </script>
 </body>
 </html>

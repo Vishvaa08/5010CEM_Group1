@@ -1,17 +1,26 @@
 <?php
 session_start();
 
-$pic = 'images/user.png'; // Default profile image
-$isLoggedIn = false; // Default to false
-$userName = 'Guest'; // Default user name
-$userEmail = ''; // Initialize an empty string to avoid undefined variable warning
+$pic = 'images/user.png';
+$isLoggedIn = false; 
+$userName = 'Guest'; 
+$userEmail = ''; 
+$isAdmin = false; 
 
-// Check if the user is logged in by verifying if 'userName' is set in the session
 if (isset($_SESSION['userName'])) {
-    $pic = $_SESSION['profileImage'] ?? $pic; // Use session image or default
+    $pic = $_SESSION['profileImage'] ?? $pic; 
     $isLoggedIn = true;
-    $userName = $_SESSION['userName']; // Set the userName from session
-    $userEmail = $_SESSION['userEmail'] ?? ''; // Set email from session
+    $userName = $_SESSION['userName']; 
+    $userEmail = $_SESSION['userEmail'] ?? ''; 
+
+    include 'firebase_connection.php';
+    $database = $factory->createDatabase();
+    $userId = $_SESSION['user_id'];
+    $userSnapshot = $database->getReference('users/' . $userId)->getValue();
+    
+    if ($userSnapshot && $userSnapshot['role'] === 'adminREQUEST' && $userSnapshot['status'] === 'approved') {
+        $isAdmin = true; 
+    }
 }
 ?>
 
@@ -76,6 +85,13 @@ if (isset($_SESSION['userName'])) {
                 <a href="https://www.twitter.com/"><i class="fa fa-twitter"></i></a>
             </div>
         </div>
+
+        <!-- Add admin dashboard button if the user is an admin -->
+        <?php if ($isAdmin): ?>
+            <div class="admin-dashboard">
+                <button type="button" onclick="window.location.href='AdminDashboard.php'">Go to Admin Dashboard</button>
+            </div>
+        <?php endif; ?>
 
     </div>
     <!--Ending of home section-->

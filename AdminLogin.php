@@ -1,27 +1,43 @@
 <?php
+require 'firebase_connection.php'; // Include Firebase connection
+
+session_start();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $correct_username = "ADMIN";
-    $correct_password = "Admin2306";
+    try {
+        $auth = $factory->createAuth();  // Firebase Auth
+        $signInResult = $auth->signInWithEmailAndPassword($email, $password);
+        $userId = $signInResult->firebaseUserId();
 
-    if ($username !== $correct_username) {
-        $error_message = "Invalid username.";
+        // Fetch user role and status from Firebase Realtime Database
+        $userSnapshot = $database->getReference('users/' . $userId)->getValue();
+        $role = $userSnapshot['role'] ?? null;
+        $status = $userSnapshot['status'] ?? null;
+
+        // Store session
+        $_SESSION['user_id'] = $userId;
+        $_SESSION['user_role'] = $role;
+
+        // Redirect based on role and status
+        if ($role === 'admin') {
+            if ($status === 'pending') {
+                header("Location: adminWait.php");
+            } elseif ($status === 'approved') {
+                header("Location: AdminDashboard.php");
+            }
+        } else {
+            echo "You do not have admin access.";
+        }
+    } catch (Exception $e) {
+        echo "Invalid email or password.";
     }
-  
-    else if ($password !== $correct_password) {
-        $error_message = "Invalid password.";
-    }
-   
-    else {
-        
-        header("Location: AdminDashboard.php");
-        exit;
-    }
-    
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,8 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h1>Admin Login</h1>
         <form id="loginForm" action="" method="POST">
             <div class="input-field">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter Username" required>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter Email" required>
             </div>
             <div class="input-field">
                 <label for="password">Password</label>
@@ -53,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
        <div id="error-message">
             <?php
             if (isset($error_message)) {
-                echo "<p style='color:red; text-align:center;'>" . $error_message . "</p>";
+                echo "<p style='color:red; text-align:center;'>" . htmlspecialchars($error_message, ENT_QUOTES, 'UTF-8') . "</p>";
             }
             ?>
         </div>
@@ -64,19 +80,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             var passwordInput = document.getElementById("password");
             var icon = document.querySelector(".eye-icon i");
 
-            
             if (passwordInput.type === "password") {
                 passwordInput.type = "text"; 
                 icon.classList.remove("fa-eye-slash"); 
-                icon.classList.add("fa-eye"); //open eye
+                icon.classList.add("fa-eye"); // Open eye
             } else {
                 passwordInput.type = "password";
                 icon.classList.remove("fa-eye");
-                icon.classList.add("fa-eye-slash"); //close eye
+                icon.classList.add("fa-eye-slash"); // Close eye
             }
         }
     </script>
-
-
 </body>
 </html>

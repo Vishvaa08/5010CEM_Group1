@@ -1,5 +1,4 @@
 <?php
-
 require 'vendor/autoload.php';
 
 use Kreait\Firebase\Factory;
@@ -13,14 +12,31 @@ $factory = (new Factory)
 $database = $factory->createDatabase();
 $storage = $factory->createStorage(); 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userId = $_POST['user_id'];
-    $action = $_POST['action'];
+session_start();
+$userId = $_SESSION['user_id'] ?? null;
 
-    if ($action === 'verify') {
-        $database->getReference('users/' . $userId)->update(['status' => 'verified']);
-    } elseif ($action === 'reject') {
-        $database->getReference('users/' . $userId)->update(['status' => 'rejected']);
+if (!$userId) {
+    header('Location: AdminLogin.php');
+    exit();
+}
+
+$userSnapshot = $database->getReference('users/' . $userId)->getValue();
+if (!$userSnapshot || $userSnapshot['role'] !== 'admin' || $userSnapshot['status'] !== 'approved') {
+    header('Location: index.php');
+    exit();
+}
+
+$adminName = $userSnapshot['name'] ?? 'Admin';
+
+// Fetch user data
+$usersRef = $database->getReference('users');
+$users = $usersRef->getValue();
+$newUsersCount = 0;
+if (is_array($users)) {
+    foreach ($users as $user) {
+        if (!array_key_exists('status', $user)) {
+            $newUsersCount++;
+        }
     }
 }
 
@@ -36,7 +52,7 @@ $users = $usersRef->getValue();
     <title>Admin User Management</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/User.css">
-</head>
+  </head>
 <body>
 
 <div class="sidebar">
@@ -68,23 +84,23 @@ $users = $usersRef->getValue();
 </div>
 
 <div class="main-content">
-        <header>
-            <div class="header-left">
-                <h2>Dashboard / User Management</h2>
-                <p>User Management</p>
+    <header>
+        <div class="header-left">
+            <h2>Dashboard / User Management</h2>
+            <p>User Management</p>
+        </div>
+        <div class="header-right">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search" onkeyup="filterUsers()">
             </div>
-            <div class="header-right">
-                <div class="search-box">
-                    <input type="text" placeholder="Search">
-                </div>
-                <div class="user-wrapper">
-                    <p>Hi, Admin</p>
+            <div class="user-wrapper">
+                    <p>Hi, <?php echo htmlspecialchars($adminName); ?>!</p> 
                     <a href="AdminLogin.php">
                         <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
                     </a>
                 </div>
-            </div>
-        </header>
+        </div>
+    </header>
 
     <table>
         <thead>
@@ -93,8 +109,6 @@ $users = $usersRef->getValue();
                 <th>Passport No.</th>
                 <th>Phone Number</th>
                 <th>Email</th>
-                <th>Status</th>
-                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -105,37 +119,11 @@ $users = $usersRef->getValue();
                         <td><?php echo !empty($user['passport']) ? htmlspecialchars($user['passport']) : 'N/A'; ?></td>
                         <td><?php echo htmlspecialchars($user['phone']); ?></td>
                         <td><?php echo htmlspecialchars($user['email']); ?></td>
-                        <td>
-                            <?php 
-                                $status = isset($user['status']) ? $user['status'] : 'unverified';
-                                if ($status === 'verified'): 
-                            ?>
-                                <span class="status verified">Verified</span>
-                            <?php elseif ($status === 'rejected'): ?>
-                                <span class="status rejected">Rejected</span>
-                            <?php else: ?>
-                                <span class="status unverified">Unverified</span>
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <?php if ($status !== 'verified' && $status !== 'rejected'): ?>
-                                <form method="POST" style="display:inline;">
-                                    <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($key); ?>">
-                                    <input type="hidden" name="action" value="verify">
-                                    <button type="submit" class="btn btn-success">✔️ Verify</button>
-                                </form>
-                                <form method="POST" style="display:inline;">
-                                    <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($key); ?>">
-                                    <input type="hidden" name="action" value="reject">
-                                    <button type="submit" class="btn btn-danger">❌ Reject</button>
-                                </form>
-                            <?php endif; ?>
-                        </td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="6">No users found</td>
+                    <td colspan="4">No users found</td>
                 </tr>
             <?php endif; ?>
         </tbody>

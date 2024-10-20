@@ -91,29 +91,17 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
 }
 
 .header-left {
     display: block; 
+    margin-left: 10px;
 }
 
 .header-right {
     display: flex;
     align-items: center;
-}
-
-.search-box {
-    margin-right: 20px;
-}
-
-
-.search-box input {
-    padding: 10px;
-    width: 200px; 
-    border-radius: 15px;
-    margin-right: 10px; 
-    border: none;
-    background-color: #FFF;
 }
 
 .user-wrapper {
@@ -130,8 +118,21 @@ header {
     vertical-align: middle;
 }
 
+.search-box {
+    margin-right: 20px;
+}
 
-/* Table Styling */
+
+.search-box input {
+    padding: 10px;
+    width: 200px; 
+    border-radius: 15px;
+    margin-right: 10px; 
+    border: none;
+    background-color: #FFF;
+}
+
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -152,20 +153,3 @@ table th {
 
 }
 
-/* Status styling */
-.status.verified {
-    color: green;
-}
-
-.status.unverified {
-    color: red;
-}
-
-.btn-sm {
-    font-size: 14px;
-    color: green;
-}
-
-.btn-sm:hover {
-    color: darkgreen;
-}

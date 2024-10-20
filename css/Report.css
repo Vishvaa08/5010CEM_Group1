@@ -134,36 +134,13 @@ header {
     gap: 20px;
 }
 
-.report-table, .user-details {
+.user-details {
     background-color: #f4f4f4;
-    padding: 10px; 
+    padding: 20px; 
     border-radius: 10px;
     width: 48%; 
     border: 1px solid #ccc;
-}
-
-.user-details {
-    background-color: #ffffff; 
-    border: none; 
-    padding: 10; 
-}
-
-.scrollable-table {
-    overflow-y: auto; 
-    max-height: 300px; 
-    border-radius: 10px;
-    overflow: hidden; 
-}
-
-.report-table .total-earnings {
-    margin-top: 15px;
-    background-color: #ffffff; 
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    border: 1px solid #ddd; 
+    margin-top: 20px;
 }
 
 table {
@@ -195,3 +172,49 @@ tr:last-child td {
     border-bottom: none; 
 }
 
+.fa {
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+    font-size: 30px; 
+}
+
+.fa-check {
+    color: green; 
+}
+
+.fa-close {
+    color: red; 
+    transition: background-color 0.3s; 
+}
+
+.fa-check:hover {
+    background-color: darkgreen;
+    color: white; 
+}
+
+.fa-close:hover {
+    background-color: darkred; 
+    color: white; 
+}
+
+.approved {
+    color: green; 
+    font-weight: bold; 
+}
+
+.rejected {
+    color: red; 
+    font-weight: bold; 
+}
+button {
+    background: none; 
+    border: none; 
+    padding: 0; 
+    cursor: pointer; 
+    font-size: 24px;
+}
+
+button:focus {
+    outline: none; 
+}
