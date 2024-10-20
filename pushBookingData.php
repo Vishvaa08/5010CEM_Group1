@@ -40,4 +40,32 @@ if ($dataFlight && isset($dataFlight['Seats'])) {
 
     $flightReference->update(['Seats' => $newSeatsCount]);
 }
+
+$email = $bookingData['email'];
+
+$usersRef = $database->getReference('users/');
+$snapshot = $usersRef->getSnapshot();
+$users = $snapshot->getValue();
+
+$userId = null;
+
+if ($users) {
+    foreach ($users as $id => $user) {
+        if (isset($user['email']) && $user['email'] === $email) {
+            $userId = $id;
+            break;
+        }
+    }
+}
+
+if ($userId) {
+    $userReference = $database->getReference('users/' . $userId);
+    $currentPointsSnapshot = $userReference->getSnapshot();
+    $currentPoints = $currentPointsSnapshot->getValue()['points'] ?? 0;
+
+    $pointsEarned = $bookingData['pointsEarned'];
+
+    $newPoints = $currentPoints + $pointsEarned;
+    $userReference->update(['points' => $newPoints]);
+}
 ?>
