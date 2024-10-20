@@ -74,7 +74,7 @@ $users = $usersRef->getValue();
         </li>
         <li>
             <img src="images/inventory.png" alt="Inventory Icon">
-            <a href="AdminInventory.php">Inventory Status</a>
+            <a href="AdminInventory.php">Hotel/Flight Management</a>
         </li>
         <li>
             <img src="images/report.png" alt="Report Icon">

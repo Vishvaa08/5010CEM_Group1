@@ -16,6 +16,34 @@
 include 'firebase_connection.php'; 
 include 'firebase_data.php'; 
 
+session_start();
+$userId = $_SESSION['user_id'] ?? null;
+
+if (!$userId) {
+    header('Location: AdminLogin.php');
+    exit();
+}
+
+$userSnapshot = $database->getReference('users/' . $userId)->getValue();
+if (!$userSnapshot || $userSnapshot['role'] !== 'admin' || $userSnapshot['status'] !== 'approved') {
+    header('Location: index.php');
+    exit();
+}
+
+$adminName = $userSnapshot['name'] ?? 'Admin';
+
+// Fetch user data
+$usersRef = $database->getReference('users');
+$users = $usersRef->getValue();
+$newUsersCount = 0;
+if (is_array($users)) {
+    foreach ($users as $user) {
+        if (!array_key_exists('status', $user)) {
+            $newUsersCount++;
+        }
+    }
+}
+
 if (isset($_POST['submit'])) {
     $countryName = $_POST['countryName'];
     $countryImage = $_FILES['countryImage']['name'];
@@ -70,7 +98,7 @@ if (isset($_POST['submit'])) {
             </li>
             <li>
                 <img src="images/inventory.png" alt="Inventory Icon">
-                <a href="AdminInventory.php">Inventory Status</a>
+                <a href="AdminInventory.php">Hotel/Flight Management</a>
             </li>
             <li>
                 <img src="images/report.png" alt="Report Icon">
@@ -93,8 +121,10 @@ if (isset($_POST['submit'])) {
                 </div>
 
                 <div class="user-wrapper">
-                    <p>Hi, Admin</p>
-                    <a href="AdminLogin.php"><img src="images/logout.png" alt="Logout Icon" class="logout-icon"></a>
+                    <p>Hi, <?php echo htmlspecialchars($adminName); ?>!</p> 
+                    <a href="AdminLogin.php">
+                        <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+                    </a>
                 </div>
             </div>
         </header>

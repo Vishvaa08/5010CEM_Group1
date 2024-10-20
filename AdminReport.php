@@ -74,7 +74,7 @@ if (is_array($users)) {
             </li>
             <li>
                 <img src="images/inventory.png" alt="Inventory Icon">
-                <a href="AdminInventory.php">Inventory Status</a>
+                <a href="AdminInventory.php">Hotel/Flight Management</a>
             </li>
             <li class="active">
                 <img src="images/report_dark.jpg" alt="Report Icon">

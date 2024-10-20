@@ -8,7 +8,9 @@ if (!$userId) {
     exit();
 }
 
-$userSnapshot = $database->getReference('users/' . $userId)->getValue();
+$db = $factory->createDatabase(); 
+
+$userSnapshot = $db->getReference('users/' . $userId)->getValue();
 if (!$userSnapshot || $userSnapshot['role'] !== 'admin' || $userSnapshot['status'] !== 'approved') {
     header('Location: index.php');
     exit();
@@ -17,7 +19,7 @@ if (!$userSnapshot || $userSnapshot['role'] !== 'admin' || $userSnapshot['status
 $adminName = $userSnapshot['name'] ?? 'Admin';
 
 // Fetch user data
-$usersRef = $database->getReference('users');
+$usersRef = $db->getReference('users');
 $users = $usersRef->getValue();
 $newUsersCount = 0;
 if (is_array($users)) {
@@ -28,8 +30,21 @@ if (is_array($users)) {
     }
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userId'])) {
+    $userIdToApprove = $_POST['userId'];
+
+    $db->getReference('users/' . $userIdToApprove)
+      ->update([
+          'status' => 'approved',
+          'role' => 'admin' 
+      ]);
+
+    header("Location: AdminDashboard.php");
+    exit;
+}
+
 // Fetch payment data
-$paymentsRef = $database->getReference('Admin/newBookings');
+$paymentsRef = $db->getReference('Admin/newBookings');
 $payments = $paymentsRef->getValue();
 $newPaymentsCount = 0;
 $totalEarnings = 0;
@@ -55,7 +70,7 @@ if (is_array($payments)) {
 
 // Fetch inventory data by country
 $countryInventoryStatus = [];
-$countriesData = $database->getReference('Packages')->getValue() ?: [];
+$countriesData = $db->getReference('Packages')->getValue() ?: [];
 
 foreach ($countriesData as $countryName => $countryData) {
     $totalAvailableRooms = 0;
@@ -88,7 +103,7 @@ foreach ($countriesData as $countryName => $countryData) {
 }
 
 // Fetch notifications
-$reference = $database->getReference('adminNotifications');
+$reference = $db->getReference('adminNotifications');
 $messages = $reference->getValue();
 ?>
 
@@ -122,7 +137,7 @@ $messages = $reference->getValue();
             </li>
             <li>
                 <img src="images/inventory.png" alt="Inventory Icon">
-                <a href="AdminInventory.php">Inventory Status</a>
+                <a href="AdminInventory.php">Hotel/Flight Management</a>
             </li>
             <li>
                 <img src="images/report.png" alt="Report Icon">
@@ -138,9 +153,37 @@ $messages = $reference->getValue();
                 <p>Dashboard</p>
             </div>
             <div class="header-right d-flex align-items-center">
-                <a href="AdminApproval.php" class="icon-wrapper">
-                    <img src="images/admin_approval.png" alt="Admin Approval Icon" class="admin-approval-icon">
-                </a>
+            <div class="icon-wrapper" id="adminApprovalIcon">
+                <img src="images/admin_approval.png" alt="Admin Approval Icon" class="admin-approval-icon">
+                </div>
+                <div class="admin-approval-dropdown" id="adminApprovalDropdown">
+                    <div class="admin-approval-header">
+                        <h4>Pending Approvals</h4>
+                    </div>
+                    <div class="admin-approval-list">
+                        <?php
+                        $pendingUsers = $db->getReference('users')->orderByChild('status')->equalTo('pending')->getValue();
+                        
+                        if ($pendingUsers): ?>
+                            <?php foreach ($pendingUsers as $userId => $user): ?>
+                                <div class="admin-approval-item">
+                                    <div class="approval-details">
+                                        <p class="approval-name"><?php echo htmlspecialchars($user['name']); ?></p>
+                                        <p class="approval-email"><?php echo htmlspecialchars($user['email']); ?></p>
+                                        <p class="approval-phone"><?php echo htmlspecialchars($user['phone']); ?></p>
+                                        <p class="approval-role"><?php echo htmlspecialchars($user['role']); ?></p>
+                                    </div>
+                                    <form method="POST" action="AdminDashboard.php" class="approval-form">
+                                        <input type="hidden" name="userId" value="<?php echo $userId; ?>">
+                                        <button type="submit" class="approve-button">Approve</button>
+                                    </form>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p class="no-approvals">No pending approvals.</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
                 <div class="notification-container">
                     <img src="images/notifications.png" alt="Notifications Icon" class="notification-icon" id="notificationIcon">
                     <div class="notification-dropdown" id="notificationDropdown">
@@ -274,6 +317,20 @@ $messages = $reference->getValue();
                 notificationDropdown.classList.remove('show');
             }
         });
-    </script>
+
+        const adminApprovalIcon = document.getElementById('adminApprovalIcon');
+        const adminApprovalDropdown = document.getElementById('adminApprovalDropdown');
+
+        adminApprovalIcon.addEventListener('click', function() {
+            adminApprovalDropdown.classList.toggle('show');
+        });
+
+        window.addEventListener('click', function(event) {
+            if (!adminApprovalIcon.contains(event.target) && !adminApprovalDropdown.contains(event.target)) {
+                adminApprovalDropdown.classList.remove('show');
+            }
+        });
+
+   </script>
 </body>
 </html>

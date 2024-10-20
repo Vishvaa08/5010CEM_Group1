@@ -35,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'profileImageUrl' => $profileImageUrl,
             'role' => $role,
             'status' => ($role === 'admin') ? 'pending' : 'approved'
+           
         ]);
 
         // Redirect based on role
@@ -62,7 +63,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Joti+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    <!-- Add Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
@@ -200,6 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     console.error('Error registering user:', errorMessage);
                     alert(errorMessage); 
                 });
+
         });
     </script>
 </body>

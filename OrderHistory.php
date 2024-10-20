@@ -12,7 +12,9 @@ $factory = (new Factory)
 $database = $factory->createDatabase();
 session_start();
 $userId = $_SESSION['user_id']; 
-$ordersRef = $database->getReference('orders/' . $userId); 
+
+// Fetch user orders
+$ordersRef = $database->getReference('users/' . $userId . '/orders'); 
 $orders = $ordersRef->getValue();
 ?>
 
@@ -56,7 +58,7 @@ $orders = $ordersRef->getValue();
                     <div class="order-item">
                         <div class="order-info">
                             <div class="order-details">
-                                <p><strong>Order Placed:</strong> <?php echo $order['orderPlaced']; ?></p>
+                                <p><strong>Order Placed:</strong> <?php echo $order['orderDate']; ?></p>
                                 <p><strong>Total:</strong> RM<?php echo number_format($order['total'], 2); ?></p>
                                 <p><strong>Location:</strong> <?php echo $order['location']; ?></p>
                             </div>
