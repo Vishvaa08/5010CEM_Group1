@@ -75,10 +75,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     foreach ($hotels as $hotel) {
         $cityData['Hotels'][$nextHotelId] = [
             'Hotel' => $hotel['Hotel'] ?? 'N/A',
+            'Availability' => $hotel['Availability'] ?? 'N/A',
             'Image' => $hotel['Image'] ?? '',
             'Description' => $hotel['Description'] ?? 'No description available',
             'CheapestRoom' => $hotel['CheapestRoom'] ?? 0, 
             'Rooms' => $hotel['Rooms'] ?? []
+            
         ];
         $nextHotelId++; 
     }

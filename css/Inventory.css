@@ -290,3 +290,13 @@ input[type="checkbox"] {
 .delete-btn:hover {
     background-color: #D32F2F; /* Darker red on hover */
 }
+
+#hotel-availability {
+    margin-right: 10px;
+}
+
+.update-btn, .delete-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+

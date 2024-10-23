@@ -1,3 +1,18 @@
+<?php
+session_start();
+include 'firebase_connection.php'; 
+
+$pic = '';
+
+if (isset($_SESSION['userName'])) {
+    $pic = $_SESSION['profileImage'];
+    $name = $_SESSION['userName'];
+} else {
+    $pic = 'images/user.png';
+    $name = 'Admin';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,8 +31,13 @@
 
 <div class="sidebar">
     <div class="sidebar-header">
-        <h2>TravelTrail</h2>
+        <div class="admin-profile">
+        <div class="admin-profile">
+        <img src="<?php echo htmlspecialchars($pic); ?>" alt="Admin Profile Picture" class="profile-pic">
+        <p><?php echo htmlspecialchars($name); ?></p>
+        </div>
     </div>
+</div>
     <ul>
         <li>
             <img src="images/home.png" alt="Dashboard Icon">
@@ -97,6 +117,12 @@
     </div>
 
     <div class="city-grid">
+    <div class="upload-image-section">
+    <h5>Upload City Image for <?= htmlspecialchars($cityDetails['City']); ?></h5>
+    <input type="file" class="city-image-upload" accept="image/*" data-city="<?= htmlspecialchars($city); ?>" data-country="<?= htmlspecialchars($country); ?>">
+    <button type="button" class="btn btn-primary upload-city-image-btn" data-city="<?= htmlspecialchars($city); ?>" data-country="<?= htmlspecialchars($country); ?>">Upload Image</button>
+</div>
+
         <?php
         include 'firebase_connection.php';
         include 'firebase_data.php';
@@ -220,17 +246,17 @@
                         </div>
                         <div class="room-item">
                             <span>Single</span>
-                            <input type="number" data-key="SingleRooms" placeholder="Rooms" style="width: 40%;" min="0">
+                            <input type="number" data-key="SingleRooms" placeholder="Rooms" style="width: 40%;" min="0" max="10" value="10">
                             <input type="number" data-key="SinglePrice" placeholder="Price" style="width: 40%;">
                         </div>
                         <div class="room-item">
                             <span>Double</span>
-                            <input type="number" data-key="DoubleRooms" placeholder="Rooms" style="width: 40%;"  min="0">
+                            <input type="number" data-key="DoubleRooms" placeholder="Rooms" style="width: 40%;" min="0" max="10" value="10">
                             <input type="number" data-key="DoublePrice" placeholder="Price" style="width: 40%;">
                         </div>
                         <div class="room-item">
                             <span>Suite</span>
-                            <input type="number" data-key="SuiteRooms" placeholder="Rooms" style="width: 40%;"  min="0">
+                            <input type="number" data-key="SuiteRooms" placeholder="Rooms" style="width: 40%;"  min="0" max="10" value="10">
                             <input type="number" data-key="SuitePrice" placeholder="Price" style="width: 40%;">
                         </div>
                         <textarea data-key="Description" placeholder="Enter Hotel Description"></textarea>
@@ -352,13 +378,13 @@
 
             if (itineraryIndex && cityDetails[city]['Itinerary'][itineraryIndex]) {
                 const itinerary = cityDetails[city]['Itinerary'][itineraryIndex];
-
                 const itineraryHtml = `
-    <div class="itinerary-item d-flex" data-index="${itineraryIndex}"> 
-        <div class="itinerary-image-container">
-            <img src="${itinerary.Image || 'https://example.com/path/to/default_image.jpg'}" class="itinerary-image" alt="${itinerary.Itinerary}">
-        </div>
-        <div class="itinerary-details-container">
+                
+            <div class="itinerary-item d-flex" data-index="${itineraryIndex}"> 
+            <div class="itinerary-image-container">
+                <img src="${itinerary.Image || 'https://example.com/path/to/default_image.jpg'}" class="itinerary-image" alt="${itinerary.Itinerary}">
+            </div>
+            <div class="itinerary-details-container">
             <div class="mb-3">
                 <label>Itinerary:</label>
                 <input type="text" class="form-control" value="${itinerary.Itinerary}" readonly>
@@ -367,11 +393,11 @@
                 <label>Price:</label>
                 <input type="number" class="form-control" value="${itinerary.Price}" readonly>
             </div>
-            <i class="fas fa-times delete-itinerary-btn" style="cursor: pointer; color: red;"></i> <!-- Cross icon for delete -->
-        </div>
-    </div>`;
-                
-cityCard.find('.itinerary-details').append(itineraryHtml); 
+                <i class="fas fa-times delete-itinerary-btn" style="cursor: pointer; color: red;"></i> <!-- Cross icon for delete -->
+            </div>
+            </div>`;
+
+            cityCard.find('.itinerary-details').append(itineraryHtml); 
 
             }
         });
@@ -470,6 +496,7 @@ $(document).on('click', '.edit-btn', function() {
 
     let hotelCounter = 1; 
        const MAX_SEATS = 20; 
+       const MAX_ROOMS_PER_TYPE = 10;
 
        card.find('.hotel-item').each(function() {
         const hotelName = $(this).find('[data-key="Hotel"]').val().trim(); 
@@ -481,6 +508,14 @@ $(document).on('click', '.edit-btn', function() {
         const suiteRooms = parseInt($(this).find('[data-key="SuiteRooms"]').val()) || 0;
         const suitePrice = parseFloat($(this).find('[data-key="SuitePrice"]').val()) || 0;
         const hotelImageFile = $(this).find('.hotel-image-upload')[0].files[0];
+
+        const singleRoomsBooked = parseInt($(this).find('[data-key="SingleRooms"]').val()) || 0;
+        const doubleRoomsBooked = parseInt($(this).find('[data-key="DoubleRooms"]').val()) || 0;
+        const suiteRoomsBooked = parseInt($(this).find('[data-key="SuiteRooms"]').val()) || 0;
+
+        const singleRoomsAvailable = MAX_ROOMS_PER_TYPE - singleRoomsBooked;
+        const doubleRoomsAvailable = MAX_ROOMS_PER_TYPE - doubleRoomsBooked;
+        const suiteRoomsAvailable = MAX_ROOMS_PER_TYPE - suiteRoomsBooked;
 
         if (hotelName) {
             let hotelId = hotelCounter; 
@@ -496,20 +531,22 @@ $(document).on('click', '.edit-btn', function() {
                     Single: { Availability: singleRooms, Price: singlePrice, Booked: 0 },
                     Double: { Availability: doubleRooms, Price: doublePrice, Booked: 0 },
                     Suite: { Availability: suiteRooms, Price: suitePrice, Booked: 0 }
-                }
+                },
+                Availability: "N/A"
             };
 
+            
             ['Single', 'Double', 'Suite'].forEach(roomType => {
-                const bookedRooms = 0; 
-                const availableRooms = hotels[hotelId].Rooms[roomType].Availability;
-                const remainingRooms = availableRooms - hotels[hotelId].Rooms[roomType].Booked;
+                const bookedRooms = hotels[hotelCounter].Rooms[roomType].Booked;
+                const availableRooms = hotels[hotelCounter].Rooms[roomType].Availability;
 
-                if (bookedRooms > remainingRooms) {
+                if (bookedRooms > availableRooms) {
                     console.log(`Not enough ${roomType} rooms available`);
                 } else {
-                    console.log(`${remainingRooms} ${roomType} rooms remaining`);
+                    console.log(`${availableRooms} ${roomType} rooms remaining`);
                 }
             });
+
 
             if (hotelImageFile) {
                 const imageFormData = new FormData();
