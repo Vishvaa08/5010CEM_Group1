@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]
             );
     
-            $imageUrl = "https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/" . urlencode($filePath) . "?alt=media";
+            $imageUrl = "https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/" . urlencode($filePath) . "?alt=media&token=";
             error_log("Image uploaded successfully: " . $imageUrl);
         } catch (Exception $e) {
             error_log("Error uploading image: " . $e->getMessage());

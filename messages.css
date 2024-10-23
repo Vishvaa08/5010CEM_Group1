@@ -6,7 +6,7 @@ body {
 }
 
 .sidebar {
-    width: 280px;
+    width: 250px;
     min-height: calc(90vh - 40px);
     background-color: #FFFFFF;
     position: fixed;
@@ -75,6 +75,7 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
+
 .admin-profile {
     display: flex;
     align-items: center;
@@ -93,14 +94,11 @@ body {
     color: #333;
     margin: 0;
 }
+
 .main-content {
     margin-left: 300px;
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
-
 header {
     display: flex;
     justify-content: space-between;
@@ -108,70 +106,66 @@ header {
     width: 100%;
 }
 
-.header-left {
-    display: block; 
-    margin-left: 10px;
+.notification-list {
+    list-style: none;
+    padding: 0;
 }
 
-.header-right {
+.notification-item {
     display: flex;
-    align-items: center;
-}
-
-.user-wrapper {
-    color: #282828;
-    font-weight: bold;
-    display: flex;
-    align-items: center; 
-}
-
-.logout-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #333; 
-    font-weight: bold;
-    margin-left: 10px;
-}
-
-.logout-link span {
-    margin-left: 5px; 
-    font-size: 16px;  
-}
-
-.logout-icon {
-    width: 24px;
-    height: 24px;
-}
-
-.search-box {
-    margin-right: 20px;
-}
-
-.search-box input {
+    flex-direction: column;
     padding: 10px;
-    width: 200px; 
-    border-radius: 15px;
-    margin-right: 10px; 
-    border: none;
-    background-color: #FFF;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s;
 }
 
-table {
+.notification-item:hover {
+    background-color: #f0f0f0;
+}
+
+.user-info h3 {
+    font-size: 19px;
+    margin-bottom: 5px;
+    color: #007bff;
+}
+
+.user-info p {
+    font-size: 15px;
+    color: #777;
+}
+
+.notification-details {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+    display: none;
+}
+
+.notification-details p {
+    margin: 5px 0;
+}
+
+textarea {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: white;
     padding: 10px;
+    height: 80px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
-table th, table td {
-    padding: 12px;
-    text-align: left;
-    border: 1px solid #ddd;
+button {
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
-table th {
-    background-color: #000000;
-    color: white;
+button:hover {
+    background-color: #0056b3;
 }

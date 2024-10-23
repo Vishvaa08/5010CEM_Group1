@@ -27,22 +27,25 @@ window.addEventListener('DOMContentLoaded', ()=>{
     })
 })
 
-const buttons = document.querySelectorAll('.info-btn');
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-                const infoId = this.getAttribute('data-id');
-                const infoDetails = document.getElementById(infoId);
-
-                if (infoDetails.style.display === 'block') {
-                    infoDetails.style.display = 'none';
+            document.querySelectorAll('.info-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const details = document.querySelector(`#${this.dataset.id}`);
+                details.classList.toggle('open');
+                
+                const downArrow = this.querySelector('.arrow.down');
+                const upArrow = this.querySelector('.arrow.up');
+                
+                if (details.classList.contains('open')) {
+                    downArrow.style.display = 'none';
+                    upArrow.style.display = 'inline';
                 } else {
-                    document.querySelectorAll('.info-details').forEach(detail => {
-                        detail.style.display = 'none';
-                    });
-                    infoDetails.style.display = 'block';
+                    downArrow.style.display = 'inline';
+                    upArrow.style.display = 'none';
                 }
             });
         });
+
+
 
         const modal = document.getElementById("contactModal");
         const openModal = document.getElementById("openModal");

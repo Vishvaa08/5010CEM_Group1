@@ -20,65 +20,79 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-    .sidebar ul {
-        list-style: none;
-        padding: 10px;
-        margin: 0;
-        flex-grow: 1;
-    }
+.sidebar ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+    flex-grow: 1;
+}
 
-    .sidebar li {
-        margin-bottom: 30px;
-        display: flex;
-        align-items: center;
-        color: #333333;
-        font-size: 17px;
-    }
+.sidebar li {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    color: #333333;
+    font-size: 17px;
+}
 
-        .sidebar li img {
-            width: 26px; 
-            height: 26px; 
-            margin-right: 15px; 
-            vertical-align: middle; 
-        }
+.sidebar li img {
+    width: 26px; 
+    height: 26px; 
+    margin-right: 15px; 
+    vertical-align: middle; 
+}
 
-        .sidebar li a {
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            align-items: center
-               
-        }
+.sidebar li a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+}
 
-        .sidebar li:hover {
-            background-color: #E8E8E8;
-            padding: 10px;
-            border-radius: 10px;
-        }
+.sidebar li:hover {
+    background-color: #E8E8E8;
+    padding: 10px;
+    border-radius: 10px;
+}
 
-        .sidebar li.active {
-            background-color: black;
-            color: #FFFFFF;
-            padding: 10px;
-            border-radius: 10px;
-        }
+.sidebar li.active {
+    background-color: black;
+    color: #FFFFFF;
+    padding: 10px;
+    border-radius: 10px;
+}
 
-        .sidebar li.active a {
-            color: #FFFFFF;
-        }
+.sidebar li.active a {
+    color: #FFFFFF;
+}
 
-        .sidebar-header {
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 30px;
-            padding: 20px;
-        }
+.sidebar-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+}
 
-        .sidebar-header h2 {
-            margin: 0; 
-            text-align: center; 
-        }
+.admin-profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-profile img.profile-pic {
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px; 
+}
+
+.admin-profile p {
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
 
 .main-content {
     margin-left: 300px;
@@ -100,19 +114,6 @@ header {
     align-items: center;
 }
 
-.search-box {
-    margin-right: 20px;
-}
-
-
-.search-box input {
-    padding: 10px;
-    width: 200px; 
-    border-radius: 15px;
-    margin-right: 10px; 
-    border: none;
-    background-color: #FFF;
-}
 
 .user-wrapper {
     color: #282828;
@@ -134,36 +135,27 @@ header {
     gap: 20px;
 }
 
-.report-table, .user-details {
-    background-color: #f4f4f4;
-    padding: 10px; 
-    border-radius: 10px;
-    width: 48%; 
-    border: 1px solid #ccc;
+.search-box {
+    margin-right: 20px;
+}
+
+
+.search-box input {
+    padding: 10px;
+    width: 200px; 
+    border-radius: 15px;
+    margin-right: 10px; 
+    border: none;
+    background-color: #FFF;
 }
 
 .user-details {
-    background-color: #ffffff; 
-    border: none; 
-    padding: 10; 
-}
-
-.scrollable-table {
-    overflow-y: auto; 
-    max-height: 300px; 
+    background-color: #f4f4f4;
+    padding: 20px; 
     border-radius: 10px;
-    overflow: hidden; 
-}
-
-.report-table .total-earnings {
-    margin-top: 15px;
-    background-color: #ffffff; 
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    border: 1px solid #ddd; 
+    width: 48%; 
+    border: 1px solid #ccc;
+    margin-top: 20px;
 }
 
 table {
@@ -195,3 +187,49 @@ tr:last-child td {
     border-bottom: none; 
 }
 
+.fa {
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+    font-size: 30px; 
+}
+
+.fa-check {
+    color: green; 
+}
+
+.fa-close {
+    color: red; 
+    transition: background-color 0.3s; 
+}
+
+.fa-check:hover {
+    background-color: darkgreen;
+    color: white; 
+}
+
+.fa-close:hover {
+    background-color: darkred; 
+    color: white; 
+}
+
+.approved {
+    color: green; 
+    font-weight: bold; 
+}
+
+.rejected {
+    color: red; 
+    font-weight: bold; 
+}
+button {
+    background: none; 
+    border: none; 
+    padding: 0; 
+    cursor: pointer; 
+    font-size: 24px;
+}
+
+button:focus {
+    outline: none; 
+}

@@ -1,35 +1,34 @@
 <?php
 
-require 'vendor/autoload.php';
+session_start();
+include 'firebase_connection.php'; 
 
-use Kreait\Firebase\Factory;
+$pic = '';
 
-$serviceAccount = __DIR__ . '/prvkey.json';
-
-$factory = (new Factory)
-    ->withServiceAccount($serviceAccount)
-    ->withDatabaseUri('https://traveltrail-39e23-default-rtdb.firebaseio.com/');
-
-$database = $factory->createDatabase();
-$usersRef = $database->getReference('users');
-$users = $usersRef->getValue();
-$newUsersCount = 0;
-
-if (is_array($users)) {
-    foreach ($users as $user) {
-        if (!array_key_exists('status', $user)) {
-            $newUsersCount++;
-        }
-    }
+if (isset($_SESSION['userName'])) {
+    $pic = $_SESSION['profileImage'];
+    $name = $_SESSION['userName'];
+} else {
+    $pic = 'images/user.png';
+    $name = 'Admin';
 }
 
-$paymentsRef = $database->getReference('Admin/newBookings');
+
+$db = $database;
+// Fetch total number of users
+$usersSnapshot = $db->getReference('users')->getValue();
+$totalUsers = is_array($usersSnapshot) ? count($usersSnapshot) : 0;
+
+// Fetch total number of countries
+$countriesSnapshot = $db->getReference('Packages')->getValue();
+$totalCountries = is_array($countriesSnapshot) ? count($countriesSnapshot) : 0;
+
+// Fetch payment data
+$paymentsRef = $db->getReference('Admin/newBookings');
 $payments = $paymentsRef->getValue();
-$newPaymentsCount = 0;
 $totalEarnings = 0;
 $cardEarnings = 0;
 $fpxEarnings = 0;
-$today = date('Y-m-d');
 
 if (is_array($payments)) {
     foreach ($payments as $payment) {
@@ -40,47 +39,53 @@ if (is_array($payments)) {
         } else {
             $fpxEarnings += floatval($payment['totalPrice']);
         }
-
-        if (isset($payment['date']) && $payment['date'] === $today) {
-            $newPaymentsCount++;
-        }
     }
 }
 
-$countryInventoryStatus = [];
+// Fetch Report for Year
+if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
+    $year = date('Y'); 
+    $monthlyEarnings = [
+        'card' => array_fill(1, 12, 0),
+        'fpx' => array_fill(1, 12, 0)
+    ];
 
-$countriesData = $database->getReference('Packages')->getValue() ?: [];
+    $payments = $db->getReference('Admin/newBookings')->getValue();
 
-foreach ($countriesData as $countryName => $countryData) {
-    $totalAvailableRooms = 0;
-    $totalAvailableSeats = 0;
+    if (is_array($payments)) {
+        foreach ($payments as $paymentID => $payment) {
+            $totalPrice = 0;
+            $orderDate = null;
 
-    foreach ($countryData as $cityName => $cityData) {
-        if (isset($cityData['Hotels'])) {
-            foreach ($cityData['Hotels'] as $hotelIndex => $hotelData) {
-                if (isset($hotelData['Rooms'])) {
-                    foreach ($hotelData['Rooms'] as $roomType => $roomData) {
-                        $availability = isset($roomData['Availability']) ? (int)$roomData['Availability'] : 0;
-                        $totalAvailableRooms += $availability;
+            if (isset($payment['cardDetails'])) {
+                $totalPrice = floatval($payment['totalPrice']);
+                $orderDate = $payment['orderDate'] ?? null;
+            } 
+            elseif (isset($payment['bankDetails'])) {
+                $totalPrice = floatval($payment['totalPrice']);
+                $orderDate = $payment['orderDate'] ?? null;
+            }
+
+            if ($orderDate) {
+                $dateTime = strtotime($orderDate);
+                $month = date('n', $dateTime); 
+                $yearOfPayment = date('Y', $dateTime);
+
+                if ($yearOfPayment == $year) {
+                    if (isset($payment['cardDetails'])) {
+                        $monthlyEarnings['card'][$month] += $totalPrice;
+                    } elseif (isset($payment['bankDetails'])) {
+                        $monthlyEarnings['fpx'][$month] += $totalPrice;
                     }
                 }
             }
         }
-
-        if (isset($cityData['Flights'])) {
-            foreach ($cityData['Flights'] as $class => $flightData) {
-                $seats = isset($flightData['Seats']) ? (int)$flightData['Seats'] : 0;
-                $totalAvailableSeats += $seats;
-            }
-        }
     }
 
-    $countryInventoryStatus[$countryName] = [
-        'totalAvailableRooms' => $totalAvailableRooms,
-        'totalAvailableSeats' => $totalAvailableSeats
-    ];
+    header('Content-Type: application/json');
+    echo json_encode($monthlyEarnings);
+    exit; 
 }
-
 ?>
 
 
@@ -90,15 +95,23 @@ foreach ($countriesData as $countryName => $countryData) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/Dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>     
+
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h2>TravelTrail</h2>
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="admin-profile">
+        <div class="admin-profile">
+        <img src="<?php echo htmlspecialchars($pic); ?>" alt="Admin Profile Picture" class="profile-pic">
+        <p><?php echo htmlspecialchars($name); ?></p>
         </div>
+    </div>
+</div>
         <ul>
             <li class="active">
                 <img src="images/home dark.jpg" alt="Dashboard Icon">
@@ -114,83 +127,95 @@ foreach ($countriesData as $countryName => $countryData) {
             </li>
             <li>
                 <img src="images/inventory.png" alt="Inventory Icon">
-                <a href="AdminInventory.php">Inventory Status</a>
+                <a href="AdminInventory.php">Hotel/Flight Management</a>
             </li>
             <li>
-                <img src="images/report.png" alt="Report Icon">
-                <a href="AdminReport.php">Report</a>
+                <img src="images/payments.png" alt="Report Icon">
+                <a href="AdminReport.php">Bookings</a>
             </li>
         </ul>
     </div>
 
     <div class="main-content">
         <header>
-            <div class="header-left">
-                <h2>Dashboard / Home</h2>
-                <p>Dashboard</p>
-            </div>
-                <div class="user-wrapper">
-                    <p>Hi, Admin</p>
-                    <a href="AdminLogin.php">
+        <div class="header-left">
+            <h2>Dashboard / Home</h2>
+            <p>Dashboard</p>
+        </div>
+            <div class="header-right d-flex align-items-center">
+                <div class="notification-container">
+                    <a href= "messages.php">
+                    <img src="images/notifications.png" alt="Notifications Icon" class="notification-icon" id="notificationIcon">
+                </div>
+                <div class="header-right d-flex align-items-center">
+                    <a href="login.php" class="logout-link">
                         <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+                        <span>Logout</span>
                     </a>
                 </div>
             </div>
         </header>
 
-        <div class="cards">
-            <div class="card">
-                <div class="icon-wrapper1">
-                    <img src="images/new user.jpg" alt="User Icon">
+        <div class="info-box-container">
+        <!-- Total Users Box -->
+        <div class="info-box" id="totalUsersBox">
+            <div class="info-box-row">
+                <div class="info-box-icon">
+                    <img src="images/total_users.png" alt="Total Users Icon">
                 </div>
-                <div class="card-info">
-                    <h3>Unverified Users</h3>
-                    <p><?php echo $newUsersCount; ?></p>
-
+                <div class="info-box-content">
+                    <h3>Total Users</h3>
+                    <p id="totalUsersCount">10</p>
                 </div>
             </div>
-            <div class="card-payment">
-            <div class="icon-wrapper">
-                <img src="images/payment.jpg" alt="Payment Icon">
-            </div>
-            <div class="card-info">
-                <h3>New Payments</h3>
-                <p><?php echo $newPaymentsCount; ?></p>
-            </div>
-        </div>
         </div>
 
-        <div class="charts">
-        <div class="chart pie">
-            <h3>Total Earnings</h3>
-            <div class="pie-chart">
-                <canvas id="earningsChart"></canvas>
-            </div>
-            <div class="chart-legend">
-                <div>
-                    <div class="color-box" style="background-color: #FFCD56;"></div>
-                    <span>Card</span>
+        <!-- Total Countries Box -->
+        <div class="info-box" id="totalCountriesBox">
+            <div class="info-box-row">
+                <div class="info-box-icon">
+                    <img src="images/countries.png" alt="Total Countries Icon">
                 </div>
-                <div>
-                    <div class="color-box" style="background-color: #4BC0C0;"></div>
-                    <span>Bank Transfer (FPX)</span>
+                <div class="info-box-content">
+                    <h3>Total Countries</h3>
+                    <p id="totalCountriesCount">6</p>
                 </div>
             </div>
-        </div>
-        <div class="chart bar inventory-chart">
-        <h3>Inventory Status by Country</h3>
-        <div class="bar-chart">
-            <canvas id="inventoryChart"></canvas>
         </div>
     </div>
-</div>
+    <div class="charts">
+    <div class="chart pie">
+        <h3>Total Earnings</h3>
+        <div class="pie-chart">
+            <canvas id="earningsChart"></canvas>
+        </div>
+        <div class="chart-legend">
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #FFCD56;"></div>
+                <span>Card</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #4BC0C0;"></div>
+                <span>Bank Transfer (FPX)</span>
+            </div>
+        </div>
+    </div>
 
+    <div class="chart bar inventory-chart">
+    <h3>Monthly Earnings Report for <?php echo date('Y'); ?></h3>
+    <div class="bar-chart">
+        <canvas id="paymentsChart"></canvas>
+    </div>
+    <button id="generateReport" class="generate-btn">Generate Report</button>
+    </div>
+   </div>
 
 <script>
+
     const cardEarnings = <?php echo $cardEarnings; ?>;
     const fpxEarnings = <?php echo $fpxEarnings; ?>;
     const minDisplayValue = 0.01;
-    
+
     const adjustedCardEarnings = cardEarnings < minDisplayValue ? minDisplayValue : cardEarnings;
     const adjustedFpxEarnings = fpxEarnings < minDisplayValue ? minDisplayValue : fpxEarnings;
 
@@ -216,39 +241,88 @@ foreach ($countriesData as $countryName => $countryData) {
         }
     });
 
-    const countryLabels = <?php echo json_encode(array_keys($countryInventoryStatus)); ?>;
-    const availableRoomsData = <?php echo json_encode(array_column($countryInventoryStatus, 'totalAvailableRooms')); ?>;
-    const availableSeatsData = <?php echo json_encode(array_column($countryInventoryStatus, 'totalAvailableSeats')); ?>;
+        let paymentsChart;
 
-    const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
-    const inventoryChart = new Chart(inventoryCtx, {
-        type: 'bar',
-        data: {
-            labels: countryLabels,
-            datasets: [
-                {
-                    label: 'Available Hotel Rooms',
-                    data: availableRoomsData,
-                    backgroundColor: 'rgba(255, 205, 86, 0.7)', 
-                },
-                {
-                    label: 'Available Flight Seats',
-                    data: availableSeatsData,
-                    backgroundColor: 'rgba(54, 162, 235, 0.7)', 
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+        function updateChartWithMonthlyData() {
+            fetch('<?php echo $_SERVER['PHP_SELF']; ?>?action=fetchMonthlyEarnings') 
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    const months = Array.from({ length: 12 }, (_, i) => i + 1); 
+                    const cardEarnings = months.map(month => data.card[month] || 0); 
+                    const fpxEarnings = months.map(month => data.fpx[month] || 0);   
+
+                    const totalCardEarnings = cardEarnings.reduce((acc, curr) => acc + curr, 0);
+                    const totalFpxEarnings = fpxEarnings.reduce((acc, curr) => acc + curr, 0);
+
+                    console.log("Card Earnings:", totalCardEarnings);
+                    console.log("FPX Earnings:", totalFpxEarnings);
+
+                    if (typeof paymentsChart !== 'undefined') {
+                        paymentsChart.destroy(); 
+                    }
+
+                    const paymentCtx = document.getElementById('paymentsChart').getContext('2d');
+                    paymentsChart = new Chart(paymentCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                            datasets: [
+                                {
+                                    label: 'Card Payments',
+                                    data: cardEarnings,
+                                    backgroundColor: 'rgba(255, 205, 86, 0.7)' 
+                                },
+                                {
+                                    label: 'Bank Transfer (FPX)',
+                                    data: fpxEarnings,
+                                    backgroundColor: 'rgba(54, 162, 235, 0.7)' 
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                
+
+
+                    document.getElementById('generateReport').addEventListener('click', function () {
+                        html2canvas(document.getElementById('paymentsChart')).then(function (canvas) {
+                            const imgData = canvas.toDataURL('image/png');
+                            const { jsPDF } = window.jspdf;
+                            const pdf = new jsPDF();
+
+                            pdf.addImage(imgData, 'PNG', 10, 10, 180, 100);
+                            pdf.setFontSize(18);
+                            pdf.text('Total Earnings Report', 10, 130);
+                            pdf.setFontSize(12);
+                            pdf.text(`Card Total: RM${totalCardEarnings.toFixed(2)}`, 10, 140);
+                            pdf.text(`Bank Transfer (FPX) Total: RM${totalFpxEarnings.toFixed(2)}`, 10, 150);
+
+                            pdf.save('Payments_Report.pdf');
+                        });
+                    });
+                });
         }
-    });
-</script>
 
+        updateChartWithMonthlyData();
+
+            document.getElementById('totalUsersCount').textContent = '<?php echo $totalUsers; ?>';
+            document.getElementById('totalCountriesCount').textContent = '<?php echo $totalCountries; ?>';
+
+        
+            document.getElementById('notificationIcon').addEventListener('click', function() {
+            window.location.href = 'messages.php';  
+        });
+
+    </script>
 
 </body>
 </html>

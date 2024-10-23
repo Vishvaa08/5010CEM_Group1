@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 fopen($file['tmp_name'], 'r'),
                 ['name' => $filePath, 'predefinedAcl' => 'publicRead']
             );
-            $imageUrl = "https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/" . urlencode($filePath) . "?alt=media";
+            $imageUrl = "https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/" . urlencode($filePath) . "?alt=media&token=";
         } catch (Exception $e) {
             error_log('Error uploading hotel image: ' . $e->getMessage());
             echo json_encode(['success' => false, 'message' => 'Failed to upload the hotel image.']);

@@ -7,7 +7,7 @@
 
 .sidebar {
     width: 250px;
-    min-height: calc(100vh - 40px);
+    min-height: calc(90vh - 40px);
     background-color: #FFFFFF;
     position: fixed;
     left: 20px;
@@ -22,7 +22,7 @@
 
 .sidebar ul {
     list-style: none;
-    padding: 0;
+    padding: 10px;
     margin: 0;
     flex-grow: 1;
 }
@@ -67,18 +67,50 @@
 }
 
 .sidebar-header {
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    height: 30px;
-    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
 }
 
-.sidebar-header h2 {
-    margin: 0; 
-    text-align: center; 
+.admin-profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.admin-profile img.profile-pic {
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px; 
+}
+
+.admin-profile p {
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+.logout-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333; 
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.logout-link span {
+    margin-left: 5px; 
+    font-size: 16px;  
+}
+
+.logout-icon {
+    width: 24px;
+    height: 24px;
+}
 .main-content {
     margin-left: 300px;
     padding: 20px;
@@ -96,6 +128,7 @@ header {
 
 .header-left {
     display: block; 
+    margin-left: 10px;
 }
 
 .header-right {
@@ -110,125 +143,151 @@ header {
     align-items: center; 
 }
 
-.logout-icon {
-    width: 24px; 
-    height: 24px; 
+.logout-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333; 
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.logout-link span {
     margin-left: 5px; 
-    vertical-align: middle;
+    font-size: 16px;  
 }
 
-.cards {
+.logout-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.admin-profile {
     display: flex;
-    justify-content: center; /* Centering cards horizontally */
-    align-items: center; /* Centering cards vertically */
-    flex-wrap: wrap; /* Allow cards to wrap to the next row */
-    gap: 20px; /* Add some space between cards */
-    margin: 20px auto; /* Centering the cards container */
+    align-items: center;
+}
+
+.admin-profile img.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.info-box-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 370px; 
+    justify-content: center;
+    margin-bottom: 40px;
+    margin-top: 30px;
+}
+
+.info-box {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 1000px; /* Constrain the width of the cards container */
+    max-width: 300px;
+    text-align: center; 
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
-.card {
-    background: #FFFFFF;
-    border-radius: 12px;
-    padding: 20px;
-    width: 440px; /* Keep the increased width */
-    height: 100px; /* Keep the increased height */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.info-box-row {
     display: flex;
     align-items: center;
-    text-align: left;
-    gap: 20px; /* Add spacing between the image and text */
-    position: relative;
-    left: 70px;
-    flex-direction: row; /* Arrange icon and card-info vertically */
+    justify-content: space-between;
 }
 
-.card-payment {
-    position: relative;
-    left: 130px;
-    background: #FFFFFF;
-    border-radius: 12px;
-    padding: 20px;
-    width: 450px; /* Keep the increased width */
-    height: 100px; /* Keep the increased height */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    text-align: left;
-    gap: 20px; 
-    }
+.info-box-icon {
+    flex-shrink: 0;
+    margin-right: 10px; 
+}
 
-.card-info {
+.info-box-icon img {
+    width: 50px;
+    height: 50px;
+}
+
+.info-box-content {
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center vertically */
-    align-items: center; /* Center horizontally */
-    text-align: center; /* Align text to the center */
+    justify-content: center; 
+    text-align: center;
+    flex-grow: 1; 
 }
 
-.card-info h3 {
-    color: #282828;
-    font-size: 20px;
-    font-family: 'Itim', cursive;
-    font-style: italic;
+.info-box-content h3 {
+    font-size: 1.2rem;
+    color: #333;
     margin-bottom: 5px;
-    text-align: center; 
 }
 
-.card-info p {
-    font-size: 24px;
-    font-family: 'Itim', cursive; 
-    font-weight: bold; 
-    color: #282828;
-    margin-top: 5px;
-    
+.info-box-content p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
 }
 
-.icon-wrapper1 img,
-.icon-wrapper img {
-    width: 80px; 
-    height: 80px;
-    border-radius: 10px;
-    margin-left: 8px;
-}
 
 .charts {
     display: flex;
-    justify-content: center; /* Centering charts horizontally */
-    align-items: center; /* Centering charts vertically */
-    flex-wrap: wrap; /* Allow charts to wrap to the next row */
-    gap: 20px; /* Add some space between charts */
-    margin: 20px auto; /* Centering the charts container */
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px; 
     width: 100%;
-    max-width: 1000px; /* Constrain the width of the charts container */
+    max-width: 1200px;
 }
+
 
 .chart {
     background: #FFFFFF;
     border-radius: 12px;
     padding: 20px;
-    width: 450px; /* Set the same width for both cards and charts */
-    height: 260px; /* Set the same height for both cards and charts */
+    width: 450px; 
+    height: 260px; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
-    left: 70px;
-}
+    margin: 0 auto;
+    
+   }
 
 .chart.inventory-chart {
     background: #FFFFFF;
     border-radius: 12px;
     padding: 20px;
-    width: 450px; /* Set the same width for both cards and charts */
-    height: 260px; /* Set the same height for both cards and charts */
+    width: 450px; 
+    height: 260px; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
-    left: 130px;
+    margin: 0 auto; 
+   }
+   
+   .generate-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.generate-btn:hover {
+    background-color: #0056b3;
 }
 
 .pie-chart {
-    height: 150px; /* Reduced height */
-    width: 150px; /* Reduced width */
+    height: 150px; 
+    width: 150px; 
     max-width: 100%;
     display: flex;
     justify-content: center;
@@ -236,7 +295,6 @@ header {
     margin: 0 auto;
     position: relative;
 }
-
 
 .pie-chart canvas {
     max-width: 100%;
@@ -269,3 +327,216 @@ header {
     margin-right: 5px;
     border-radius: 3px;
 }
+
+.admin-approval,
+.notification {
+    margin-right: 20px; 
+}
+
+.admin-approval-icon {
+    width: 24px !important;  
+    height: 24px !important;
+    vertical-align: middle;
+}
+.notification-icon {
+    width: 24px !important;  
+    height: 24px !important;
+    padding: 15px;
+    vertical-align: middle;
+}
+
+.icon-wrapper {
+    display: flex;
+    align-items: center;
+    margin-right: 10px; 
+}
+
+/* Notification  */
+.notification-container {
+    position: relative;
+}
+
+.notification-dropdown {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 400px; 
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: none; 
+    flex-direction: column;
+    padding: 15px; 
+    z-index: 100;
+    max-height: 300px; 
+    overflow-y: auto; 
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.notification-header h4 {
+    margin: 0;
+    font-size: 18px; 
+}
+
+.notification-tabs {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.notification-tabs .tab {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: #007BFF;
+}
+
+.notification-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+.notification-item:hover {
+    background-color: #f9f9f9;
+}
+
+.notification-icon img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.notification-details {
+    flex-grow: 1;
+}
+
+.notification-title {
+    font-weight: bold;
+    color: #007BFF;
+    margin: 0;
+}
+
+.notification-meta {
+    font-size: 12px;
+    color: #999;
+    margin: 5px 0;
+}
+
+.no-notifications {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+}
+
+.show {
+    display: flex !important;
+}
+
+/* Pending Approvals */
+.admin-approval-dropdown {
+    position: absolute;
+    top: 90px;
+    right: 270px;
+    width: 400px; 
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: none; 
+    flex-direction: column;
+    padding: 15px; 
+    z-index: 100;
+    max-height: 300px; 
+    overflow-y: auto; 
+}
+
+.admin-approval-dropdown.show {
+    display: flex !important; 
+}
+
+
+.admin-approval-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.admin-approval-header h4 {
+    margin: 0;
+    font-size: 18px; 
+}
+
+.admin-approval-list {
+    max-height: 250px; 
+    overflow-y: auto;
+    margin-top: 10px; 
+}
+
+.admin-approval-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+.admin-approval-item:hover {
+    background-color: #f9f9f9;
+}
+
+.approval-details {
+    flex-grow: 1; 
+}
+
+.approval-name {
+    font-weight: bold;
+    color: #007BFF; 
+    margin: 0;
+}
+
+.approval-email,
+.approval-phone,
+.approval-role {
+    font-size: 14px; 
+    color: #555; 
+    margin: 0;
+}
+
+.approve-button {
+    background-color: #4CAF50; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.approve-button:hover {
+    background-color: #45a049; 
+}
+
+.no-approvals {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+}
+
+

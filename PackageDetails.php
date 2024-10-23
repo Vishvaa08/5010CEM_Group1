@@ -1,3 +1,18 @@
+<?php
+session_start();
+include 'firebase_connection.php'; 
+
+$pic = '';
+
+if (isset($_SESSION['userName'])) {
+    $pic = $_SESSION['profileImage'];
+    $name = $_SESSION['userName'];
+} else {
+    $pic = 'images/user.png';
+    $name = 'Admin';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,8 +31,13 @@
 
 <div class="sidebar">
     <div class="sidebar-header">
-        <h2>TravelTrail</h2>
+        <div class="admin-profile">
+        <div class="admin-profile">
+        <img src="<?php echo htmlspecialchars($pic); ?>" alt="Admin Profile Picture" class="profile-pic">
+        <p><?php echo htmlspecialchars($name); ?></p>
+        </div>
     </div>
+</div>
     <ul>
         <li>
             <img src="images/home.png" alt="Dashboard Icon">
@@ -33,7 +53,7 @@
         </li>
         <li>
             <img src="images/inventory.png" alt="Inventory Icon">
-            <a href="AdminInventory.php">Inventory Status</a>
+            <a href="AdminInventory.php">Hotel/Flight Management</a>
         </li>
         <li>
             <img src="images/report.png" alt="Report Icon">
@@ -50,7 +70,8 @@
         </div>
         <div class="header-right d-flex align-items-center">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search by City, Hotel, or Itinerary" onkeyup="filterUsers()">
+            <input type="text" id="searchInput" placeholder="Search by City" onkeyup="filterCities()"> 
+
             </div>
             <div class="add-city-btn text-center">
                 <button type="button" class="btn btn-primary btn-lg rounded-circle" onclick="toggleCityForm()">
@@ -96,6 +117,12 @@
     </div>
 
     <div class="city-grid">
+    <div class="upload-image-section">
+    <h5>Upload City Image for <?= htmlspecialchars($cityDetails['City']); ?></h5>
+    <input type="file" class="city-image-upload" accept="image/*" data-city="<?= htmlspecialchars($city); ?>" data-country="<?= htmlspecialchars($country); ?>">
+    <button type="button" class="btn btn-primary upload-city-image-btn" data-city="<?= htmlspecialchars($city); ?>" data-country="<?= htmlspecialchars($country); ?>">Upload Image</button>
+</div>
+
         <?php
         include 'firebase_connection.php';
         include 'firebase_data.php';
@@ -110,7 +137,7 @@
                 if (!empty($city) && !empty($cityDetails['City'])) {
                     echo '<div class="city-card" data-country="' . htmlspecialchars($country) . '" data-city="' . htmlspecialchars($city) . '">';
                     echo '<h4 contenteditable="true" data-key="City">' . htmlspecialchars($cityDetails['City']) . '</h4>';
-                    echo '<textarea data-key="CityDetail" placeholder="Enter City Description" style="width:100%; height: 60px;">' . htmlspecialchars($cityDetails['CityDetail'] ?? '') . '</textarea>';
+                    echo '<textarea data-key="CityDetail" class="fixed-textarea" placeholder="Enter City Description">' . htmlspecialchars($cityDetails['CityDetail'] ?? '') . '</textarea>';
                     $cityImage = htmlspecialchars($cityDetails['CityImage'] ?? 'https://example.com/path/to/default_image.jpg');
                     echo '<img src="' . $cityImage . '" alt="' . htmlspecialchars($cityDetails['City']) . '" style="width:100%;">';
                     echo '<input type="file" accept="image/*" class="image-upload" id="cityImage" name="cityImage">';
@@ -162,7 +189,7 @@
                             $vehiclePrice = htmlspecialchars($vehicleDetails['Price'] ?? 0);
                             echo '<div class="vehicle-item">';
                             echo '<strong>' . $vehicleType . '</strong>';
-                            echo '<input type="number" data-key="VehiclePrice" value="' . $vehiclePrice . '" placeholder="Vehicle Price" readonly>';
+                            echo '<input type="number" data-key="VehiclePrice" value="' . $vehiclePrice . '" placeholder="Vehicle Price">';
                             echo '</div>';
                         }
                     }
@@ -213,23 +240,23 @@
                     const hotelHtml = `
                     <div class="hotel-item">
                         <input type="text" data-key="Hotel" placeholder="Enter Hotel Name" required>
-                        <input type="file" name="hotelImage[]" class="hotel-image-upload" accept="image/*" onchange="previewHotelImage(this)">
+                        <input type="file" name="hotelImage[]" class="hotel-image-upload" accept="image/*">
                         <div class="image-container">
                             <img src="" class="thumbnail hotel-thumbnail" alt="Hotel Image" style="display: none;">
                         </div>
                         <div class="room-item">
                             <span>Single</span>
-                            <input type="number" data-key="SingleRooms" placeholder="Rooms" style="width: 40%;" value="30" min="0">
+                            <input type="number" data-key="SingleRooms" placeholder="Rooms" style="width: 40%;" min="0" max="10" value="10">
                             <input type="number" data-key="SinglePrice" placeholder="Price" style="width: 40%;">
                         </div>
                         <div class="room-item">
                             <span>Double</span>
-                            <input type="number" data-key="DoubleRooms" placeholder="Rooms" style="width: 40%;" value="30" min="0">
+                            <input type="number" data-key="DoubleRooms" placeholder="Rooms" style="width: 40%;" min="0" max="10" value="10">
                             <input type="number" data-key="DoublePrice" placeholder="Price" style="width: 40%;">
                         </div>
                         <div class="room-item">
                             <span>Suite</span>
-                            <input type="number" data-key="SuiteRooms" placeholder="Rooms" style="width: 40%;" value="30" min="0">
+                            <input type="number" data-key="SuiteRooms" placeholder="Rooms" style="width: 40%;"  min="0" max="10" value="10">
                             <input type="number" data-key="SuitePrice" placeholder="Price" style="width: 40%;">
                         </div>
                         <textarea data-key="Description" placeholder="Enter Hotel Description"></textarea>
@@ -270,6 +297,24 @@
                 }
             }
         });
+    });
+
+
+    function filterCities() {
+    const searchValue = $('#searchInput').val().toLowerCase(); 
+
+    $('.city-card').each(function() {
+        const cityName = $(this).find('[data-key="City"]').text().toLowerCase(); 
+        let hasMatch = false; 
+
+        if (cityName.includes(searchValue)) {
+            hasMatch = true; 
+        }
+
+        $(this).toggle(hasMatch);
+    });
+}
+
 
         // Hotel dropdown  
         $('.hotel-dropdown').on('change', function() {
@@ -290,27 +335,27 @@
                         <div class="hotel-details-container">
                             <div class="room-detail">
                                 <label>Double:</label>
-                                <input type="number" class="form-control" value="${hotel.Rooms.Double.Availability || 0}" readonly>
+                                <input type="number" class="form-control" value="${hotel.Rooms.Double.Availability || 0}" >
                             </div>
                             <div class="room-detail">
                                 <label>Price:</label>
-                                <input type="number" class="form-control" value="${hotel.Rooms.Double.Price || 0}" readonly>
+                                <input type="number" class="form-control" value="${hotel.Rooms.Double.Price || 0}">
                             </div>
                             <div class="room-detail">
                                 <label>Single:</label>
-                                <input type="number" class="form-control" value="${hotel.Rooms.Single.Availability || 0}" readonly>
+                                <input type="number" class="form-control" value="${hotel.Rooms.Single.Availability || 0}" >
                             </div>
                             <div class="room-detail">
                                 <label>Price:</label>
-                                <input type="number" class="form-control" value="${hotel.Rooms.Single.Price || 0}" readonly>
+                                <input type="number" class="form-control" value="${hotel.Rooms.Single.Price || 0}" >
                             </div>
                             <div class="room-detail">
                                 <label>Suite:</label>
-                                <input type="number" class="form-control" value="${hotel.Rooms.Suite.Availability || 0}" readonly>
+                                <input type="number" class="form-control" value="${hotel.Rooms.Suite.Availability || 0}" >
                             </div>
                             <div class="room-detail">
                                 <label>Price:</label>
-                                <input type="number" class="form-control" value="${hotel.Rooms.Suite.Price || 0}" readonly>
+                                <input type="number" class="form-control" value="${hotel.Rooms.Suite.Price || 0}">
                             </div>
                         </div>
                         <div class="description-container">
@@ -333,13 +378,13 @@
 
             if (itineraryIndex && cityDetails[city]['Itinerary'][itineraryIndex]) {
                 const itinerary = cityDetails[city]['Itinerary'][itineraryIndex];
-
                 const itineraryHtml = `
-    <div class="itinerary-item d-flex" data-index="${itineraryIndex}"> <!-- Add data-index for identification -->
-        <div class="itinerary-image-container">
-            <img src="${itinerary.Image || 'https://example.com/path/to/default_image.jpg'}" class="itinerary-image" alt="${itinerary.Itinerary}">
-        </div>
-        <div class="itinerary-details-container">
+                
+            <div class="itinerary-item d-flex" data-index="${itineraryIndex}"> 
+            <div class="itinerary-image-container">
+                <img src="${itinerary.Image || 'https://example.com/path/to/default_image.jpg'}" class="itinerary-image" alt="${itinerary.Itinerary}">
+            </div>
+            <div class="itinerary-details-container">
             <div class="mb-3">
                 <label>Itinerary:</label>
                 <input type="text" class="form-control" value="${itinerary.Itinerary}" readonly>
@@ -348,11 +393,11 @@
                 <label>Price:</label>
                 <input type="number" class="form-control" value="${itinerary.Price}" readonly>
             </div>
-            <i class="fas fa-times delete-itinerary-btn" style="cursor: pointer; color: red;"></i> <!-- Cross icon for delete -->
-        </div>
-    </div>`;
-                
-cityCard.find('.itinerary-details').append(itineraryHtml); 
+                <i class="fas fa-times delete-itinerary-btn" style="cursor: pointer; color: red;"></i> <!-- Cross icon for delete -->
+            </div>
+            </div>`;
+
+            cityCard.find('.itinerary-details').append(itineraryHtml); 
 
             }
         });
@@ -436,7 +481,7 @@ cityCard.find('.itinerary-details').append(itineraryHtml);
 
 
 
-    $(document).on('click', '.edit-btn', function() {
+$(document).on('click', '.edit-btn', function() {
     const card = $(this).closest('.city-card'); 
     const country = card.data('country'); 
     const city = card.find('[data-key="City"]').text().trim(); 
@@ -450,10 +495,10 @@ cityCard.find('.itinerary-details').append(itineraryHtml);
     const uploadPromises = []; 
 
     let hotelCounter = 1; 
-    const MAX_ROOMS = 30; 
-    const MAX_SEATS = 20; 
+       const MAX_SEATS = 20; 
+       const MAX_ROOMS_PER_TYPE = 10;
 
-    card.find('.hotel-item').each(function() {
+       card.find('.hotel-item').each(function() {
         const hotelName = $(this).find('[data-key="Hotel"]').val().trim(); 
         const hotelDescription = $(this).find('[data-key="Description"]').val() || ''; 
         const singleRooms = parseInt($(this).find('[data-key="SingleRooms"]').val()) || 0;
@@ -464,23 +509,17 @@ cityCard.find('.itinerary-details').append(itineraryHtml);
         const suitePrice = parseFloat($(this).find('[data-key="SuitePrice"]').val()) || 0;
         const hotelImageFile = $(this).find('.hotel-image-upload')[0].files[0];
 
-        if (singleRooms > MAX_ROOMS) {
-            alert('Single rooms cannot exceed ' + MAX_ROOMS);
-            return; 
-        }
-        if (doubleRooms > MAX_ROOMS) {
-            alert('Double rooms cannot exceed ' + MAX_ROOMS);
-            return; 
-        }
-        if (suiteRooms > MAX_ROOMS) {
-            alert('Suite rooms cannot exceed ' + MAX_ROOMS);
-            return; 
-        }
+        const singleRoomsBooked = parseInt($(this).find('[data-key="SingleRooms"]').val()) || 0;
+        const doubleRoomsBooked = parseInt($(this).find('[data-key="DoubleRooms"]').val()) || 0;
+        const suiteRoomsBooked = parseInt($(this).find('[data-key="SuiteRooms"]').val()) || 0;
+
+        const singleRoomsAvailable = MAX_ROOMS_PER_TYPE - singleRoomsBooked;
+        const doubleRoomsAvailable = MAX_ROOMS_PER_TYPE - doubleRoomsBooked;
+        const suiteRoomsAvailable = MAX_ROOMS_PER_TYPE - suiteRoomsBooked;
 
         if (hotelName) {
             let hotelId = hotelCounter; 
             
-            // Calculate the cheapest room price
             const roomPrices = [singlePrice, doublePrice, suitePrice];
             const cheapestRoomPrice = Math.min(...roomPrices.filter(price => price > 0)); 
             
@@ -489,11 +528,25 @@ cityCard.find('.itinerary-details').append(itineraryHtml);
                 Description: hotelDescription,
                 CheapestRoom: cheapestRoomPrice, 
                 Rooms: {
-                    Single: { Availability: singleRooms, Price: singlePrice },
-                    Double: { Availability: doubleRooms, Price: doublePrice },
-                    Suite: { Availability: suiteRooms, Price: suitePrice }
-                }
+                    Single: { Availability: singleRooms, Price: singlePrice, Booked: 0 },
+                    Double: { Availability: doubleRooms, Price: doublePrice, Booked: 0 },
+                    Suite: { Availability: suiteRooms, Price: suitePrice, Booked: 0 }
+                },
+                Availability: "N/A"
             };
+
+            
+            ['Single', 'Double', 'Suite'].forEach(roomType => {
+                const bookedRooms = hotels[hotelCounter].Rooms[roomType].Booked;
+                const availableRooms = hotels[hotelCounter].Rooms[roomType].Availability;
+
+                if (bookedRooms > availableRooms) {
+                    console.log(`Not enough ${roomType} rooms available`);
+                } else {
+                    console.log(`${availableRooms} ${roomType} rooms remaining`);
+                }
+            });
+
 
             if (hotelImageFile) {
                 const imageFormData = new FormData();
@@ -634,6 +687,8 @@ cityCard.find('.itinerary-details').append(itineraryHtml);
                 const result = JSON.parse(response);
                 if (result.success) {
                     alert('City data saved successfully!');
+                    hasItem = false;
+                    $(".draggable").draggable("enable");
                     location.reload(); 
                 } else {
                     alert('Error saving city data: ' + result.message);
@@ -648,7 +703,9 @@ cityCard.find('.itinerary-details').append(itineraryHtml);
         console.error('Error during upload process:', error);
         alert('Error uploading data.');
     });
+
 });
+
 
 /// Delete Itinerary
 $(document).on('click', '.delete-itinerary-btn', function() {
@@ -708,19 +765,6 @@ $(document).on('click', '.delete-btn', function() {
     }
 });
 
-
-        function previewHotelImage(input) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    $(input).siblings('.image-container').find('.hotel-thumbnail').attr('src', e.target.result).show();
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-    });
 
     
     
