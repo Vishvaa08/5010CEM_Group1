@@ -42,7 +42,7 @@ if (is_array($payments)) {
     }
 }
 
-// Fetch payment data grouped by month for the entire year
+// Fetch Report for Year
 if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
     $year = date('Y'); 
     $monthlyEarnings = [
@@ -50,7 +50,6 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
         'fpx' => array_fill(1, 12, 0)
     ];
 
-    // Fetch all bookings from Firebase again for monthly calculation
     $payments = $db->getReference('Admin/newBookings')->getValue();
 
     if (is_array($payments)) {
@@ -58,24 +57,20 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
             $totalPrice = 0;
             $orderDate = null;
 
-            // Check for card details
             if (isset($payment['cardDetails'])) {
                 $totalPrice = floatval($payment['totalPrice']);
                 $orderDate = $payment['orderDate'] ?? null;
             } 
-            // Check for bank details (FPX)
             elseif (isset($payment['bankDetails'])) {
                 $totalPrice = floatval($payment['totalPrice']);
                 $orderDate = $payment['orderDate'] ?? null;
             }
 
-            // Process the payment if orderDate is set
             if ($orderDate) {
                 $dateTime = strtotime($orderDate);
-                $month = date('n', $dateTime); // Numeric representation of month (1-12)
+                $month = date('n', $dateTime); 
                 $yearOfPayment = date('Y', $dateTime);
 
-                // Only accumulate earnings for the current year
                 if ($yearOfPayment == $year) {
                     if (isset($payment['cardDetails'])) {
                         $monthlyEarnings['card'][$month] += $totalPrice;
@@ -87,10 +82,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
         }
     }
 
-    // Return the monthly earnings data as JSON
     header('Content-Type: application/json');
     echo json_encode($monthlyEarnings);
-    exit; // Stop further execution
+    exit; 
 }
 ?>
 
@@ -195,7 +189,6 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
         <div class="pie-chart">
             <canvas id="earningsChart"></canvas>
         </div>
-        <!-- Legend for Chart Colors -->
         <div class="chart-legend">
             <div class="legend-item">
                 <div class="color-box" style="background-color: #FFCD56;"></div>
@@ -218,6 +211,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
    </div>
 
 <script>
+
     const cardEarnings = <?php echo $cardEarnings; ?>;
     const fpxEarnings = <?php echo $fpxEarnings; ?>;
     const minDisplayValue = 0.01;
@@ -241,90 +235,84 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
             responsive: true,
             plugins: {
                 legend: {
-                    display: false // We manually create the legend
+                    display: false 
                 }
             }
         }
     });
 
-    // Declare paymentsChart in the global scope
-let paymentsChart;
+        let paymentsChart;
 
-function updateChartWithMonthlyData() {
-    fetch('<?php echo $_SERVER['PHP_SELF']; ?>?action=fetchMonthlyEarnings') // AJAX request
-        .then(response => response.json())
-        .then(data => {
-            console.log(data); // Debugging: log the data received
+        function updateChartWithMonthlyData() {
+            fetch('<?php echo $_SERVER['PHP_SELF']; ?>?action=fetchMonthlyEarnings') 
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
 
-            const months = Array.from({ length: 12 }, (_, i) => i + 1); 
-            const cardEarnings = months.map(month => data.card[month] || 0); 
-            const fpxEarnings = months.map(month => data.fpx[month] || 0);   
+                    const months = Array.from({ length: 12 }, (_, i) => i + 1); 
+                    const cardEarnings = months.map(month => data.card[month] || 0); 
+                    const fpxEarnings = months.map(month => data.fpx[month] || 0);   
 
-            const totalCardEarnings = cardEarnings.reduce((acc, curr) => acc + curr, 0);
-            const totalFpxEarnings = fpxEarnings.reduce((acc, curr) => acc + curr, 0);
+                    const totalCardEarnings = cardEarnings.reduce((acc, curr) => acc + curr, 0);
+                    const totalFpxEarnings = fpxEarnings.reduce((acc, curr) => acc + curr, 0);
 
-            // Check totals before rendering
-            console.log("Card Earnings:", totalCardEarnings);
-            console.log("FPX Earnings:", totalFpxEarnings);
+                    console.log("Card Earnings:", totalCardEarnings);
+                    console.log("FPX Earnings:", totalFpxEarnings);
 
-            if (typeof paymentsChart !== 'undefined') {
-                paymentsChart.destroy(); 
-            }
-
-            const paymentCtx = document.getElementById('paymentsChart').getContext('2d');
-            paymentsChart = new Chart(paymentCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets: [
-                        {
-                            label: 'Card Payments',
-                            data: cardEarnings,
-                            backgroundColor: 'rgba(255, 205, 86, 0.7)' 
-                        },
-                        {
-                            label: 'Bank Transfer (FPX)',
-                            data: fpxEarnings,
-                            backgroundColor: 'rgba(54, 162, 235, 0.7)' 
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                    if (typeof paymentsChart !== 'undefined') {
+                        paymentsChart.destroy(); 
                     }
-                }
-            });
-        
+
+                    const paymentCtx = document.getElementById('paymentsChart').getContext('2d');
+                    paymentsChart = new Chart(paymentCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                            datasets: [
+                                {
+                                    label: 'Card Payments',
+                                    data: cardEarnings,
+                                    backgroundColor: 'rgba(255, 205, 86, 0.7)' 
+                                },
+                                {
+                                    label: 'Bank Transfer (FPX)',
+                                    data: fpxEarnings,
+                                    backgroundColor: 'rgba(54, 162, 235, 0.7)' 
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                
 
 
-            // Event listener for generating the report
-            document.getElementById('generateReport').addEventListener('click', function () {
-                html2canvas(document.getElementById('paymentsChart')).then(function (canvas) {
-                    const imgData = canvas.toDataURL('image/png');
-                    const { jsPDF } = window.jspdf;
-                    const pdf = new jsPDF();
+                    document.getElementById('generateReport').addEventListener('click', function () {
+                        html2canvas(document.getElementById('paymentsChart')).then(function (canvas) {
+                            const imgData = canvas.toDataURL('image/png');
+                            const { jsPDF } = window.jspdf;
+                            const pdf = new jsPDF();
 
-                    pdf.addImage(imgData, 'PNG', 10, 10, 180, 100);
-                    pdf.setFontSize(18);
-                    pdf.text('Total Earnings Report', 10, 130);
-                    pdf.setFontSize(12);
-                    pdf.text(`Card Total: RM${totalCardEarnings.toFixed(2)}`, 10, 140);
-                    pdf.text(`Bank Transfer (FPX) Total: RM${totalFpxEarnings.toFixed(2)}`, 10, 150);
+                            pdf.addImage(imgData, 'PNG', 10, 10, 180, 100);
+                            pdf.setFontSize(18);
+                            pdf.text('Total Earnings Report', 10, 130);
+                            pdf.setFontSize(12);
+                            pdf.text(`Card Total: RM${totalCardEarnings.toFixed(2)}`, 10, 140);
+                            pdf.text(`Bank Transfer (FPX) Total: RM${totalFpxEarnings.toFixed(2)}`, 10, 150);
 
-                    pdf.save('Payments_Report.pdf');
+                            pdf.save('Payments_Report.pdf');
+                        });
+                    });
                 });
-            });
-        });
-}
+        }
 
-// Call the function to load the data on page load
-updateChartWithMonthlyData();
-
-
+        updateChartWithMonthlyData();
 
             document.getElementById('totalUsersCount').textContent = '<?php echo $totalUsers; ?>';
             document.getElementById('totalCountriesCount').textContent = '<?php echo $totalCountries; ?>';
