@@ -23,7 +23,7 @@ $totalUsers = is_array($usersSnapshot) ? count($usersSnapshot) : 0;
 $countriesSnapshot = $db->getReference('Packages')->getValue();
 $totalCountries = is_array($countriesSnapshot) ? count($countriesSnapshot) : 0;
 
-// Fetch payment data from Firebase
+// Fetch payment data
 $paymentsRef = $db->getReference('Admin/newBookings');
 $payments = $paymentsRef->getValue();
 $totalEarnings = 0;
@@ -32,69 +32,66 @@ $fpxEarnings = 0;
 
 if (is_array($payments)) {
     foreach ($payments as $payment) {
-        // Add up the total earnings
         $totalEarnings += isset($payment['totalPrice']) ? floatval($payment['totalPrice']) : 0;
 
-        // Check if payment was made via card
         if (isset($payment['cardDetails'])) {
             $cardEarnings += floatval($payment['totalPrice']);
         } else {
-            // Otherwise, assume it's an FPX payment
             $fpxEarnings += floatval($payment['totalPrice']);
         }
     }
 }
 
-// Fetch report data for the selected month
-if (isset($_GET['month'])) {
-    $selectedMonth = $_GET['month'];
+// Fetch payment data grouped by month for the entire year
+if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
+    $year = date('Y'); 
+    $monthlyEarnings = [
+        'card' => array_fill(1, 12, 0),
+        'fpx' => array_fill(1, 12, 0)
+    ];
 
-    // Format the start and end of the month
-    $startOfMonth = $selectedMonth . '-01';
-    $endOfMonth = date("Y-m-t", strtotime($startOfMonth));
+    // Fetch all bookings from Firebase again for monthly calculation
+    $payments = $db->getReference('Admin/newBookings')->getValue();
 
-    // Fetch booking data from Firebase (or SQL database)
-    $bookingsRef = $db->getReference('Admin/newBookings');
-    $bookings = $bookingsRef->getValue();
+    if (is_array($payments)) {
+        foreach ($payments as $paymentID => $payment) {
+            $totalPrice = 0;
+            $orderDate = null;
 
-    $totalEarnings = 0;
-    $cardEarnings = 0;
-    $fpxEarnings = 0;
+            // Check for card details
+            if (isset($payment['cardDetails'])) {
+                $totalPrice = floatval($payment['totalPrice']);
+                $orderDate = $payment['orderDate'] ?? null;
+            } 
+            // Check for bank details (FPX)
+            elseif (isset($payment['bankDetails'])) {
+                $totalPrice = floatval($payment['totalPrice']);
+                $orderDate = $payment['orderDate'] ?? null;
+            }
 
-    // Filter bookings by the selected month
-    if (is_array($bookings)) {
-        foreach ($bookings as $booking) {
-            $orderDate = isset($booking['orderDate']) ? $booking['orderDate'] : null;
+            // Process the payment if orderDate is set
+            if ($orderDate) {
+                $dateTime = strtotime($orderDate);
+                $month = date('n', $dateTime); // Numeric representation of month (1-12)
+                $yearOfPayment = date('Y', $dateTime);
 
-            // Check if the booking was made in the selected month
-            if ($orderDate >= $startOfMonth && $orderDate <= $endOfMonth) {
-                $totalEarnings += floatval($booking['totalPrice']);
-
-                // Check if payment was made via card
-                if (isset($payment['cardDetails'])) {
-                    $cardEarnings += floatval($payment['totalPrice']);
-                } elseif (isset($payment['bankDetails'])) {
-                    $fpxEarnings += floatval($payment['totalPrice']);
+                // Only accumulate earnings for the current year
+                if ($yearOfPayment == $year) {
+                    if (isset($payment['cardDetails'])) {
+                        $monthlyEarnings['card'][$month] += $totalPrice;
+                    } elseif (isset($payment['bankDetails'])) {
+                        $monthlyEarnings['fpx'][$month] += $totalPrice;
+                    }
                 }
             }
         }
     }
 
-    // Output earnings for the selected month
-    echo json_encode([
-        'cardEarnings' => $cardEarnings,
-        'fpxEarnings' => $fpxEarnings
-    ]);
-
-} else {
-    // Handle case where 'month' is not set, you can return default values or an error message
-    echo json_encode([
-        'error' => 'Month parameter is missing',
-        'cardEarnings' => 0,
-        'fpxEarnings' => 0
-    ]);
+    // Return the monthly earnings data as JSON
+    header('Content-Type: application/json');
+    echo json_encode($monthlyEarnings);
+    exit; // Stop further execution
 }
-
 ?>
 
 
@@ -153,7 +150,7 @@ if (isset($_GET['month'])) {
         </div>
             <div class="header-right d-flex align-items-center">
                 <div class="notification-container">
-                    <!-- Notification Icon -->
+                    <a href= "messages.php">
                     <img src="images/notifications.png" alt="Notifications Icon" class="notification-icon" id="notificationIcon">
                 </div>
                 <div class="header-right d-flex align-items-center">
@@ -212,13 +209,11 @@ if (isset($_GET['month'])) {
     </div>
 
     <div class="chart bar inventory-chart">
-        <h3>Total Payments</h3>
-        <label for="monthPicker">Select Month: </label>
-        <input type="month" id="monthPicker">
-        <div class="bar-chart">
-            <canvas id="paymentsChart"></canvas>
-        </div>
-        <button id="generateReport" class="generate-btn">Generate Report</button>
+    <h3>Monthly Earnings Report for <?php echo date('Y'); ?></h3>
+    <div class="bar-chart">
+        <canvas id="paymentsChart"></canvas>
+    </div>
+    <button id="generateReport" class="generate-btn">Generate Report</button>
     </div>
    </div>
 
@@ -246,34 +241,53 @@ if (isset($_GET['month'])) {
             responsive: true,
             plugins: {
                 legend: {
-                    display: false
+                    display: false // We manually create the legend
                 }
             }
         }
     });
 
-    let paymentsChart = null; // Declare the chart variable globally
+    // Declare paymentsChart in the global scope
+let paymentsChart;
 
-function updateChartForMonth(month) {
-    return fetch(`<?php echo $_SERVER['PHP_SELF']; ?>?month=${month}`)
+function updateChartWithMonthlyData() {
+    fetch('<?php echo $_SERVER['PHP_SELF']; ?>?action=fetchMonthlyEarnings') // AJAX request
         .then(response => response.json())
         .then(data => {
-            const paymentData = [data.cardEarnings, data.fpxEarnings];
+            console.log(data); // Debugging: log the data received
 
-            if (paymentsChart) {
-                paymentsChart.destroy(); // Destroy previous instance
+            const months = Array.from({ length: 12 }, (_, i) => i + 1); 
+            const cardEarnings = months.map(month => data.card[month] || 0); 
+            const fpxEarnings = months.map(month => data.fpx[month] || 0);   
+
+            const totalCardEarnings = cardEarnings.reduce((acc, curr) => acc + curr, 0);
+            const totalFpxEarnings = fpxEarnings.reduce((acc, curr) => acc + curr, 0);
+
+            // Check totals before rendering
+            console.log("Card Earnings:", totalCardEarnings);
+            console.log("FPX Earnings:", totalFpxEarnings);
+
+            if (typeof paymentsChart !== 'undefined') {
+                paymentsChart.destroy(); 
             }
 
             const paymentCtx = document.getElementById('paymentsChart').getContext('2d');
             paymentsChart = new Chart(paymentCtx, {
                 type: 'bar',
                 data: {
-                    labels: paymentLabels,
-                    datasets: [{
-                        label: 'Total Payments',
-                        data: paymentData,
-                        backgroundColor: ['rgba(255, 205, 86, 0.7)', 'rgba(54, 162, 235, 0.7)']
-                    }]
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [
+                        {
+                            label: 'Card Payments',
+                            data: cardEarnings,
+                            backgroundColor: 'rgba(255, 205, 86, 0.7)' 
+                        },
+                        {
+                            label: 'Bank Transfer (FPX)',
+                            data: fpxEarnings,
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)' 
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
@@ -284,44 +298,34 @@ function updateChartForMonth(month) {
                     }
                 }
             });
-
-            return paymentData;
-        });
-}
-
         
 
-        document.getElementById('generateReport').addEventListener('click', function () {
-            const selectedMonth = document.getElementById('monthPicker').value;
 
-            if (!selectedMonth) {
-                alert('Please select a month.');
-                return;
-            }
-
-            updateChartForMonth(selectedMonth).then(paymentData => {
+            // Event listener for generating the report
+            document.getElementById('generateReport').addEventListener('click', function () {
                 html2canvas(document.getElementById('paymentsChart')).then(function (canvas) {
                     const imgData = canvas.toDataURL('image/png');
                     const { jsPDF } = window.jspdf;
                     const pdf = new jsPDF();
 
                     pdf.addImage(imgData, 'PNG', 10, 10, 180, 100);
-
                     pdf.setFontSize(18);
-                    pdf.text(`Total Payments Report for ${selectedMonth}`, 10, 130);
+                    pdf.text('Total Earnings Report', 10, 130);
                     pdf.setFontSize(12);
-                    pdf.text(`Card: RM${paymentData[0]}`, 10, 140);
-                    pdf.text(`Bank Transfer (FPX): RM${paymentData[1]}`, 10, 150);
+                    pdf.text(`Card Total: RM${totalCardEarnings.toFixed(2)}`, 10, 140);
+                    pdf.text(`Bank Transfer (FPX) Total: RM${totalFpxEarnings.toFixed(2)}`, 10, 150);
 
-                    pdf.save(`Payments_Report_${selectedMonth}.pdf`);
+                    pdf.save('Payments_Report.pdf');
                 });
             });
         });
+}
 
-            document.getElementById('monthPicker').addEventListener('change', function () {
-            const selectedMonth = this.value;
-            updateChartForMonth(selectedMonth);
-        });
+// Call the function to load the data on page load
+updateChartWithMonthlyData();
+
+
+
             document.getElementById('totalUsersCount').textContent = '<?php echo $totalUsers; ?>';
             document.getElementById('totalCountriesCount').textContent = '<?php echo $totalCountries; ?>';
 
