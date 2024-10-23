@@ -1,28 +1,19 @@
 <?php
 session_start();
 
-$pic = 'images/user.png';
+$pic = 'images/user.png'; 
 $isLoggedIn = false; 
 $userName = 'Guest'; 
 $userEmail = ''; 
-$isAdmin = false; 
 
 if (isset($_SESSION['userName'])) {
     $pic = $_SESSION['profileImage'] ?? $pic; 
     $isLoggedIn = true;
     $userName = $_SESSION['userName']; 
     $userEmail = $_SESSION['userEmail'] ?? ''; 
-
-    include 'firebase_connection.php';
-    $database = $factory->createDatabase();
-    $userId = $_SESSION['user_id'];
-    $userSnapshot = $database->getReference('users/' . $userId)->getValue();
-    
-    if ($userSnapshot && $userSnapshot['role'] === 'adminREQUEST' && $userSnapshot['status'] === 'approved') {
-        $isAdmin = true; 
-    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -85,14 +76,6 @@ if (isset($_SESSION['userName'])) {
                 <a href="https://www.twitter.com/"><i class="fa fa-twitter"></i></a>
             </div>
         </div>
-
-        <!-- Add admin dashboard button if the user is an admin -->
-        <?php if ($isAdmin): ?>
-            <div class="admin-dashboard">
-                <button type="button" onclick="window.location.href='AdminDashboard.php'">Go to Admin Dashboard</button>
-            </div>
-        <?php endif; ?>
-
     </div>
     <!--Ending of home section-->
 
@@ -128,32 +111,44 @@ if (isset($_SESSION['userName'])) {
 
     <!-- Contact Form -->
     <div id="contact">
-        <div class="contact-section">
-            <h2>Get the Info you're looking for!</h2>
+    <div class="contact-section">
+        <h2>Get the Info you're looking for!</h2>
 
-            <div class="info-item">
-                <button class="info-btn" data-id="info1">Delays and Cancellations</button>
-                <div class="info-details" id="info1">
-                    <p>As a third-party booking service, we are not responsible for delays or cancellations related to flights or hotels. For any issues with your tour guide, please contact us directly for assistance.</p>
-                </div>
+        <div class="info-item">
+            <button class="info-btn" data-id="info1">
+                Delays and Cancellations 
+                <i class="arrow down"></i>
+                <i class="arrow up" style="display: none;"></i>
+            </button>
+            <div class="info-details" id="info1">
+                <p>As a third-party booking service, we are not responsible for delays or cancellations related to flights or hotels. For any issues with your tour guide, please contact us directly for assistance.</p>
             </div>
+        </div>
 
-            <div class="info-item">
-                <button class="info-btn" data-id="info2">Refunds</button>
-                <div class="info-details" id="info2">
-                    <p>Refunds are not provided through our service, as we act solely as a booking platform. Please reach out to the airline, hotel, or service provider directly for any refund inquiries.</p>
-                </div>
+        <div class="info-item">
+            <button class="info-btn" data-id="info2">
+                Refunds 
+                <i class="arrow down"></i>
+                <i class="arrow up" style="display: none;"></i>
+            </button>
+            <div class="info-details" id="info2">
+                <p>Refunds are not provided through our service, as we act solely as a booking platform. Please reach out to the airline, hotel, or service provider directly for any refund inquiries.</p>
             </div>
+        </div>
 
-            <div class="info-item">
-                <button class="info-btn" data-id="info3">No Change or Cancel Fees</button>
-                <div class="info-details" id="info3">
-                    <p>We do not charge any fees for changing or cancelling your bookings. However, please refer to the policies of the respective airline, hotel, or service provider for any applicable charges.</p>
-                </div>
+        <div class="info-item">
+            <button class="info-btn" data-id="info3">
+                No Change or Cancel Fees 
+                <i class="arrow down"></i>
+                <i class="arrow up" style="display: none;"></i>
+            </button>
+            <div class="info-details" id="info3">
+                <p>We do not charge any fees for changing or cancelling your bookings. However, please refer to the policies of the respective airline, hotel, or service provider for any applicable charges.</p>
             </div>
+        </div>
 
-            <div class="contact">
-                <p>Still Need HELP? <a href="#" class="contact-link" id="openModal">Contact Us</a></p>
+        <div class="contact">
+            <p>Still Need HELP? <a href="#" class="contact-link" id="openModal">Contact Us</a></p>
             </div>
         </div>
     </div>

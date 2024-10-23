@@ -1,10 +1,9 @@
 ﻿html{
     scroll-behavior: smooth;
 }
-
 body {
     font-family: Arial, sans-serif;
-    background-color: rgb(232, 232, 232);
+    background-color: #E8E8E8;
     margin: 0;
     padding: 0;
 }
@@ -40,10 +39,10 @@ body {
 }
 
 .sidebar li img {
-    width: 26px;
-    height: 26px;
-    margin-right: 15px;
-    vertical-align: middle;
+    width: 26px; 
+    height: 26px; 
+    margin-right: 15px; 
+    vertical-align: middle; 
 }
 
 .sidebar li a {
@@ -74,13 +73,28 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 30px;
-    padding: 20px;
+    padding: 20px 0;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
 }
 
-.sidebar-header h2 {
+.admin-profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-profile img.profile-pic {
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px; 
+}
+
+.admin-profile p {
+    font-weight: bold;
+    color: #333;
     margin: 0;
-    text-align: center;
 }
 
 .main-content {
@@ -124,11 +138,23 @@ header {
     align-items: center; 
 }
 
-.logout-icon {
-    width: 24px; 
-    height: 24px; 
+.logout-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333; 
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.logout-link span {
     margin-left: 5px; 
-    vertical-align: middle;
+    font-size: 16px;  
+}
+
+.logout-icon {
+    width: 24px;
+    height: 24px;
 }
 
 .country-grid {
@@ -256,6 +282,11 @@ header {
     box-sizing: border-box; 
 }
 
+.description-textarea {
+    width: 100%;
+    height: 40px;
+    resize: none; /
+}
 
 .description {
     width: 100%; 

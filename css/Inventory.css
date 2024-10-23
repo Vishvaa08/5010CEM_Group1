@@ -67,27 +67,91 @@
 }
 
 .sidebar-header {
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    height: 30px;
-    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
 }
 
-.sidebar-header h2 {
-    margin: 0; 
-    text-align: center; 
+.admin-profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-profile img.profile-pic {
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px; 
+}
+
+.admin-profile p {
+    font-weight: bold;
+    color: #333;
+    margin: 0;
 }
 
 .main-content {
     margin-left: 300px;
     padding: 20px;
 }
-
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+}
+
+.header-left {
+    display: block; 
+    margin-left: 10px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.user-wrapper {
+    color: #282828;
+    font-weight: bold;
+    display: flex;
+    align-items: center; 
+}
+
+.logout-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333; 
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.logout-link span {
+    margin-left: 5px; 
+    font-size: 16px;  
+}
+
+.logout-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.search-box {
+    margin-right: 20px;
+}
+
+.search-box input {
+    padding: 10px;
+    width: 200px; 
+    border-radius: 15px;
+    margin-right: 10px; 
+    border: none;
+    background-color: #FFF;
 }
 
 .inventory-container {

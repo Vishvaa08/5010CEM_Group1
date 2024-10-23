@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ]);
 
         // Redirect based on role
-        if ($role === 'admin') {
+        if ($role === 'adminREQUEST') {
             header("Location: adminWait.php");
         } else {
             header("Location: login.php");

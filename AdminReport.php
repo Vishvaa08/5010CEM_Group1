@@ -1,34 +1,21 @@
 <?php
+session_start();
+include 'firebase_connection.php'; 
 
-require 'vendor/autoload.php';
+$pic = '';
 
-use Kreait\Firebase\Factory;
-
-$serviceAccount = __DIR__ . '/prvkey.json';
-
-$factory = (new Factory)
-    ->withServiceAccount($serviceAccount)
-    ->withDatabaseUri('https://traveltrail-39e23-default-rtdb.firebaseio.com/');
+if (isset($_SESSION['userName'])) {
+    $pic = $_SESSION['profileImage'];
+    $name = $_SESSION['userName'];
+} else {
+    $pic = 'images/user.png';
+    $name = 'Admin';
+}
 
 $database = $factory->createDatabase();
 $bookingsRef = $database->getReference('Admin/newBookings');
 $bookings = $bookingsRef->getValue();
 
-session_start();
-$userId = $_SESSION['user_id'] ?? null;
-
-if (!$userId) {
-    header('Location: AdminLogin.php');
-    exit();
-}
-
-$userSnapshot = $database->getReference('users/' . $userId)->getValue();
-if (!$userSnapshot || $userSnapshot['role'] !== 'admin' || $userSnapshot['status'] !== 'approved') {
-    header('Location: index.php');
-    exit();
-}
-
-$adminName = $userSnapshot['name'] ?? 'Admin';
 
 // Fetch user data
 $usersRef = $database->getReference('users');
@@ -55,13 +42,18 @@ if (is_array($users)) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h2>TravelTrail</h2>
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="admin-profile">
+        <div class="admin-profile">
+        <img src="<?php echo htmlspecialchars($pic); ?>" alt="Admin Profile Picture" class="profile-pic">
+        <p><?php echo htmlspecialchars($name); ?></p>
         </div>
+    </div>
+</div>
         <ul>
             <li>
-                <img src="images/home dark.jpg" alt="Dashboard Icon">
+                <img src="images/home.png" alt="Dashboard Icon">
                 <a href="AdminDashboard.php">Dashboard</a>
             </li>
             <li>
@@ -76,9 +68,9 @@ if (is_array($users)) {
                 <img src="images/inventory.png" alt="Inventory Icon">
                 <a href="AdminInventory.php">Hotel/Flight Management</a>
             </li>
-            <li class="active">
-                <img src="images/report_dark.jpg" alt="Report Icon">
-                <a href="AdminReport.php">Report</a>
+            <li  class="active">
+                <img src="images/payment.jpg" alt="Report Icon">
+                <a href="AdminReport.php">Bookings</a>
             </li>
         </ul>
     </div>
@@ -86,19 +78,19 @@ if (is_array($users)) {
     <div class="main-content">
         <header>
             <div class="header-left">
-                <h2>Dashboard / Report</h2>
-                <p>Report</p>
+                <h2>Dashboard / Bookings</h2>
+                <p>Bookings</p>
             </div>
             <div class="header-right">
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="Search by name or date" onkeyup="filterUsers()">
                 </div>
-                <div class="user-wrapper">
-                    <p>Hi, <?php echo htmlspecialchars($adminName); ?>!</p> 
-                    <a href="AdminLogin.php">
-                        <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
-                    </a>
-                </div>
+                <div class="header-right d-flex align-items-center">
+                <a href="AdminLogin.php" class="logout-link">
+                    <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+                    <span>Logout</span> 
+                </a>
+            </div>
             </div>
         </header>
 

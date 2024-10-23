@@ -12,5 +12,8 @@ $factory = (new Factory)
 
 $database = $factory->createDatabase();
 $storage = $factory->createStorage(); 
+$auth = $factory->createAuth();
+$db = $database;
+
 
 ?>

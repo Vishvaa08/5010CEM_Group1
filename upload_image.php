@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]
             );
 
-            $newImageUrl = "https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/" . urlencode('cities/' . $uniqueFileName) . "?alt=media";
+            $newImageUrl = "https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/" . urlencode('cities/' . $uniqueFileName) . "?alt=media&token=";
 
             $database->getReference("Packages/$country/$city/CityImage")
                 ->set($newImageUrl);

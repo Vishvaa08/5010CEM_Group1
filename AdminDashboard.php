@@ -1,111 +1,102 @@
 <?php
-include 'firebase_connection.php'; 
+
 session_start();
-$userId = $_SESSION['user_id'] ?? null;
+include 'firebase_connection.php'; 
 
-if (!$userId) {
-    header('Location: AdminLogin.php');
-    exit();
+$pic = '';
+
+if (isset($_SESSION['userName'])) {
+    $pic = $_SESSION['profileImage'];
+    $name = $_SESSION['userName'];
+} else {
+    $pic = 'images/user.png';
+    $name = 'Admin';
 }
 
-$db = $factory->createDatabase(); 
 
-$userSnapshot = $db->getReference('users/' . $userId)->getValue();
-if (!$userSnapshot || $userSnapshot['role'] !== 'admin' || $userSnapshot['status'] !== 'approved') {
-    header('Location: index.php');
-    exit();
-}
+$db = $database;
+// Fetch total number of users
+$usersSnapshot = $db->getReference('users')->getValue();
+$totalUsers = is_array($usersSnapshot) ? count($usersSnapshot) : 0;
 
-$adminName = $userSnapshot['name'] ?? 'Admin';
+// Fetch total number of countries
+$countriesSnapshot = $db->getReference('Packages')->getValue();
+$totalCountries = is_array($countriesSnapshot) ? count($countriesSnapshot) : 0;
 
-// Fetch user data
-$usersRef = $db->getReference('users');
-$users = $usersRef->getValue();
-$newUsersCount = 0;
-if (is_array($users)) {
-    foreach ($users as $user) {
-        if (!array_key_exists('status', $user)) {
-            $newUsersCount++;
-        }
-    }
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userId'])) {
-    $userIdToApprove = $_POST['userId'];
-
-    $db->getReference('users/' . $userIdToApprove)
-      ->update([
-          'status' => 'approved',
-          'role' => 'admin' 
-      ]);
-
-    header("Location: AdminDashboard.php");
-    exit;
-}
-
-// Fetch payment data
+// Fetch payment data from Firebase
 $paymentsRef = $db->getReference('Admin/newBookings');
 $payments = $paymentsRef->getValue();
-$newPaymentsCount = 0;
 $totalEarnings = 0;
 $cardEarnings = 0;
 $fpxEarnings = 0;
-$today = date('Y-m-d');
 
 if (is_array($payments)) {
     foreach ($payments as $payment) {
+        // Add up the total earnings
         $totalEarnings += isset($payment['totalPrice']) ? floatval($payment['totalPrice']) : 0;
 
+        // Check if payment was made via card
         if (isset($payment['cardDetails'])) {
             $cardEarnings += floatval($payment['totalPrice']);
         } else {
+            // Otherwise, assume it's an FPX payment
             $fpxEarnings += floatval($payment['totalPrice']);
-        }
-
-        if (isset($payment['date']) && $payment['date'] === $today) {
-            $newPaymentsCount++;
         }
     }
 }
 
-// Fetch inventory data by country
-$countryInventoryStatus = [];
-$countriesData = $db->getReference('Packages')->getValue() ?: [];
+// Fetch report data for the selected month
+if (isset($_GET['month'])) {
+    $selectedMonth = $_GET['month'];
 
-foreach ($countriesData as $countryName => $countryData) {
-    $totalAvailableRooms = 0;
-    $totalAvailableSeats = 0;
+    // Format the start and end of the month
+    $startOfMonth = $selectedMonth . '-01';
+    $endOfMonth = date("Y-m-t", strtotime($startOfMonth));
 
-    foreach ($countryData as $cityName => $cityData) {
-        if (isset($cityData['Hotels'])) {
-            foreach ($cityData['Hotels'] as $hotelData) {
-                if (isset($hotelData['Rooms'])) {
-                    foreach ($hotelData['Rooms'] as $roomData) {
-                        $availability = isset($roomData['Availability']) ? (int)$roomData['Availability'] : 0;
-                        $totalAvailableRooms += $availability;
-                    }
+    // Fetch booking data from Firebase (or SQL database)
+    $bookingsRef = $db->getReference('Admin/newBookings');
+    $bookings = $bookingsRef->getValue();
+
+    $totalEarnings = 0;
+    $cardEarnings = 0;
+    $fpxEarnings = 0;
+
+    // Filter bookings by the selected month
+    if (is_array($bookings)) {
+        foreach ($bookings as $booking) {
+            $orderDate = isset($booking['orderDate']) ? $booking['orderDate'] : null;
+
+            // Check if the booking was made in the selected month
+            if ($orderDate >= $startOfMonth && $orderDate <= $endOfMonth) {
+                $totalEarnings += floatval($booking['totalPrice']);
+
+                // Check if payment was made via card
+                if (isset($payment['cardDetails'])) {
+                    $cardEarnings += floatval($payment['totalPrice']);
+                } elseif (isset($payment['bankDetails'])) {
+                    $fpxEarnings += floatval($payment['totalPrice']);
                 }
             }
         }
-
-        if (isset($cityData['Flights'])) {
-            foreach ($cityData['Flights'] as $flightData) {
-                $seats = isset($flightData['Seats']) ? (int)$flightData['Seats'] : 0;
-                $totalAvailableSeats += $seats;
-            }
-        }
     }
 
-    $countryInventoryStatus[$countryName] = [
-        'totalAvailableRooms' => $totalAvailableRooms,
-        'totalAvailableSeats' => $totalAvailableSeats
-    ];
+    // Output earnings for the selected month
+    echo json_encode([
+        'cardEarnings' => $cardEarnings,
+        'fpxEarnings' => $fpxEarnings
+    ]);
+
+} else {
+    // Handle case where 'month' is not set, you can return default values or an error message
+    echo json_encode([
+        'error' => 'Month parameter is missing',
+        'cardEarnings' => 0,
+        'fpxEarnings' => 0
+    ]);
 }
 
-// Fetch notifications
-$reference = $db->getReference('adminNotifications');
-$messages = $reference->getValue();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -116,12 +107,20 @@ $messages = $reference->getValue();
     <link rel="stylesheet" href="css/Dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>     
+
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h2>TravelTrail</h2>
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="admin-profile">
+        <div class="admin-profile">
+        <img src="<?php echo htmlspecialchars($pic); ?>" alt="Admin Profile Picture" class="profile-pic">
+        <p><?php echo htmlspecialchars($name); ?></p>
         </div>
+    </div>
+</div>
         <ul>
             <li class="active">
                 <img src="images/home dark.jpg" alt="Dashboard Icon">
@@ -140,197 +139,198 @@ $messages = $reference->getValue();
                 <a href="AdminInventory.php">Hotel/Flight Management</a>
             </li>
             <li>
-                <img src="images/report.png" alt="Report Icon">
-                <a href="AdminReport.php">Report</a>
+                <img src="images/payments.png" alt="Report Icon">
+                <a href="AdminReport.php">Bookings</a>
             </li>
         </ul>
     </div>
 
     <div class="main-content">
         <header>
-            <div class="header-left">
-                <h2>Dashboard / Home</h2>
-                <p>Dashboard</p>
-            </div>
+        <div class="header-left">
+            <h2>Dashboard / Home</h2>
+            <p>Dashboard</p>
+        </div>
             <div class="header-right d-flex align-items-center">
-            <div class="icon-wrapper" id="adminApprovalIcon">
-                <img src="images/admin_approval.png" alt="Admin Approval Icon" class="admin-approval-icon">
-                </div>
-                <div class="admin-approval-dropdown" id="adminApprovalDropdown">
-                    <div class="admin-approval-header">
-                        <h4>Pending Approvals</h4>
-                    </div>
-                    <div class="admin-approval-list">
-                        <?php
-                        $pendingUsers = $db->getReference('users')->orderByChild('status')->equalTo('pending')->getValue();
-                        
-                        if ($pendingUsers): ?>
-                            <?php foreach ($pendingUsers as $userId => $user): ?>
-                                <div class="admin-approval-item">
-                                    <div class="approval-details">
-                                        <p class="approval-name"><?php echo htmlspecialchars($user['name']); ?></p>
-                                        <p class="approval-email"><?php echo htmlspecialchars($user['email']); ?></p>
-                                        <p class="approval-phone"><?php echo htmlspecialchars($user['phone']); ?></p>
-                                        <p class="approval-role"><?php echo htmlspecialchars($user['role']); ?></p>
-                                    </div>
-                                    <form method="POST" action="AdminDashboard.php" class="approval-form">
-                                        <input type="hidden" name="userId" value="<?php echo $userId; ?>">
-                                        <button type="submit" class="approve-button">Approve</button>
-                                    </form>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p class="no-approvals">No pending approvals.</p>
-                        <?php endif; ?>
-                    </div>
-                </div>
                 <div class="notification-container">
+                    <!-- Notification Icon -->
                     <img src="images/notifications.png" alt="Notifications Icon" class="notification-icon" id="notificationIcon">
-                    <div class="notification-dropdown" id="notificationDropdown">
-                        <div class="notification-header">
-                            <h4>Notifications</h4>
-                        </div>
-                        <div class="notification-list">
-                            <?php if ($messages): ?>
-                                <?php foreach ($messages as $message): ?>
-                                    <div class="notification-item">
-                                        <div class="notification-details">
-                                            <p class="notification-title"><?php echo htmlspecialchars($message['userName']); ?></p> 
-                                            <p class="notification-email"><?php echo htmlspecialchars($message['userEmail']); ?></p> 
-                                            <p class="notification-message"><?php echo htmlspecialchars($message['userMessage']); ?></p> 
-                                            <p class="notification-timestamp"><?php echo htmlspecialchars($message['timestamp']); ?></p> 
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <p class="no-notifications">No notifications available.</p>
-                            <?php endif; ?>
-                        </div>
-                    </div>
                 </div>
-                <div class="user-wrapper">
-                    <p>Hi, <?php echo htmlspecialchars($adminName); ?>!</p> 
-                    <a href="AdminLogin.php">
+                <div class="header-right d-flex align-items-center">
+                    <a href="login.php" class="logout-link">
                         <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+                        <span>Logout</span>
                     </a>
                 </div>
             </div>
         </header>
 
-        <div class="charts">
-            <div class="chart pie">
-                <h3>Total Earnings</h3>
-                <div class="pie-chart">
-                    <canvas id="earningsChart"></canvas>
+        <div class="info-box-container">
+        <!-- Total Users Box -->
+        <div class="info-box" id="totalUsersBox">
+            <div class="info-box-row">
+                <div class="info-box-icon">
+                    <img src="images/total_users.png" alt="Total Users Icon">
                 </div>
-                <div class="chart-legend">
-                    <div>
-                        <div class="color-box" style="background-color: #FFCD56;"></div>
-                        <span>Card</span>
-                    </div>
-                    <div>
-                        <div class="color-box" style="background-color: #4BC0C0;"></div>
-                        <span>Bank Transfer (FPX)</span>
-                    </div>
+                <div class="info-box-content">
+                    <h3>Total Users</h3>
+                    <p id="totalUsersCount">10</p>
                 </div>
             </div>
-            <div class="chart bar inventory-chart">
-                <h3>Inventory Status by Country</h3>
-                <div class="bar-chart">
-                    <canvas id="inventoryChart"></canvas>
+        </div>
+
+        <!-- Total Countries Box -->
+        <div class="info-box" id="totalCountriesBox">
+            <div class="info-box-row">
+                <div class="info-box-icon">
+                    <img src="images/countries.png" alt="Total Countries Icon">
+                </div>
+                <div class="info-box-content">
+                    <h3>Total Countries</h3>
+                    <p id="totalCountriesCount">6</p>
                 </div>
             </div>
         </div>
     </div>
+    <div class="charts">
+    <div class="chart pie">
+        <h3>Total Earnings</h3>
+        <div class="pie-chart">
+            <canvas id="earningsChart"></canvas>
+        </div>
+        <!-- Legend for Chart Colors -->
+        <div class="chart-legend">
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #FFCD56;"></div>
+                <span>Card</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #4BC0C0;"></div>
+                <span>Bank Transfer (FPX)</span>
+            </div>
+        </div>
+    </div>
 
-    <script>
-        const cardEarnings = <?php echo $cardEarnings; ?>;
-        const fpxEarnings = <?php echo $fpxEarnings; ?>;
-        const minDisplayValue = 0.01;
+    <div class="chart bar inventory-chart">
+        <h3>Total Payments</h3>
+        <label for="monthPicker">Select Month: </label>
+        <input type="month" id="monthPicker">
+        <div class="bar-chart">
+            <canvas id="paymentsChart"></canvas>
+        </div>
+        <button id="generateReport" class="generate-btn">Generate Report</button>
+    </div>
+   </div>
 
-        const adjustedCardEarnings = cardEarnings < minDisplayValue ? minDisplayValue : cardEarnings;
-        const adjustedFpxEarnings = fpxEarnings < minDisplayValue ? minDisplayValue : fpxEarnings;
+<script>
+    const cardEarnings = <?php echo $cardEarnings; ?>;
+    const fpxEarnings = <?php echo $fpxEarnings; ?>;
+    const minDisplayValue = 0.01;
 
-        const ctx = document.getElementById('earningsChart').getContext('2d');
-        const earningsChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Card', 'Bank Transfer (FPX)'],
-                datasets: [{
-                    label: 'Total Earnings',
-                    data: [adjustedCardEarnings, adjustedFpxEarnings],
-                    backgroundColor: ['#FFCD56', '#4BC0C0'],
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false 
-                    }
+    const adjustedCardEarnings = cardEarnings < minDisplayValue ? minDisplayValue : cardEarnings;
+    const adjustedFpxEarnings = fpxEarnings < minDisplayValue ? minDisplayValue : fpxEarnings;
+
+    const ctx = document.getElementById('earningsChart').getContext('2d');
+    const earningsChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Card', 'Bank Transfer (FPX)'],
+            datasets: [{
+                label: 'Total Earnings',
+                data: [adjustedCardEarnings, adjustedFpxEarnings],
+                backgroundColor: ['#FFCD56', '#4BC0C0'],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
                 }
             }
-        });
+        }
+    });
 
-        const countryLabels = <?php echo json_encode(array_keys($countryInventoryStatus)); ?>;
-        const availableRoomsData = <?php echo json_encode(array_column($countryInventoryStatus, 'totalAvailableRooms')); ?>;
-        const availableSeatsData = <?php echo json_encode(array_column($countryInventoryStatus, 'totalAvailableSeats')); ?>;
+    let paymentsChart = null; // Declare the chart variable globally
 
-        const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
-        const inventoryChart = new Chart(inventoryCtx, {
-            type: 'bar',
-            data: {
-                labels: countryLabels,
-                datasets: [
-                    {
-                        label: 'Available Hotel Rooms',
-                        data: availableRoomsData,
-                        backgroundColor: 'rgba(255, 205, 86, 0.7)', 
-                    },
-                    {
-                        label: 'Available Flight Seats',
-                        data: availableSeatsData,
-                        backgroundColor: 'rgba(54, 162, 235, 0.7)', 
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
+function updateChartForMonth(month) {
+    return fetch(`<?php echo $_SERVER['PHP_SELF']; ?>?month=${month}`)
+        .then(response => response.json())
+        .then(data => {
+            const paymentData = [data.cardEarnings, data.fpxEarnings];
+
+            if (paymentsChart) {
+                paymentsChart.destroy(); // Destroy previous instance
+            }
+
+            const paymentCtx = document.getElementById('paymentsChart').getContext('2d');
+            paymentsChart = new Chart(paymentCtx, {
+                type: 'bar',
+                data: {
+                    labels: paymentLabels,
+                    datasets: [{
+                        label: 'Total Payments',
+                        data: paymentData,
+                        backgroundColor: ['rgba(255, 205, 86, 0.7)', 'rgba(54, 162, 235, 0.7)']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
+            });
+
+            return paymentData;
+        });
+}
+
+        
+
+        document.getElementById('generateReport').addEventListener('click', function () {
+            const selectedMonth = document.getElementById('monthPicker').value;
+
+            if (!selectedMonth) {
+                alert('Please select a month.');
+                return;
             }
+
+            updateChartForMonth(selectedMonth).then(paymentData => {
+                html2canvas(document.getElementById('paymentsChart')).then(function (canvas) {
+                    const imgData = canvas.toDataURL('image/png');
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF();
+
+                    pdf.addImage(imgData, 'PNG', 10, 10, 180, 100);
+
+                    pdf.setFontSize(18);
+                    pdf.text(`Total Payments Report for ${selectedMonth}`, 10, 130);
+                    pdf.setFontSize(12);
+                    pdf.text(`Card: RM${paymentData[0]}`, 10, 140);
+                    pdf.text(`Bank Transfer (FPX): RM${paymentData[1]}`, 10, 150);
+
+                    pdf.save(`Payments_Report_${selectedMonth}.pdf`);
+                });
+            });
         });
 
-        const notificationIcon = document.getElementById('notificationIcon');
-        const notificationDropdown = document.getElementById('notificationDropdown');
+            document.getElementById('monthPicker').addEventListener('change', function () {
+            const selectedMonth = this.value;
+            updateChartForMonth(selectedMonth);
+        });
+            document.getElementById('totalUsersCount').textContent = '<?php echo $totalUsers; ?>';
+            document.getElementById('totalCountriesCount').textContent = '<?php echo $totalCountries; ?>';
 
-        notificationIcon.addEventListener('click', function() {
-            notificationDropdown.classList.toggle('show');
+        
+            document.getElementById('notificationIcon').addEventListener('click', function() {
+            window.location.href = 'messages.php';  
         });
 
-        window.addEventListener('click', function(event) {
-            if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
-                notificationDropdown.classList.remove('show');
-            }
-        });
+    </script>
 
-        const adminApprovalIcon = document.getElementById('adminApprovalIcon');
-        const adminApprovalDropdown = document.getElementById('adminApprovalDropdown');
-
-        adminApprovalIcon.addEventListener('click', function() {
-            adminApprovalDropdown.classList.toggle('show');
-        });
-
-        window.addEventListener('click', function(event) {
-            if (!adminApprovalIcon.contains(event.target) && !adminApprovalDropdown.contains(event.target)) {
-                adminApprovalDropdown.classList.remove('show');
-            }
-        });
-
-   </script>
 </body>
 </html>

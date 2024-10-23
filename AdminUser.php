@@ -1,47 +1,58 @@
 <?php
-require 'vendor/autoload.php';
-
-use Kreait\Firebase\Factory;
-
-$serviceAccount = __DIR__ . '/prvkey.json';
-
-$factory = (new Factory)
-    ->withServiceAccount($serviceAccount)
-    ->withDatabaseUri('https://traveltrail-39e23-default-rtdb.firebaseio.com/');
-
-$database = $factory->createDatabase();
-$storage = $factory->createStorage(); 
-
 session_start();
-$userId = $_SESSION['user_id'] ?? null;
+include 'firebase_connection.php'; 
 
-if (!$userId) {
-    header('Location: AdminLogin.php');
-    exit();
+$pic = '';
+
+if (isset($_SESSION['userName'])) {
+    $pic = $_SESSION['profileImage'];
+    $name = $_SESSION['userName'];
+} else {
+    $pic = 'images/user.png';
+    $name = 'Admin';
 }
-
-$userSnapshot = $database->getReference('users/' . $userId)->getValue();
-if (!$userSnapshot || $userSnapshot['role'] !== 'admin' || $userSnapshot['status'] !== 'approved') {
-    header('Location: index.php');
-    exit();
-}
-
-$adminName = $userSnapshot['name'] ?? 'Admin';
 
 // Fetch user data
 $usersRef = $database->getReference('users');
 $users = $usersRef->getValue();
-$newUsersCount = 0;
-if (is_array($users)) {
-    foreach ($users as $user) {
-        if (!array_key_exists('status', $user)) {
-            $newUsersCount++;
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $userId = $_POST['userId'] ?? null;
+
+    if ($userId) {
+        // Verify User
+        if (isset($_POST['verifyUser'])) {
+            $userSnapshot = $database->getReference('users/' . $userId)->getValue();
+            if ($userSnapshot['status'] === 'approved') {
+                $database->getReference('users/' . $userId)
+                    ->update([
+                        'status' => 'verified'
+                    ]);
+            }
         }
+
+        // Reject User
+        if (isset($_POST['rejectUser'])) {
+            $database->getReference('users/' . $userId)->remove();
+        }
+
+        // Approve Admin
+        if (isset($_POST['approveAdmin'])) {
+            $userSnapshot = $database->getReference('users/' . $userId)->getValue();
+            if ($userSnapshot['role'] === 'adminREQUEST' && $userSnapshot['status'] === 'pending') {
+                $database->getReference('users/' . $userId)
+                    ->update([
+                        'role' => 'admin',
+                        'status' => 'approved'
+                    ]);
+            }
+        }
+
+        // Redirect after action
+        header('Location: AdminUser.php');
+        exit();
     }
 }
-
-$usersRef = $database->getReference('users');
-$users = $usersRef->getValue();
 ?>
 
 <!DOCTYPE html>
@@ -52,36 +63,42 @@ $users = $usersRef->getValue();
     <title>Admin User Management</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/User.css">
-  </head>
-<body>
+</head>
 
+<body>
+    
 <div class="sidebar">
     <div class="sidebar-header">
-        <h2>TravelTrail</h2>
+        <div class="admin-profile">
+        <div class="admin-profile">
+        <img src="<?php echo htmlspecialchars($pic); ?>" alt="Admin Profile Picture" class="profile-pic">
+        <p><?php echo htmlspecialchars($name); ?></p>
+        </div>
     </div>
-    <ul>
-        <li>
-            <img src="images/home.png" alt="Dashboard Icon">
-            <a href="AdminDashboard.php">Dashboard</a>
-        </li>
-        <li>
-            <img src="images/package.png" alt="Packages Icon">
-            <a href="AdminPackage.php">Travel Packages</a>
-        </li>
-        <li class="active">
-            <img src="images/users dark.jpg" alt="User Icon">
-            <a href="AdminUser.php">User Management</a>
-        </li>
-        <li>
-            <img src="images/inventory.png" alt="Inventory Icon">
-            <a href="AdminInventory.php">Hotel/Flight Management</a>
-        </li>
-        <li>
-            <img src="images/report.png" alt="Report Icon">
-            <a href="AdminReport.php">Report</a>
-        </li>
-    </ul>
 </div>
+        <ul>
+            <li>
+                <img src="images/home dark.jpg" alt="Dashboard Icon">
+                <a href="AdminDashboard.php">Dashboard</a>
+            </li>
+            <li>
+                <img src="images/package.png" alt="Packages Icon">
+                <a href="AdminPackage.php">Travel Packages</a>
+            </li>
+            <li class="active">
+                <img src="images/user.jpg" alt="User Icon">
+                <a href="AdminUser.php">User Management</a>
+            </li>
+            <li>
+                <img src="images/inventory.png" alt="Inventory Icon">
+                <a href="AdminInventory.php">Hotel/Flight Management</a>
+            </li>
+            <li>
+                <img src="images/report.png" alt="Report Icon">
+                <a href="AdminReport.php">Report</a>
+            </li>
+        </ul>
+    </div>
 
 <div class="main-content">
     <header>
@@ -91,39 +108,69 @@ $users = $usersRef->getValue();
         </div>
         <div class="header-right">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search" onkeyup="filterUsers()">
+                <input type="text" id="searchInput" placeholder="Search by name or date" onkeyup="filterUsers()">
             </div>
-            <div class="user-wrapper">
-                    <p>Hi, <?php echo htmlspecialchars($adminName); ?>!</p> 
-                    <a href="AdminLogin.php">
-                        <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
-                    </a>
-                </div>
+            <div class="header-right d-flex align-items-center">
+            <a href="login.php" class="logout-link">
+                <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+                <span>Logout</span> 
+            </a>
+        </div>
         </div>
     </header>
 
-    <table>
+    <table class="table table-striped">
         <thead>
             <tr>
+                <th>Profile</th>
                 <th>Name</th>
+                <th>Role</th>
+                <th>Status</th>
                 <th>Passport No.</th>
                 <th>Phone Number</th>
                 <th>Email</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <?php if (is_array($users) && !empty($users)): ?>
                 <?php foreach ($users as $key => $user): ?>
                     <tr>
+                        <td>
+                            <img src="<?php echo !empty($user['profileImageUrl']) ? htmlspecialchars($user['profileImageUrl']) : 'images/default_profile_picture.jpg'; ?>" 
+                            style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                        </td>
                         <td><?php echo htmlspecialchars($user['name']); ?></td>
+                        <td><?php echo isset($user['role']) ? htmlspecialchars($user['role']) : 'N/A'; ?></td>
+                        <td><?php echo isset($user['status']) ? htmlspecialchars($user['status']) : 'N/A'; ?></td>
                         <td><?php echo !empty($user['passport']) ? htmlspecialchars($user['passport']) : 'N/A'; ?></td>
                         <td><?php echo htmlspecialchars($user['phone']); ?></td>
                         <td><?php echo htmlspecialchars($user['email']); ?></td>
+                        <td>
+                            <form method="POST" action="AdminUser.php">
+                                <input type="hidden" name="userId" value="<?php echo $key; ?>">
+                                <button type="submit" name="rejectUser" class="btn btn-danger">Reject</button>
+                            </form>
+
+                            <?php if (isset($user['status']) && $user['status'] === 'approved' && $user['role'] !== 'admin'): ?>
+                                <form method="POST" action="AdminUser.php">
+                                    <input type="hidden" name="userId" value="<?php echo $key; ?>">
+                                    <button type="submit" name="verifyUser" class="btn btn-success">Verify</button>
+                                </form>
+                            <?php endif; ?>
+
+                            <?php if (isset($user['role']) && $user['role'] === 'adminREQUEST' && isset($user['status']) && $user['status'] === 'pending'): ?>
+                                <form method="POST" action="AdminUser.php">
+                                    <input type="hidden" name="userId" value="<?php echo $key; ?>">
+                                    <button type="submit" name="approveAdmin" class="btn btn-primary">Admin</button>
+                                </form>
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="4">No users found</td>
+                    <td colspan="8">No users found</td>
                 </tr>
             <?php endif; ?>
         </tbody>
@@ -137,10 +184,10 @@ $users = $usersRef->getValue();
 
         rows.forEach(row => {
             const cells = row.querySelectorAll('td');
-            const name = cells[0].textContent.toLowerCase();
-            const passport = cells[1].textContent.toLowerCase();
-            const phone = cells[2].textContent.toLowerCase();
-            const email = cells[3].textContent.toLowerCase();
+            const name = cells[1].textContent.toLowerCase();
+            const passport = cells[4].textContent.toLowerCase();
+            const phone = cells[5].textContent.toLowerCase();
+            const email = cells[6].textContent.toLowerCase();
 
             if (
                 name.includes(searchInput) ||
