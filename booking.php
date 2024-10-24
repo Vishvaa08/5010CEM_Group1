@@ -88,7 +88,7 @@ if (isset($_SESSION['userName'])) {
                     foreach ($dataCityItinerary as $key => $itinerary) {
                         if (isset($itinerary['Itinerary']) && isset($itinerary['Price'])) {
                             echo '<label>';
-                            echo '<input type="checkbox" class="itinerary-checkbox" name="itineraries[]" value="' . htmlspecialchars($itinerary['Itinerary']) . '|' . htmlspecialchars($itinerary['ItineraryPrice']) . '">';
+                            echo '<input type="checkbox" class="itinerary-checkbox" name="itineraries[]" value="' . htmlspecialchars($itinerary['Itinerary']) . '|' . htmlspecialchars($itinerary['Price']) . '">';
                             echo htmlspecialchars($itinerary['Itinerary']) . ' - <span style="color: white;">RM' . htmlspecialchars($itinerary['Price']);
                             echo '</label>';
                         }
