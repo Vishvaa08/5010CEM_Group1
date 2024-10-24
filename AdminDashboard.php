@@ -103,6 +103,13 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
 
 </head>
 <body>
+
+<div class="splash-screen">
+        <h1 class="splash-title">
+            <span class="splash">Hello, </span><span class="splash">Admin</span>
+        </h1>
+    </div>
+
 <div class="sidebar">
     <div class="sidebar-header">
         <div class="admin-profile">
@@ -321,6 +328,35 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
             document.getElementById('notificationIcon').addEventListener('click', function() {
             window.location.href = 'messages.php';  
         });
+
+        let splashScreen = document.querySelector(".splash-screen");
+        let splash = document.querySelectorAll(".splash");
+
+        window.addEventListener('DOMContentLoaded', ()=>{
+
+            setTimeout(() => {
+                
+                splash.forEach((span, idx)=>{
+                    setTimeout(()=>{
+                        span.classList.add('active');
+                    }, (idx + 1) * 500)
+                });
+
+                setTimeout(()=>{
+                    splash.forEach((span, idx)=>{
+                        setTimeout(()=>{
+                            span.classList.remove('active');
+                            span.classList.add('fade');
+                        }, (idx + 1) * 50)
+                    })
+                }, 2000);
+
+                setTimeout(()=>{
+                    splashScreen.style.top = '-100vh';
+                }, 2300)
+
+    })
+})
 
     </script>
 
