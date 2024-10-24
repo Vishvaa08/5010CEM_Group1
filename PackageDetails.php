@@ -117,12 +117,6 @@ if (isset($_SESSION['userName'])) {
     </div>
 
     <div class="city-grid">
-    <div class="upload-image-section">
-    <h5>Upload City Image for <?= htmlspecialchars($cityDetails['City']); ?></h5>
-    <input type="file" class="city-image-upload" accept="image/*" data-city="<?= htmlspecialchars($city); ?>" data-country="<?= htmlspecialchars($country); ?>">
-    <button type="button" class="btn btn-primary upload-city-image-btn" data-city="<?= htmlspecialchars($city); ?>" data-country="<?= htmlspecialchars($country); ?>">Upload Image</button>
-</div>
-
         <?php
         include 'firebase_connection.php';
         include 'firebase_data.php';
@@ -379,7 +373,6 @@ if (isset($_SESSION['userName'])) {
             if (itineraryIndex && cityDetails[city]['Itinerary'][itineraryIndex]) {
                 const itinerary = cityDetails[city]['Itinerary'][itineraryIndex];
                 const itineraryHtml = `
-                
             <div class="itinerary-item d-flex" data-index="${itineraryIndex}"> 
             <div class="itinerary-image-container">
                 <img src="${itinerary.Image || 'https://example.com/path/to/default_image.jpg'}" class="itinerary-image" alt="${itinerary.Itinerary}">
@@ -441,23 +434,32 @@ if (isset($_SESSION['userName'])) {
             });
         });
 
-        $(document).on('click', '.image-btn', function() {
-    const card = $(this).closest('.city-card'); 
-    const country = card.data('country'); 
-    const city = card.data('city'); 
-    const newCityImageFile = card.find('#cityImage')[0].files[0]; 
 
-    if (!newCityImageFile) {
+    $(document).on('click', '.image-btn', function() {
+        const card = $(this).closest('.city-card'); 
+        const country = card.data('country'); 
+        const city = card.data('city'); 
+        const newImageFile = card.find('#cityImage')[0].files[0]; 
+
+        if (!newImageFile) {
         alert('Please select a new image to upload.');
         return;
-    }
+        }
 
-    const formData = new FormData();
-    formData.append('country', country);
-    formData.append('city', city);
-    formData.append('cityImage', newCityImageFile); 
+        const imageType = prompt("Please enter the image type (City, Banner, or Banner2):").trim();
 
-    $.ajax({
+        if (!['City', 'Banner', 'Banner2'].includes(imageType)) {
+        alert('Invalid image type. Please enter City, Banner, or Banner2.');
+        return;
+        }
+
+        const formData = new FormData();
+        formData.append('country', country);
+        formData.append('city', city);
+        formData.append('imageType', imageType); 
+        formData.append('imageFile', newImageFile); 
+
+        $.ajax({
         url: 'upload_image.php', 
         type: 'POST',
         data: formData,
@@ -466,18 +468,20 @@ if (isset($_SESSION['userName'])) {
         success: function(response) {
             const result = JSON.parse(response);
             if (result.success) {
-                alert('City image updated successfully!');
-                card.find('img').attr('src', result.imageUrl);
+                alert(imageType + ' image updated successfully!');
+                setTimeout(function() {
+                    location.reload(); 
+                }, 1000); 
             } else {
-                alert('Error updating city image: ' + result.message);
+                alert('Error updating image: ' + result.message);
             }
         },
         error: function(xhr, status, error) {
             console.error('Error:', error);
-            alert('Failed to update city image.');
+            alert('Failed to update image.');
         }
-    });
-});
+        });
+        });
 
 
 
