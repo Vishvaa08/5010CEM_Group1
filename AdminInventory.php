@@ -1,22 +1,18 @@
 <?php
 session_start();
-include 'firebase_connection.php'; 
+include 'firebase_connection.php';
 
-$pic = '';
+// Initialize profile info
+$pic = isset($_SESSION['userName']) ? $_SESSION['profileImage'] : 'images/user.png';
+$name = isset($_SESSION['userName']) ? $_SESSION['userName'] : 'Admin';
 
-if (isset($_SESSION['userName'])) {
-    $pic = $_SESSION['profileImage'];
-    $name = $_SESSION['userName'];
-} else {
-    $pic = 'images/user.png';
-    $name = 'Admin';
-}
-
+// Get country, city, and hotel data from GET parameters
 $country = isset($_GET['country']) ? $_GET['country'] : '';
 $city = isset($_GET['city']) ? $_GET['city'] : '';
 $hotelIndex = isset($_GET['hotel']) ? (int)$_GET['hotel'] : null;
-$view = isset($_GET['view']) ? $_GET['view'] : 'hotel'; 
+$view = isset($_GET['view']) ? $_GET['view'] : 'hotel';
 
+// Fetch country, city, and hotel data from Firebase
 $countryRef = $database->getReference('Packages');
 $countryData = $countryRef->getValue() ?: [];
 $countries = array_keys($countryData);
@@ -32,7 +28,13 @@ if ($country) {
     }
 }
 
+// Initialize hotel, flight, and room data
 $hotels = [];
+$flights = [];
+$hotelDescription = '';
+$rooms = [];
+
+// Fetch hotel data if a country and city are selected
 if ($country && $city) {
     $hotelRef = $database->getReference('Packages/' . $country . '/' . $city . '/Hotels');
     $hotelData = $hotelRef->getValue() ?: [];
@@ -41,101 +43,82 @@ if ($country && $city) {
             $hotels[$index] = $hotelDetail['Hotel'];
         }
     }
-}
 
-$bookingsRef = $database->getReference('Admin/newBookings');
-$bookingsData = $bookingsRef->getValue() ?: [];
+    // Fetch selected hotel details if a hotel is selected
+    if ($hotelIndex !== null && isset($hotelData[$hotelIndex])) {
+        $selectedHotel = $hotelData[$hotelIndex];
+        $hotelDescription = isset($selectedHotel['Description']) ? $selectedHotel['Description'] : '';
+        $roomData = $selectedHotel['Rooms'] ?? [];
 
-$maxRoomsPerType = 10;
-
-$rooms = [];
-if ($country && $city && $hotelIndex !== null && isset($hotelData[$hotelIndex])) {
-    $selectedHotel = $hotelData[$hotelIndex];
-    $roomData = $selectedHotel['Rooms'] ?? [];
-    
-    foreach ($roomData as $roomType => $roomDetails) {
-        $availableRooms = $maxRoomsPerType; 
-        $bookedRooms = 0; 
-
-        foreach ($bookingsData as $bookingId => $bookingDetails) {
-            if ($bookingDetails['country'] === $country && 
-                $bookingDetails['city'] === $city && 
-                $bookingDetails['hotelID'] == $hotelIndex && 
-                $bookingDetails['roomType'] === $roomType) {
-                $bookedRooms++;
-            }
+        foreach ($roomData as $roomType => $roomDetails) {
+            $rooms[$roomType] = [
+                'availability' => $roomDetails['Availability'] ?? 0,
+                'price' => $roomDetails['Price'] ?? 0,
+            ];
         }
-
-        $availableRooms = max(0, $maxRoomsPerType - $bookedRooms);
-
-        $rooms[$roomType] = [
-            'availability' => $availableRooms,
-            'booked' => $bookedRooms
-        ];
     }
-}
 
-$maxSeats = 20; 
-
-$flights = [];
-if ($country && $city) {
+    // Fetch flight data for the selected city
     $flightRef = $database->getReference('Packages/' . $country . '/' . $city . '/Flights');
     $flightData = $flightRef->getValue() ?: [];
     foreach ($flightData as $class => $details) {
         $flights[$class] = [
+            'price' => isset($details['Price']) ? (int)$details['Price'] : 0,
             'seats' => isset($details['Seats']) ? (int)$details['Seats'] : 0,
         ];
     }
 }
 
+// Handle form submission for hotel and flight updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['update_availability'])) {
-
-        // Update hotel room availability 
+        // Update hotel data
         if ($view === 'hotel' && $country && $city && $hotelIndex !== null) {
+            $hotelDescription = isset($_POST['hotel_description']) ? $_POST['hotel_description'] : '';
+            $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex)
+                     ->update(['Description' => $hotelDescription]);
+
             foreach ($_POST['availability'] as $roomType => $availability) {
                 $availability = (int)$availability;
-                $bookedRooms = 10 - $availability;
+                $price = isset($_POST['price'][$roomType]) ? (float)$_POST['price'][$roomType] : 0;
 
                 $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex . '/Rooms/' . $roomType)
-                         ->update(['Availability' => $availability]);
-
-                $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex . '/Rooms/' . $roomType)
-                         ->update(['Booked' => $bookedRooms]);
+                         ->update(['Availability' => $availability, 'Price' => $price]);
             }
 
+            // Update hotel availability
             $hotelAvailability = isset($_POST['hotel_availability']) ? 'Available' : 'N/A';
             $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex)
                      ->update(['Availability' => $hotelAvailability]);
 
+            // Redirect to refresh the page
             header('Location: ' . $_SERVER['REQUEST_URI']);
             exit();
         }
 
-        // Update flight availability
+        // Update flight data
         if ($view === 'flight' && $country && $city) {
             foreach ($_POST['availability'] as $flightClass => $availability) {
                 $availability = (int)$availability;
-                $bookedSeats = 20 - $availability;
-                $database->getReference('Packages/' . $country . '/' . $city . '/Flights/' . $flightClass)
-                         ->update(['Seats' => $availability]);
+                $price = isset($_POST['price'][$flightClass]) ? (float)$_POST['price'][$flightClass] : 0;
 
                 $database->getReference('Packages/' . $country . '/' . $city . '/Flights/' . $flightClass)
-                         ->update(['Booked' => $bookedSeats]);
+                         ->update(['Seats' => $availability, 'Price' => $price]);
             }
+
+            // Redirect to refresh the page
             header('Location: ' . $_SERVER['REQUEST_URI']);
             exit();
         }
     }
 
-    // Hotel deletion
+    // Handle hotel deletion
     if (isset($_POST['delete_hotel']) && $view === 'hotel' && $country && $city && $hotelIndex !== null) {
         $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex)->remove();
         header('Location: AdminInventory.php?view=hotel&country=' . urlencode($country) . '&city=' . urlencode($city));
         exit();
     }
 }
-
 ?>
 
 
@@ -150,39 +133,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    
+
 <div class="sidebar">
     <div class="sidebar-header">
         <div class="admin-profile">
-        <div class="admin-profile">
-        <img src="<?php echo htmlspecialchars($pic); ?>" alt="Admin Profile Picture" class="profile-pic">
-        <p><?php echo htmlspecialchars($name); ?></p>
+            <img src="<?php echo htmlspecialchars($pic); ?>" alt="Admin Profile Picture" class="profile-pic">
+            <p><?php echo htmlspecialchars($name); ?></p>
         </div>
     </div>
+    <ul>
+        <li>
+            <img src="images/home.png" alt="Dashboard Icon">
+            <a href="AdminDashboard.php">Dashboard</a>
+        </li>
+        <li>
+            <img src="images/package.png" alt="Packages Icon">
+            <a href="AdminPackage.php">Travel Packages</a>
+        </li>
+        <li>
+            <img src="images/users.png" alt="User Icon">
+            <a href="AdminUser.php">User Management</a>
+        </li>
+        <li class="active">
+            <img src="images/inventory dark.jpg" alt="Inventory Icon">
+            <a href="AdminInventory.php">Hotel/Flight Management</a>
+        </li>
+        <li>
+            <img src="images/payments.png" alt="Report Icon">
+            <a href="AdminReport.php">Bookings</a>
+        </li>
+    </ul>
 </div>
-        <ul>
-            <li>
-                <img src="images/home.png" alt="Dashboard Icon">
-                <a href="AdminDashboard.php">Dashboard</a>
-            </li>
-            <li>
-                <img src="images/package.png" alt="Packages Icon">
-                <a href="AdminPackage.php">Travel Packages</a>
-            </li>
-            <li>
-                <img src="images/users.png" alt="User Icon">
-                <a href="AdminUser.php">User Management</a>
-            </li>
-            <li class="active">
-                <img src="images/inventory dark.jpg" alt="Inventory Icon">
-                <a href="AdminInventory.php">Hotel/Flight Management</a>
-            </li>
-            <li>
-                <img src="images/payments.png" alt="Report Icon">
-                <a href="AdminReport.php">Bookings</a>
-            </li>
-        </ul>
-    </div>
+
 <div class="main-content">
     <header>
         <h2>Dashboard / Hotel/Flight Management</h2>
@@ -194,157 +176,166 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <!-- Hotel Inventory Content -->
-    <div id="hotel-content" style="display: <?= $view === 'hotel' ? 'block' : 'none' ?>;">
-        <div class="inventory-container">
-            <form method="GET">
-                <input type="hidden" name="view" value="hotel">
-                <div class="selection-buttons">
-                    <label>Package:</label>
-                    <select name="country" onchange="this.form.submit()">
-                        <option value="">Select Country</option>
-                        <?php foreach ($countries as $countryName) : ?>
-                            <option value="<?= $countryName ?>" <?= $countryName === $country ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($countryName) ?>
+<div id="hotel-content" style="display: <?= $view === 'hotel' ? 'block' : 'none' ?>;">
+    <div class="inventory-container">
+        <form method="GET">
+            <input type="hidden" name="view" value="hotel">
+            <div class="selection-buttons">
+                <label>Package:</label>
+                <select name="country" onchange="this.form.submit()">
+                    <option value="">Select Country</option>
+                    <?php foreach ($countries as $countryName) : ?>
+                        <option value="<?= $countryName ?>" <?= $countryName === $country ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($countryName) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
+                <?php if ($country) : ?>
+                    <label>City:</label>
+                    <select name="city" onchange="this.form.submit()">
+                        <option value="">Select City</option>
+                        <?php foreach ($cities as $cityName) : ?>
+                            <option value="<?= $cityName ?>" <?= $cityName === $city ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($cityName) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
+                <?php endif; ?>
 
-                    <?php if ($country) : ?>
-                        <label>City:</label>
-                        <select name="city" onchange="this.form.submit()">
-                            <option value="">Select City</option>
-                            <?php foreach ($cities as $cityName) : ?>
-                                <option value="<?= $cityName ?>" <?= $cityName === $city ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($cityName) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    <?php endif; ?>
-
-                    <?php if ($city) : ?>
-                        <label>Hotel:</label>
-                        <select name="hotel" onchange="this.form.submit()">
-                            <option value="">Select Hotel</option>
-                            <?php foreach ($hotels as $index => $hotelName) : ?>
-                                <option value="<?= $index ?>" <?= $index === $hotelIndex ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($hotelName) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    <?php endif; ?>
-                </div>
-            </form>
-
-            <?php if (!empty($rooms)) : ?>
-    <h3>Room Availability for <?= htmlspecialchars($selectedHotel['Hotel']) ?></h3>
-    <form method="POST" id="availabilityForm">
-        <table class="room-table">
-            <thead>
-                <tr>
-                    <th>Rooms</th>
-                    <th>Available</th>
-                    <th>Booked</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($rooms as $roomType => $roomInfo) : 
-                    $availability = $roomInfo['availability'];
-                    $bookedRooms = $roomInfo['booked']; 
-                ?>
-                    <tr>
-                        <td><button type="button" class="room-type-btn"><?= htmlspecialchars($roomType) ?></button></td>
-                        <td>
-                            <input type="number" class="availability" name="availability[<?= $roomType ?>]" 
-                                   value="<?= htmlspecialchars($availability) ?>" min="0" max="10"
-                                   oninput="updateBookedRooms(this, '<?= $roomType ?>')">
-                        </td>
-                        <td><span class="booked" id="<?= $roomType ?>-booked"><?= htmlspecialchars($bookedRooms) ?></span></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-
-        <!-- Checkbox for Hotel Availability -->
-        <label>Hotel Availability:</label>
-        <input type="checkbox" name="hotel_availability" id="hotel-availability" <?= ($selectedHotel['Availability'] === 'Available') ? 'checked' : '' ?>>
-        <label for="hotel-availability">Available</label>
-
-        <button type="submit" name="update_availability" class="update-btn">Update</button>
-        <button type="button" name="delete_hotel" class="delete-btn" onclick="deleteHotel()">Delete Hotel</button>
+                <?php if ($city) : ?>
+                    <label>Hotel:</label>
+                    <select name="hotel" onchange="this.form.submit()">
+                        <option value="">Select Hotel</option>
+                        <?php foreach ($hotels as $index => $hotelName) : ?>
+                            <option value="<?= $index ?>" <?= $index === $hotelIndex ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($hotelName) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
+            </div>
         </form>
-        <?php else : ?>
-            <p>Please select a package, city, and hotel to view room availability.</p>
-        <?php endif; ?>
 
-
-    <!-- Flight Inventory Content -->
-    <div id="flight-content" style="display: <?= $view === 'flight' ? 'block' : 'none' ?>;">
-        <div class="inventory-container">
-            <form method="GET">
-                <input type="hidden" name="view" value="flight">
-                <div class="selection-buttons">
-                    <label>Package:</label>
-                    <select name="country" onchange="this.form.submit()">
-                        <option value="">Select Country</option>
-                        <?php foreach ($countries as $countryName) : ?>
-                            <option value="<?= $countryName ?>" <?= $countryName === $country ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($countryName) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-
-                    <?php if ($country) : ?>
-                        <label>City:</label>
-                        <select name="city" onchange="this.form.submit()">
-                            <option value="">Select City</option>
-                            <?php foreach ($cities as $cityName) : ?>
-                                <option value="<?= $cityName ?>" <?= $cityName === $city ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($cityName) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    <?php endif; ?>
-                </div>
-            </form>
-
-            <?php if (!empty($flights)) : ?>
-                <h3>Flight Seat Availability</h3>
-                <form method="POST">
+        
+        <?php if (!empty($rooms) && $hotelIndex !== null) : ?>
+            <h3>Room Availability for <?= htmlspecialchars($selectedHotel['Hotel']) ?></h3>
+            <form method="POST" id="availabilityForm">
+            <div class="hotel-description-container">
+            <label for="hotel_description">Description:</label>
+            <textarea name="hotel_description" class="hotel-description" rows="4"><?= htmlspecialchars($hotelDescription) ?></textarea>
+        </div>
                 <table class="room-table">
                     <thead>
                         <tr>
-                            <th>Class</th>
-                            <th>Available</th>
-                            <th>Booked</th>
+                            <th>Type</th>
+                            <th>Rooms</th>
+                            <th>Price</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($flights as $class => $flightInfo) : 
-                            $seats = $flightInfo['seats'];
-                            $bookedSeats = $maxSeats - $seats; 
+                        <?php foreach ($rooms as $roomType => $roomInfo) : 
+                            $availability = $roomInfo['availability'];
+                            $price = $roomInfo['price']; 
                         ?>
                             <tr>
-                                <td><button type="button" class="room-type-btn"><?= htmlspecialchars($class) ?></button></td>
+                                <td><button type="button" class="room-type-btn"><?= htmlspecialchars($roomType) ?></button></td>
                                 <td>
-                                    <input type="number" class="availability" name="availability[<?= $class ?>]" 
-                                        value="<?= htmlspecialchars($seats) ?>" min="0" max="<?= $maxSeats ?>"
-                                        oninput="updateBookedSeats(this, '<?= $class ?>')">
+                                    <input type="number" class="availability" name="availability[<?= $roomType ?>]" 
+                                           value="<?= htmlspecialchars($availability) ?>" min="0" max="10">
                                 </td>
-                                <td><span class="booked" id="<?= $class ?>-booked"><?= htmlspecialchars($bookedSeats) ?></span></td>
+                                <td>
+                                    <input type="number" class="price" name="price[<?= $roomType ?>]" 
+                                           value="<?= htmlspecialchars($price) ?>" min="0">
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <button type="submit" name="update_availability" class="update-btn">Update Seat Availability</button>
+
+                <!-- Checkbox for Hotel Availability -->
+                <label>Hotel Availability:</label>
+                <input type="checkbox" name="hotel_availability" id="hotel-availability" <?= ($selectedHotel['Availability'] === 'Available') ? 'checked' : '' ?>>
+                <label for="hotel-availability">Available</label>
+
+                <button type="submit" name="update_availability" class="update-btn">Update Hotel</button>
+                <button type="button" name="delete_hotel" class="delete-btn" onclick="deleteHotel()">Delete Hotel</button>
             </form>
-            <?php else : ?>
-                <p>Please select a package and city to view flight seat availability.</p>
-            <?php endif; ?>
-        </div>
+        <?php else : ?>
+            <p>Please select a package, city, and hotel to view room availability.</p>
+        <?php endif; ?>
     </div>
 </div>
 
+
+
+<div id="flight-content" style="display: <?= $view === 'flight' ? 'block' : 'none' ?>;">
+    <div class="inventory-container">
+        <form method="GET">
+            <input type="hidden" name="view" value="flight">
+            <div class="selection-buttons">
+                <label>Package:</label>
+                <select name="country" onchange="this.form.submit()">
+                    <option value="">Select Country</option>
+                    <?php foreach ($countries as $countryName) : ?>
+                        <option value="<?= $countryName ?>" <?= $countryName === $country ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($countryName) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
+                <?php if ($country) : ?>
+                    <label>City:</label>
+                    <select name="city" onchange="this.form.submit()">
+                        <option value="">Select City</option>
+                        <?php foreach ($cities as $cityName) : ?>
+                            <option value="<?= $cityName ?>" <?= $cityName === $city ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($cityName) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
+            </div>
+        </form>
+
+        <?php if (!empty($flights)): ?>
+            <h3>Flight Seat Availability</h3>
+            <form method="POST">
+                <table class="room-table">
+                    <thead>
+                        <tr>
+                            <th>Class</th>
+                            <th>Seats</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($flights as $class => $flightInfo): ?>
+                            <tr>
+                                <td><button type="button" class="room-type-btn"><?= htmlspecialchars($class) ?></td>
+                                <td>
+                                    <input type="number" class="availability" name="availability[<?= htmlspecialchars($class) ?>]" 
+                                           value="<?= htmlspecialchars($flightInfo['seats']) ?>" min="0" max="100">
+                                </td>
+                                <td>
+                                    <input type="number" class="price" name="price[<?= htmlspecialchars($class) ?>]" 
+                                           value="<?= htmlspecialchars($flightInfo['price']) ?>" min="0" step="0.01">
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <button type="submit" name="update_availability" class="update-btn">Update Flight</button>
+            </form>
+        <?php else: ?>
+            <p>Please select a package and city to view flight seat availability.</p>
+        <?php endif; ?>
+    </div>
+</div>
+
+
 <script>
+
 function showHotel() {
     document.querySelector('.toggle-btn.active').classList.remove('active');
     document.querySelector('.toggle-buttons .toggle-btn:nth-child(1)').classList.add('active');
@@ -401,33 +392,6 @@ function checkHotelAvailability() {
 
     const hotelAvailabilityCheckbox = document.getElementById('hotel-availability');
     hotelAvailabilityCheckbox.checked = anyRoomAvailable;
-}
-
-
-function updateBookedSeats(input, flightClass) {
-    const availability = parseInt(input.value);
-    if (availability < 0) {
-        alert("Seat availability cannot be negative.");
-        input.value = 0;
-        return;
-    }
-    const bookedSpan = document.getElementById(flightClass + '-booked');
-    const bookedSeats = 20 - availability;
-    bookedSpan.textContent = Math.max(0, bookedSeats); 
-
-    checkFlightAvailability();
-}
-
-function checkFlightAvailability() {
-    const availabilityInputs = document.querySelectorAll('input[name^="availability"]');
-    let allAvailable = true; 
-    availabilityInputs.forEach(input => {
-        const availableSeats = parseInt(input.value);
-        if (availableSeats <= 0) {
-            allAvailable = false; 
-        }
-    });
-
 }
 
 </script>

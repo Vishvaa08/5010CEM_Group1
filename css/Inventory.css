@@ -1,5 +1,5 @@
 ﻿body {
-    font-family: Arial, sans-serif;
+    font-family: "Josefin Sans", sans-serif;
     background-color: #E8E8E8;
     margin: 0;
     padding: 0;
@@ -184,6 +184,7 @@ header {
 
 .selection-buttons, .dropdowns {
     display: flex;
+    flex-wrap: wrap;
     gap: 15px; 
     align-items: flex-start; 
     margin-bottom: 20px;
@@ -191,7 +192,7 @@ header {
 
 .selection-buttons label, .dropdowns label {
     font-weight: bold; 
-    font-size: 18px;
+    font-size:20px;
     font-family: "Joti One", serif;
 }
 
@@ -205,14 +206,30 @@ header {
     width: 150px;
 }
 
+.hotel-description-container {
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    margin-bottom: 10px;
+}
+
+.hotel-description-container label {
+    font-weight: bold; 
+    font-size: 20px;
+    font-family: "Joti One", serif;
+    margin-bottom: 0; 
+}
+
 .hotel-description {
-    width: 400px; 
-    height: 80px; 
-    resize: none;
-    vertical-align: top; 
+    width: 800px; 
+    height: 60px; 
+    resize: none; 
     font-size: 18px; 
     font-family: "Joti One", serif;
     padding: 10px;
+    border: 1px solid #CCC; 
+    border-radius: 5px; 
+    box-sizing: border-box;
 }
 
 .toggle-buttons {
@@ -262,7 +279,7 @@ header {
     border: none;
     border-radius: 10px;
     padding: 10px 20px;
-    font-size: 16px;
+    font-size: 20px;
     font-family: "Joti One", serif;
     display: inline-block;
     min-width: 100px; 
