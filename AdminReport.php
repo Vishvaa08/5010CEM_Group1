@@ -106,46 +106,49 @@ if (is_array($users)) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (is_array($bookings) && !empty($bookings)): ?>
-                        <?php foreach ($bookings as $bookingId => $booking): ?>
-                            <tr>
-                                <td><?php echo isset($booking['userName']) ? htmlspecialchars($booking['userName']) : 'N/A'; ?></td>
-                                <td><?php echo isset($booking['checkInDate']) ? htmlspecialchars($booking['checkInDate']) : 'N/A'; ?></td>
-                                <td>
-                                    <?php if (!empty($booking['paymentProof'])): ?>
-                                        <a href="<?php echo htmlspecialchars($booking['paymentProof']); ?>" target="_blank">Attachment</a>
-                                    <?php else: ?>
-                                        N/A
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <?php 
-                                    $status = isset($booking['status']) ? $booking['status'] : 'pending'; 
-                                    if (!empty($booking['paymentProof'])) {
-                                        if ($status === 'pending'): ?>
-                                            <button onclick="approvePayment('<?php echo $bookingId; ?>')">
-                                                <i class="fa fa-check" style="color:green;"></i>
-                                            </button>
-                                            <button onclick="rejectPayment('<?php echo $bookingId; ?>')">
-                                                <i class="fa fa-close" style="color:red;"></i>
-                                            </button>
-                                        <?php elseif ($status === 'approved'): ?>
-                                            <span class="approved">Approved</span>
-                                        <?php elseif ($status === 'rejected'): ?>
-                                            <span class="rejected">Rejected</span>
-                                        <?php endif; 
-                                    } else {  ?>
-                                        <span>N/A</span>
-                                    <?php } ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="4">No user payments found</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
+    <?php if (is_array($bookings) && !empty($bookings)): ?>
+        <?php foreach ($bookings as $bookingId => $booking): ?>
+            <?php if (isset($booking['bankDetails'])): ?>
+                <tr>
+                    <td><?php echo isset($booking['userName']) ? htmlspecialchars($booking['userName']) : 'N/A'; ?></td>
+                    <td><?php echo isset($booking['checkInDate']) ? htmlspecialchars($booking['checkInDate']) : 'N/A'; ?></td>
+                    <td>
+                        <?php if (!empty($booking['paymentProof'])): ?>
+                            <a href="<?php echo htmlspecialchars($booking['paymentProof']); ?>" target="_blank">Attachment</a>
+                        <?php else: ?>
+                            N/A
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php 
+                        $status = isset($booking['status']) ? $booking['status'] : 'pending'; 
+                        if (!empty($booking['paymentProof'])) {
+                            if ($status === 'pending'): ?>
+                                <button onclick="approvePayment('<?php echo $bookingId; ?>')">
+                                    <i class="fa fa-check" style="color:green;"></i>
+                                </button>
+                                <button onclick="rejectPayment('<?php echo $bookingId; ?>')">
+                                    <i class="fa fa-close" style="color:red;"></i>
+                                </button>
+                            <?php elseif ($status === 'approved'): ?>
+                                <span class="approved">Approved</span>
+                            <?php elseif ($status === 'rejected'): ?>
+                                <span class="rejected">Rejected</span>
+                            <?php endif; 
+                        } else {  ?>
+                            <span>N/A</span>
+                        <?php } ?>
+                    </td>
+                </tr>
+            <?php endif;  ?>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="4">No user payments found</td>
+        </tr>
+    <?php endif; ?>
+</tbody>
+
             </table>
         </div>
     </div>

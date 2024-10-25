@@ -79,10 +79,10 @@ $messages = $snapshot->getValue();
                     <p><strong>Message:</strong> <?php echo htmlspecialchars($message['userMessage']); ?></p>
                     <p><strong>Timestamp:</strong> <?php echo htmlspecialchars($message['timestamp']); ?></p>
                     <form id="replyForm-<?php echo $key; ?>" method="POST" onclick="event.stopPropagation();">
-                        <input type="hidden" name="userEmail" value="<?php echo htmlspecialchars($message['userEmail']); ?>">
-                        <textarea name="replyMessage" placeholder="Enter your reply" onclick="event.stopPropagation();"></textarea>
-                        <button type="button" onclick="event.stopPropagation(); sendReply('<?php echo $key; ?>')">Send Reply</button>
-                    </form>
+                    <input type="hidden" name="userEmail" value="<?php echo htmlspecialchars($message['userEmail']); ?>">
+                    <textarea name="replyMessage" placeholder="Enter your reply" onclick="event.stopPropagation();" style="resize: none; width: 80%; height: 80px;"></textarea><br>
+                    <button type="button" onclick="event.stopPropagation(); sendReply('<?php echo $key; ?>')">Send Reply</button>
+                </form>
                 </div>
             </li>
         <?php endforeach; ?>

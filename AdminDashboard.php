@@ -155,41 +155,58 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
                     <img src="images/notifications.png" alt="Notifications Icon" class="notification-icon" id="notificationIcon">
                 </div>
                 <div class="header-right d-flex align-items-center">
-                    <a href="login.php" class="logout-link">
-                        <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
-                        <span>Logout</span>
-                    </a>
+                <a href="php_functions/logout.php"  class="logout-link">
+                    <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+                    <span>Logout</span>
+                </a>
                 </div>
             </div>
         </header>
 
         <div class="info-box-container">
-        <!-- Total Users Box -->
-        <div class="info-box" id="totalUsersBox">
-            <div class="info-box-row">
-                <div class="info-box-icon">
-                    <img src="images/total_users.png" alt="Total Users Icon">
-                </div>
-                <div class="info-box-content">
-                    <h3>Total Users</h3>
-                    <p id="totalUsersCount">10</p>
-                </div>
+    <!-- Total Users Box -->
+    <div class="info-box" id="totalUsersBox">
+        <div class="info-box-row">
+            <div class="info-box-icon">
+                <img src="images/total_users.png" alt="Total Users Icon">
             </div>
-        </div>
-
-        <!-- Total Countries Box -->
-        <div class="info-box" id="totalCountriesBox">
-            <div class="info-box-row">
-                <div class="info-box-icon">
-                    <img src="images/countries.png" alt="Total Countries Icon">
-                </div>
-                <div class="info-box-content">
-                    <h3>Total Countries</h3>
-                    <p id="totalCountriesCount">6</p>
-                </div>
+            <div class="info-box-content">
+                <h3>Total Users</h3>
+                <p id="totalUsersCount">10</p>
             </div>
         </div>
     </div>
+
+    <!-- Total Countries Box -->
+    <div class="info-box" id="totalCountriesBox">
+        <div class="info-box-row">
+            <div class="info-box-icon">
+                <img src="images/countries.png" alt="Total Countries Icon">
+            </div>
+            <div class="info-box-content">
+                <h3>Total Countries</h3>
+                <p id="totalCountriesCount">6</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Income Box -->
+    <div class="info-box" id="totalEarningsBox">
+        <div class="info-box-row">
+            <div class="info-box-icon">
+                <img src="images/earnings.png" alt="Total Earnings Icon"> 
+            </div>
+            <div class="info-box-content">
+                <h3>Total Income</h3>
+                <p id="totalEarnings">RM<span id="totalEarningsAmount">0.00</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
     <div class="charts">
     <div class="chart pie">
         <h3>Total Earnings</h3>
@@ -212,8 +229,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
     <h3>Monthly Earnings Report for <?php echo date('Y'); ?></h3>
     <div class="bar-chart">
         <canvas id="paymentsChart"></canvas>
+        <button id="generateReport" class="generate-btn">Generate Report</button>
     </div>
-    <button id="generateReport" class="generate-btn">Generate Report</button>
+    
     </div>
    </div>
 
@@ -221,6 +239,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
 
     const cardEarnings = <?php echo $cardEarnings; ?>;
     const fpxEarnings = <?php echo $fpxEarnings; ?>;
+    const totalEarnings = <?php echo $totalEarnings; ?>;
     const minDisplayValue = 0.01;
 
     const adjustedCardEarnings = cardEarnings < minDisplayValue ? minDisplayValue : cardEarnings;
@@ -323,8 +342,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
 
             document.getElementById('totalUsersCount').textContent = '<?php echo $totalUsers; ?>';
             document.getElementById('totalCountriesCount').textContent = '<?php echo $totalCountries; ?>';
-
-        
+            document.getElementById('totalEarningsAmount').textContent = '<?php echo $totalEarnings; ?>';
             document.getElementById('notificationIcon').addEventListener('click', function() {
             window.location.href = 'messages.php';  
         });
