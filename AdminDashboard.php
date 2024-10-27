@@ -270,54 +270,83 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
         let paymentsChart;
 
         function updateChartWithMonthlyData() {
-            fetch('<?php echo $_SERVER['PHP_SELF']; ?>?action=fetchMonthlyEarnings') 
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
+    fetch('<?php echo $_SERVER['PHP_SELF']; ?>?action=fetchMonthlyEarnings') 
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
 
-                    const months = Array.from({ length: 12 }, (_, i) => i + 1); 
-                    const cardEarnings = months.map(month => data.card[month] || 0); 
-                    const fpxEarnings = months.map(month => data.fpx[month] || 0);   
+            const months = Array.from({ length: 12 }, (_, i) => i + 1); 
+            const cardEarnings = months.map(month => data.card[month] || 0); 
+            const fpxEarnings = months.map(month => data.fpx[month] || 0);   
 
-                    const totalCardEarnings = cardEarnings.reduce((acc, curr) => acc + curr, 0);
-                    const totalFpxEarnings = fpxEarnings.reduce((acc, curr) => acc + curr, 0);
+            const totalCardEarnings = cardEarnings.reduce((acc, curr) => acc + curr, 0);
+            const totalFpxEarnings = fpxEarnings.reduce((acc, curr) => acc + curr, 0);
 
-                    console.log("Card Earnings:", totalCardEarnings);
-                    console.log("FPX Earnings:", totalFpxEarnings);
+            console.log("Card Earnings:", totalCardEarnings);
+            console.log("FPX Earnings:", totalFpxEarnings);
 
-                    if (typeof paymentsChart !== 'undefined') {
-                        paymentsChart.destroy(); 
-                    }
+            if (typeof paymentsChart !== 'undefined') {
+                paymentsChart.destroy(); 
+            }
 
-                    const paymentCtx = document.getElementById('paymentsChart').getContext('2d');
-                    paymentsChart = new Chart(paymentCtx, {
-                        type: 'bar',
-                        data: {
-                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                            datasets: [
-                                {
-                                    label: 'Card Payments',
-                                    data: cardEarnings,
-                                    backgroundColor: 'rgba(255, 205, 86, 0.7)' 
-                                },
-                                {
-                                    label: 'Bank Transfer (FPX)',
-                                    data: fpxEarnings,
-                                    backgroundColor: 'rgba(54, 162, 235, 0.7)' 
-                                }
-                            ]
+            const paymentCtx = document.getElementById('paymentsChart').getContext('2d');
+            paymentsChart = new Chart(paymentCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [
+                        {
+                            label: 'Card Payments',
+                            data: cardEarnings,
+                            backgroundColor: 'rgba(255, 205, 86, 0.8)' 
                         },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
+                        {
+                            label: 'Bank Transfer (FPX)',
+                            data: fpxEarnings,
+                            backgroundColor: 'rgba(54, 162, 235, 0.8)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#444' 
+                            },
+                            ticks: {
+                                color: '#000' 
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#000' 
                             }
                         }
-                    });
-                
-
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#000' 
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+                            titleColor: '#000', 
+                            bodyColor: '#000' 
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            left: 20,
+                            right: 20,
+                            top: 20,
+                            bottom: 20
+                        }
+                    }
+                }
+            });
 
                     document.getElementById('generateReport').addEventListener('click', function () {
                         html2canvas(document.getElementById('paymentsChart')).then(function (canvas) {

@@ -32,6 +32,7 @@ if ($country) {
 $hotels = [];
 $flights = [];
 $hotelDescription = '';
+$imageUrl = '';
 $rooms = [];
 
 // Fetch hotel data if a country and city are selected
@@ -47,6 +48,7 @@ if ($country && $city) {
     // Fetch selected hotel details if a hotel is selected
     if ($hotelIndex !== null && isset($hotelData[$hotelIndex])) {
         $selectedHotel = $hotelData[$hotelIndex];
+        $imageUrl = $selectedHotel['Image'] ?? 'images/error.jpg';
         $hotelDescription = isset($selectedHotel['Description']) ? $selectedHotel['Description'] : '';
         $roomData = $selectedHotel['Rooms'] ?? [];
 
@@ -71,39 +73,77 @@ if ($country && $city) {
 
 // Handle form submission for hotel and flight updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['update_availability'])) {
-        // Update hotel data
-        if ($view === 'hotel' && $country && $city && $hotelIndex !== null) {
-            $hotelDescription = isset($_POST['hotel_description']) ? $_POST['hotel_description'] : '';
+    // Handle image upload if provided
+    if (isset($_FILES['hotel_image']) && $_FILES['hotel_image']['error'] === UPLOAD_ERR_OK) {
+        $imageFile = $_FILES['hotel_image'];
+        $imageName = basename($imageFile['name']);
+        $imageTempPath = $imageFile['tmp_name'];
+
+        // Upload the image to Firebase Storage
+        $bucket = $storage->getBucket();
+        $storagePath = "hotel_images/{$country}/{$city}/{$hotelIndex}/{$imageName}";
+
+        try {
+            // Upload the image
+            $bucket->upload(fopen($imageTempPath, 'r'), [
+                'name' => $storagePath
+            ]);
+
+            // Get the public URL of the uploaded image
+            $imageUrl = "https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/" . urlencode($storagePath) . "?alt=media";
+
+            // Update the hotel image URL in the Realtime Database
             $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex)
-                     ->update(['Description' => $hotelDescription]);
+                ->update(['Image' => $imageUrl]);
+        } catch (FirebaseException $e) {
+            echo "Error uploading image: " . $e->getMessage();
+        }
+    }
 
-            foreach ($_POST['availability'] as $roomType => $availability) {
-                $availability = (int)$availability;
-                $price = isset($_POST['price'][$roomType]) ? (float)$_POST['price'][$roomType] : 0;
-
-                $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex . '/Rooms/' . $roomType)
-                         ->update(['Availability' => $availability, 'Price' => $price]);
-            }
-
-            // Update hotel availability
-            $hotelAvailability = isset($_POST['hotel_availability']) ? 'Available' : 'N/A';
-            $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex)
-                     ->update(['Availability' => $hotelAvailability]);
-
-            // Redirect to refresh the page
-            header('Location: ' . $_SERVER['REQUEST_URI']);
-            exit();
+    // Update hotel description and availability if provided
+    if (isset($_POST['hotel_description']) || isset($_POST['hotel_availability'])) {
+        $updateData = [];
+        if (isset($_POST['hotel_description'])) {
+            $updateData['Description'] = $_POST['hotel_description'];
+        }
+        if (isset($_POST['hotel_availability'])) {
+            $updateData['Availability'] = $_POST['hotel_availability'] ? 'Available' : 'N/A';
         }
 
-        // Update flight data
+        if (!empty($updateData)) {
+            $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex)
+                ->update($updateData);
+        }
+    }
+
+    // Update room availability and price if provided
+    if (isset($_POST['availability']) && isset($_POST['price'])) {
+        foreach ($_POST['availability'] as $roomType => $availability) {
+            $availability = (int) $availability;
+            $price = isset($_POST['price'][$roomType]) ? (float) $_POST['price'][$roomType] : 0;
+
+            $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex . '/Rooms/' . $roomType)
+                ->update([
+                    'Availability' => $availability,
+                    'Price' => $price
+                ]);
+
+        // Redirect to refresh the page
+        header('Location: ' . $_SERVER['REQUEST_URI']);
+        exit();
+
+        }
+
+        
+
+        // Update flight data if the 'flight' view is active
         if ($view === 'flight' && $country && $city) {
             foreach ($_POST['availability'] as $flightClass => $availability) {
-                $availability = (int)$availability;
-                $price = isset($_POST['price'][$flightClass]) ? (float)$_POST['price'][$flightClass] : 0;
+                $availability = (int) $availability;
+                $price = isset($_POST['price'][$flightClass]) ? (float) $_POST['price'][$flightClass] : 0;
 
                 $database->getReference('Packages/' . $country . '/' . $city . '/Flights/' . $flightClass)
-                         ->update(['Seats' => $availability, 'Price' => $price]);
+                    ->update(['Seats' => $availability, 'Price' => $price]);
             }
 
             // Redirect to refresh the page
@@ -118,7 +158,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: AdminInventory.php?view=hotel&country=' . urlencode($country) . '&city=' . urlencode($city));
         exit();
     }
+
 }
+
 ?>
 
 
@@ -220,10 +262,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         <?php if (!empty($rooms) && $hotelIndex !== null) : ?>
             <h3>Room Availability for <?= htmlspecialchars($selectedHotel['Hotel']) ?></h3>
-            <form method="POST" id="availabilityForm">
+            <form method="POST" enctype="multipart/form-data" id="availabilityForm">
             <div class="hotel-description-container">
             <label for="hotel_description">Description:</label>
             <textarea name="hotel_description" class="hotel-description" rows="4"><?= htmlspecialchars($hotelDescription) ?></textarea>
+        </div>
+            <div class="hotel-image-container">
+            <label for="hotel_image">Hotel Image:</label>
+            <img src="<?= htmlspecialchars($imageUrl) ?>" alt="Hotel Image" class="hotel-image-preview">
+            <input type="file" name="hotel_image" accept="image/*">
         </div>
                 <table class="room-table">
                     <thead>
@@ -254,9 +301,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </table>
 
                 <!-- Checkbox for Hotel Availability -->
-                <label>Hotel Availability:</label>
-                <input type="checkbox" name="hotel_availability" id="hotel-availability" <?= ($selectedHotel['Availability'] === 'Available') ? 'checked' : '' ?>>
-                <label for="hotel-availability">Available</label>
+                <label class="availability-label">Hotel Availability:</label>
+                <input type="checkbox" class="check_box" name="hotel_availability" id="hotel-availability" <?= ($selectedHotel['Availability'] === 'Available') ? 'checked' : '' ?>>
+                <label for="hotel-availability" class="availability_label">Available</label>
 
                 <button type="submit" name="update_availability" class="update-btn">Update Hotel</button>
                 <button type="button" name="delete_hotel" class="delete-btn" onclick="deleteHotel()">Delete Hotel</button>
@@ -393,6 +440,30 @@ function checkHotelAvailability() {
     const hotelAvailabilityCheckbox = document.getElementById('hotel-availability');
     hotelAvailabilityCheckbox.checked = anyRoomAvailable;
 }
+
+$(document).on('change', 'input[name="hotel_image"]', function () {
+    const formData = new FormData($('#availabilityForm')[0]);
+    $.ajax({
+        url: 'AdminInventory.php', 
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            const result = JSON.parse(response);
+            if (result.success) {
+                alert('Hotel image updated successfully!');
+                location.reload(); 
+            } else {
+                alert('Error updating hotel image: ' + result.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            alert('Failed to update hotel image.');
+            console.error('Error:', error);
+        }
+    });
+});
 
 </script>
 

@@ -1,14 +1,38 @@
+html{
+    scroll-behavior: smooth;
+    font-family: "Josefin Sans", sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #E8E8E8;
+    font-family: "Josefin Sans", sans-serif;
+    background-image: url('../images/desktop.jpg'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
     margin: 0;
     padding: 0;
+}
+
+body::-webkit-scrollbar{
+    display: none;
+}
+
+.joti-one-regular {
+    font-family: "Joti One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.josefin-sans {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
 
 .sidebar {
     width: 280px;
     min-height: calc(90vh - 40px);
-    background-color: #FFFFFF;
+    background-color: #ffffffb3;
     position: fixed;
     left: 20px;
     top: 20px;
@@ -71,8 +95,9 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px 0;
-    background-color: #f8f9fa;
+    background-color: #ffffffb3;
     border-bottom: 1px solid #ddd;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 .admin-profile {
@@ -99,6 +124,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 header {
@@ -106,16 +132,19 @@ header {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 .header-left {
     display: block; 
     margin-left: 10px;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 .header-right {
     display: flex;
     align-items: center;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 .user-wrapper {
@@ -136,7 +165,8 @@ header {
 
 .logout-link span {
     margin-left: 5px; 
-    font-size: 16px;  
+    font-size: 20px;  
+    font-family: "Josefin Sans", sans-serif;
 }
 
 .logout-icon {
@@ -161,7 +191,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: white;
+    background-color: #ffffffb3;
     padding: 10px;
 }
 
@@ -172,6 +202,6 @@ table th, table td {
 }
 
 table th {
-    background-color: #000000;
-    color: white;
+    background-color: #ffffff76;
+    color: rgb(0, 0, 0);
 }

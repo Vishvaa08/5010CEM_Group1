@@ -1,15 +1,16 @@
 ﻿html{
     scroll-behavior: smooth;
-}
-body {
     font-family: "Josefin Sans", sans-serif;
-    background-color: #E8E8E8;
-    margin: 0;
-    padding: 0;
 }
 
-body::-webkit-scrollbar{
-    display: none;
+body {
+    font-family: "Josefin Sans", sans-serif;
+    background-image: url('../images/desktop.jpg'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
 }
 
 .joti-one-regular {
@@ -27,7 +28,7 @@ body::-webkit-scrollbar{
 .sidebar {
     width: 250px;
     min-height: calc(90vh - 40px);
-    background-color: #FFFFFF;
+    background-color: #ffffff6f;
     position: fixed;
     left: 20px;
     top: 20px;
@@ -37,6 +38,7 @@ body::-webkit-scrollbar{
     justify-content: space-between;
     border-radius: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    font-size: 20px;
 }
 
 .sidebar ul {
@@ -73,7 +75,7 @@ body::-webkit-scrollbar{
 }
 
 .sidebar li:hover {
-    background-color: #E8E8E8;
+    background-color: #ffffff;
     padding: 10px;
     border-radius: 10px;
 }
@@ -94,10 +96,12 @@ body::-webkit-scrollbar{
     justify-content: center;
     align-items: center;
     padding: 20px 0;
-    background-color: #f8f9fa;
+    background-color: #ffffff6f;
     border-bottom: 1px solid #ddd;
+    font-family: "Joti One", serif;
+    border-radius: 10px;
+    font-size: 20px;
 }
-
 
 .admin-profile {
     display: flex;
@@ -133,12 +137,21 @@ header {
 .header-left {
     display: flex;
     flex-direction: column;
+    font-family: "Josefin Sans", sans-serif;
+}
+
+.header-left1 {
+    display: flex;
+    flex-direction: column;
+    margin-top: -120px;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 .header-right {
     display: flex;
     align-items: center;
     gap: 15px; 
+    font-family: "Josefin Sans", sans-serif;
 }
 
 .search-box {
@@ -171,7 +184,8 @@ header {
 
 .logout-link span {
     margin-left: 5px; 
-    font-size: 16px;  
+    font-size: 20px;  
+    font-family: "Joti One", serif;
 }
 
 .logout-icon {
@@ -204,9 +218,10 @@ header {
     text-align: center;
     border: 1px solid #ddd;
     border-radius: 10px;
-    background-color: #ffffff;
+    background-color: #ffffff91;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 .city-grid {
@@ -221,12 +236,21 @@ header {
     width: 450px;
     box-sizing: border-box;
     flex-direction: column;
+    font-family: "Josefin Sans", sans-serif;
+    background-color: #ffffffb3;
 }
 
-.city-card img,
 .country-card img {
     width: 100%;
     height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.city-card img{
+    width: 100%;
+    height: 200px;
     object-fit: cover;
     border-radius: 10px;
     margin-bottom: 10px;
@@ -239,6 +263,7 @@ header {
     border-radius: 5px;
     border: 1px solid #ccc;
     font-weight: bold;
+    font-family: "Josefin Sans", sans-serif;
     margin-bottom: 5px;
 }
 
@@ -307,9 +332,36 @@ header {
 .description-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start; 
     margin: 10px 0;
+    width: 100%; 
 }
+
+.description1-textarea {
+    width: 100%; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    resize: none; 
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+    font-family: "Josefin Sans", sans-serif;
+    background-color: #f9f9f9; 
+    white-space: pre-wrap; 
+    overflow: visible; 
+    height: auto; 
+    min-height: 80px; 
+}
+
+.description-container label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+    font-family: "Josefin Sans", sans-serif;
+}
+
 
 .fixed-textarea {
     width: 100%; 
@@ -319,12 +371,14 @@ header {
     border: 1px solid #ccc; 
     padding: 8px;
     box-sizing: border-box; 
+    margin-bottom: 10px;
 }
 
-.description-textarea {
+.D_textarea {
     width: 100%; 
     height: 50px; 
     border: 1px solid #ccc;
+    margin-left: -10px;
     border-radius: 5px;
     padding: 10px;
     resize: none; 
@@ -333,6 +387,12 @@ header {
     transition: border-color 0.3s ease;
     font-family: "Josefin Sans", sans-serif;
 }
+
+.D_textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
 
 .description {
     width: 100%; 
@@ -425,20 +485,47 @@ header {
 /* Action buttons */
 .action-buttons {
     display: flex;
-    justify-content: space-between;
+    gap: 10px; 
     margin-top: 15px;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 .action-buttons button {
-    width: 30%;
+    flex: 1; 
     padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: "Josefin Sans", sans-serif;
+    text-align: center;
+    transition: background-color 0.3s ease;
 }
 
-.action-buttons button:hover {
-    background-color: #333;
+.edit-btn {
+    background-color: #22ae03;
+    color: white;
+
+}.image-btn {
+    background-color: #e49814;
+    color: white;
+}
+
+.edit-btn:hover{
+    background-color: #84e34d;
+
+} .image-btn:hover {
+    background-color: #f2b44a;
+}
+
+.delete1-btn {
+    background-color: #E53935;
+    color: white;
+}
+
+.delete1-btn:hover {
+    background-color: #ec6666;
 }
 
 .itinerary {
@@ -464,6 +551,7 @@ header {
     height: 38px;
     width: 100%;
     border: 1px solid #ccc;
+    font-family: "Josefin Sans", sans-serif;
     border-radius: 5px;
     text-align: center;
     box-sizing: border-box;
@@ -485,27 +573,31 @@ header {
 }
 
 .draggable-container {
-    display: flex;
-    gap: 10px; 
-    margin-bottom: 20px; 
-    margin-top: 20px; 
+    position: fixed;  
+    bottom: 20px;     
+    right: 20px;      
+    display: flex;    
+    flex-direction: column;  
+    gap: 10px;        
+    z-index: 1000;    
 }
-
 
 .draggable {
-    width: 100px;
-    height: 50px;
-    padding: 5px;
-    padding-bottom: 10px;
-    background-color: #9f9d9d;
-    border: 1px solid #9a9999;
-    border-radius: 7px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: move;
+    width: 50px;               
+    height: 30px;               
+    padding: 5px;               
+    padding-bottom: 10px;       
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    border: 1px solid #9a9999;  
+    border-radius: 7px;        
+    text-align: center;          
+    color: white;                
+    display: flex;               
+    align-items: center;         
+    justify-content: center;    
+    cursor: move;               
 }
+
 
 /* Add Button - Country */
 .add-package-btn {
@@ -513,7 +605,7 @@ header {
     margin-top: 0px;
 }
 .add-package-btn button {
-    background-color: #000000; 
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
     border: none;
     color: white;
     width: 30px;
@@ -537,93 +629,115 @@ header {
     gap: 20px; 
 }
 
-/* Add Button - City */
-.add-city-btn {
-    margin-top: 0; 
-    display: flex;
-    align-items: center;
-}
-
-.add-city-btn button {
-    background-color: #000000; 
-    border: none;
+/* Submit Button Country */
+#addCountryForm .submit-btn-success {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
     color: white;
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-    border-radius: 10%; 
-    transition: all 0.3s ease;
-    padding: 0;
-    margin-left: 10px; 
-}
-
-.add-city-btn button:hover {
-    background-color: #848687; 
-    transform: scale(1.1); 
-}
-
-/* City Form Styling */
-#addCityForm .card {
-    border: none;
-    border-radius: 10px;
-    background-color: #f8f9fa; 
-}
-
-#addCityForm .card-title {
-    font-weight: bold;
-    color: #343a40; 
-}
-
-#addCityForm .card-body {
-    padding: 30px;
-}
-
-#addCityForm .form-control {
-    border-radius: 8px;
-    padding: 10px 15px;
     font-size: 16px;
-    border: 1px solid #ced4da; 
-    transition: border-color 0.3s ease;
-}
-
-#addCityForm .form-control:focus {
-    border-color: #5e5e5e; 
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25); 
-}
-
-#addCityForm .btn-success {
-    background-color: #28a745;
+    font-weight: bold;
     border: none;
-    padding: 5px;
-    font-size: 18px;
     border-radius: 8px;
+    cursor: pointer;
+    font-family: "Joti One", serif;
+    transition: background-color 0.3s ease;
+}
+
+#addCountryForm .submit-btn-success:hover {
+    background-color: #858585;
+} 
+
+/* AddCity - form */
+.add-city-container {
+    display: flex; 
+    align-items: flex-start; 
+    margin-left: 10px;
+}
+
+#addCityForm {
+    width: 220px; 
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    display: block; 
+}
+
+.card-body {
+    padding: 5px; 
+}
+
+.card-title {
+    font-family: "Josefin Sans", sans-serif; 
+    font-size: 18px; 
+    text-align: center; 
+    color: #333; 
+    margin-top: 5px;
+}
+
+#addCityForm .form-group {
+    display: flex;  
+    align-items: center; 
+}
+
+#addCityForm .form-group label {
+    flex: 0 0 80px; 
+    font-weight: bold;
+    margin-bottom: 0; 
+    font-family: "Joti One", serif;
+    font-size: 14px;
+    color: #333;
+}
+
+#addCityForm .form-group input[type="text"], 
+#addCityForm .form-group input[type="file"], 
+#addCityForm .form-group textarea {
+    flex: 1; 
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: "Josefin Sans", sans-serif;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    resize: none;
+}
+
+#addCityForm .form-group input[type="text"]:focus, 
+#addCityForm .form-group input[type="file"]:focus, 
+#addCityForm .form-group textarea:focus {
+    border-color: #333;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+/* Submit Button City */
+#addCityForm .btn-success {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: "Joti One", serif;
     transition: background-color 0.3s ease;
 }
 
 #addCityForm .btn-success:hover {
-    background-color: #218838; 
-}
+    background-color: #858585;
+} 
 
-#addCityForm {
-    margin-bottom: 40px;
-}
-
-.delete-icon {
-    color: red;
-    cursor: pointer;
-    margin-left: 10px;
-    font-weight: bold;
-}
-.delete-icon:hover {
-    color: darkred;
-}
 
 .file-availability-container {
     display: flex;
     align-items: center;
     margin-top: 10px;
 }
-
 
 .view-btn {
     display: inline-block;
@@ -644,14 +758,13 @@ header {
 }
 
 .card-form-container {
-    width: 200px; 
+    width: 300px; 
     background-color: #FFFFFF;
     border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 15px;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
+    position: relative; 
+    margin-top: 20px; 
     z-index: 100; 
 }
 
@@ -699,24 +812,6 @@ header {
     color: #333;
 }
 
-.submit-btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #000000;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: "Joti One", serif;
-    transition: background-color 0.3s ease;
-}
-
-.submit-btn:hover {
-    background-color: #858585;
-}
-
 .delete-btn {
     padding: 10px 20px;
     margin-left: 10px;
@@ -734,3 +829,36 @@ header {
 .delete-btn:hover {
     background-color: #ec6666;
 }
+
+.city-details-container {
+    padding: 20px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.category {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.category h3 {
+    cursor: pointer;
+}
+
+.category .hotel-section,
+.category .flight-section,
+.category .vehicle-section,
+.category .itinerary-section {
+    display: none; /* Initially hidden */
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+

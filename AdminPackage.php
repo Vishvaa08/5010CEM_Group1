@@ -108,12 +108,10 @@ if (isset($_POST['submit'])) {
 <div class="sidebar">
     <div class="sidebar-header">
         <div class="admin-profile">
-        <div class="admin-profile">
         <img src="<?php echo htmlspecialchars($pic); ?>" alt="Admin Profile Picture" class="profile-pic">
         <p><?php echo htmlspecialchars($name); ?></p>
         </div>
     </div>
-</div>
         <ul>
             <li>
                 <img src="images/home.png" alt="Dashboard Icon">
@@ -178,7 +176,7 @@ if (isset($_POST['submit'])) {
                     $countryDetail = isset($cities['CountryDetail']) ? htmlspecialchars($cities['CountryDetail']) : 'No description available.';
                     echo '<div class="description-container">';
                     echo '<label for="descriptionTextarea_' . htmlspecialchars($country) . '"></label>';
-                    echo '<textarea id="descriptionTextarea_' . htmlspecialchars($country) . '" class="form-control description-textarea">' . $countryDetail . '</textarea>';
+                    echo '<textarea id="descriptionTextarea_' . htmlspecialchars($country) . '" class="form-control D_textarea">' . $countryDetail . '</textarea>';
                     echo '</div>';
 
                     // Availability checkbox with onchange event
@@ -216,7 +214,7 @@ if (isset($_POST['submit'])) {
                     <textarea id="countryDescription" name="countryDescription" rows="3" placeholder="Enter country description" required></textarea>
                 </div>
                 <div class="form-group">
-                    <button type="submit" name="submit" class="submit-btn">Submit</button>
+                <button type="submit" name="submit" class="submit-btn-success">Submit</button>
                 </div>
             </form>
         </div>
@@ -225,7 +223,7 @@ if (isset($_POST['submit'])) {
 
 <script>
 
-    document.querySelectorAll('.description-textarea').forEach(textarea => {
+    document.querySelectorAll('.D_textarea').forEach(textarea => {
     textarea.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             e.preventDefault(); 

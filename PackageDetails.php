@@ -64,39 +64,27 @@ if (isset($_SESSION['userName'])) {
 
 <div class="main-content">
     <header>
-        <div class="header-left">
+        <div class="header-left1">
             <h2>Dashboard / Travel Package</h2>
             <p>City Package</p>
         </div>
-        <div class="header-right d-flex align-items-center">
-            <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search by City" onkeyup="filterCities()"> 
-
-            </div>
-            <div class="add-city-btn text-center">
-                <button type="button" class="btn btn-primary btn-lg rounded-circle" onclick="toggleCityForm()">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <div id="addCityForm" class="card" style="display:none;">
+        <div id="addCityForm" class="card">
         <div class="card-body">
-            <h5 class="card-title">Add New City</h5>
-            <form id="cityForm" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="cityName">City Name</label>
-                    <input type="text" class="form-control" id="cityName" placeholder="Enter city name" required>
-                </div>
-                <div class="form-group">
-                    <label for="cityImage">Upload City Image</label>
-                    <input type="file" class="form-control-file" id="cityImage" accept="image/*" required>
-                </div>
-                <button type="submit" class="btn btn-success">Submit City</button>
-            </form>
-        </div>
+        <h5 class="card-title">Add New City</h5>
+        <form id="cityForm" enctype="multipart/form-data">
+            <div class="form-group d-flex align-items-center" style="margin-bottom: 15px;">
+                <label for="cityName" style="margin-right: 10px;">City Name</label>
+                <input type="text" class="form-control" id="cityName" placeholder="Enter city name" required style="flex: 1;">
+            </div>
+            <div class="form-group d-flex align-items-center" style="margin-bottom: 15px;">
+                <label for="cityImage" style="margin-right: 10px;">Upload City Image</label>
+                <input type="file" class="form-control-file" id="cityImage" accept="image/*" required style="flex: 1;">
+            </div>
+            <button type="submit" class="btn btn-success">Submit City</button>
+        </form>
     </div>
+</div>
+</header>
 
     <script>
             function toggleCityForm() {
@@ -207,7 +195,7 @@ if (isset($_SESSION['userName'])) {
                     echo '<div class="action-buttons">';
                     echo '<button class="edit-btn">Save</button>';
                     echo '<button class="image-btn">Update Image</button>';
-                    echo '<button class="delete-btn">Delete</button>';
+                    echo '<button class="delete1-btn">Delete</button>';
                     echo '</div>';
                     echo '</div>'; 
                 }
@@ -221,15 +209,17 @@ if (isset($_SESSION['userName'])) {
 
 <script>
     $(document).ready(function() {
-        $(".draggable").draggable({ helper: "clone" });
+    $(".draggable").draggable({ helper: "clone" });
 
-        $(".city-card").droppable({
-            accept: ".draggable",
-            hoverClass: "highlight",
-            drop: function(event, ui) {
-                const type = $(ui.draggable).data("type");
-                const cityCard = $(this);
+    $(".city-card").droppable({
+        accept: ".draggable",
+        hoverClass: "highlight",
+        drop: function(event, ui) {
+            const type = $(ui.draggable).data("type");
+            const cityCard = $(this);
+            let isItemAdded = cityCard.data(`${type}Added`); 
 
+            if (!isItemAdded) { 
                 if (type === "hotel") {
                     const hotelHtml = `
                     <div class="hotel-item">
@@ -250,12 +240,13 @@ if (isset($_SESSION['userName'])) {
                         </div>
                         <div class="room-item">
                             <span>Suite</span>
-                            <input type="number" data-key="SuiteRooms" placeholder="Rooms" style="width: 40%;"  min="0" max="10" value="10">
+                            <input type="number" data-key="SuiteRooms" placeholder="Rooms" style="width: 40%;" min="0" max="10" value="10">
                             <input type="number" data-key="SuitePrice" placeholder="Price" style="width: 40%;">
                         </div>
                         <textarea data-key="Description" placeholder="Enter Hotel Description"></textarea>
                     </div>`;
                     cityCard.append(hotelHtml);
+                    cityCard.data(`${type}Added`, true);
                 } else if (type === "flight") {
                     const flightHtml = `
                         <div class="flight-item">
@@ -264,6 +255,7 @@ if (isset($_SESSION['userName'])) {
                             <input type="number" data-key="TotalSeats" value="20" placeholder="Total Seats" style="width: 100%;" min="0">
                         </div>`;
                     cityCard.append(flightHtml);
+                    cityCard.data(`${type}Added`, true);
                 } else if (type === "vehicle") {
                     const vehicleHtml = `
                         <div class="vehicle-item">
@@ -275,6 +267,7 @@ if (isset($_SESSION['userName'])) {
                             <input type="number" data-key="VehiclePrice" value="" placeholder="Vehicle Price">
                         </div>`;
                     cityCard.append(vehicleHtml);
+                    cityCard.data(`${type}Added`, true);
                 } else if (type === "itinerary") {
                     const itineraryHtml = `
                     <div class="itinerary-item d-flex align-items-center">
@@ -288,26 +281,14 @@ if (isset($_SESSION['userName'])) {
                         </div>
                     </div>`;
                     cityCard.append(itineraryHtml);
+                    cityCard.data(`${type}Added`, true);
                 }
+            } else {
+                alert(`You can only add one ${type} at a time.`);
             }
-        });
-    });
-
-
-    function filterCities() {
-    const searchValue = $('#searchInput').val().toLowerCase(); 
-
-    $('.city-card').each(function() {
-        const cityName = $(this).find('[data-key="City"]').text().toLowerCase(); 
-        let hasMatch = false; 
-
-        if (cityName.includes(searchValue)) {
-            hasMatch = true; 
         }
-
-        $(this).toggle(hasMatch);
     });
-}
+});
 
 
         // Hotel dropdown  
@@ -354,7 +335,7 @@ if (isset($_SESSION['userName'])) {
                         </div>
                         <div class="description-container">
                             <label>Hotel Description:</label>
-                            <textarea class="form-control description-textarea" readonly>${hotel.Description || ''}</textarea>
+                            <textarea class="description1-textarea" readonly>${hotel.Description || ''}</textarea>
                         </div>
                     </div>`;
                 cityCard.find('.hotel-details').html(hotelHtml); 
@@ -742,7 +723,7 @@ $(document).on('click', '.delete-itinerary-btn', function() {
 });
 
 // Delete City Package
-$(document).on('click', '.delete-btn', function() {
+$(document).on('click', '.delete1-btn', function() {
     const card = $(this).closest('.city-card'); 
     const country = card.data('country'); 
     const city = card.data('city'); 

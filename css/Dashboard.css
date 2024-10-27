@@ -1,14 +1,38 @@
-﻿body {
-    font-family: Arial, sans-serif;
-    background-color: #E8E8E8;
+﻿html{
+    scroll-behavior: smooth;
+    font-family: "Josefin Sans", sans-serif;
+}
+
+body {
+    font-family: "Josefin Sans", sans-serif;
+    background-image: url('../images/desktop.jpg'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
     margin: 0;
     padding: 0;
+}
+
+body::-webkit-scrollbar{
+    display: none;
+}
+
+.joti-one-regular {
+    font-family: "Joti One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.josefin-sans {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
 
 .sidebar {
     width: 250px;
     min-height: calc(90vh - 40px);
-    background-color: #FFFFFF;
+    background-color: #ffffff6f;
     position: fixed;
     left: 20px;
     top: 20px;
@@ -18,6 +42,7 @@
     justify-content: space-between;
     border-radius: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    font-size: 20px;
 }
 
 .sidebar ul {
@@ -32,7 +57,8 @@
     display: flex;
     align-items: center;
     color: #333333;
-    font-size: 17px;
+    font-size: 20px;
+    font-family: "Joti One", serif;
 }
 
 .sidebar li img {
@@ -50,7 +76,7 @@
 }
 
 .sidebar li:hover {
-    background-color: #E8E8E8;
+    background-color: #ffffff;
     padding: 10px;
     border-radius: 10px;
 }
@@ -71,8 +97,11 @@
     justify-content: center;
     align-items: center;
     padding: 20px 0;
-    background-color: #f8f9fa;
+    background-color: #ffffff6f;
     border-bottom: 1px solid #ddd;
+    font-family: "Joti One", serif;
+    border-radius: 10px;
+    font-size: 20px;
 }
 
 .admin-profile {
@@ -93,6 +122,7 @@
     color: #333;
     margin: 0;
 }
+
 .logout-link {
     display: flex;
     align-items: center;
@@ -100,23 +130,27 @@
     color: #333; 
     font-weight: bold;
     margin-left: 10px;
+    
 }
 
 .logout-link span {
     margin-left: 5px; 
-    font-size: 16px;  
+    font-size: 20px; 
+    font-family: "Joti One", serif; 
 }
 
 .logout-icon {
     width: 24px;
     height: 24px;
 }
+
 .main-content {
     margin-left: 300px;
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-family: "Joti One", serif;
 }
 
 header {
@@ -124,6 +158,8 @@ header {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    font-size: 20px;
+    font-family: "Joti One", serif;
 }
 
 .header-left {
@@ -147,14 +183,14 @@ header {
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: #333; 
+    color: #000000; 
     font-weight: bold;
     margin-left: 10px;
 }
 
 .logout-link span {
     margin-left: 5px; 
-    font-size: 16px;
+    font-size: 20px;
 }
 
 .logout-icon {
@@ -185,7 +221,7 @@ header {
 }
 
 .info-box {
-    background-color: #FFFFFF;
+    background-color: #ffffff6f;
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -248,7 +284,7 @@ header {
 
 
 .chart {
-    background: #FFFFFF;
+    background: #ffffffad;
     border-radius: 12px;
     padding: 20px;
     width: 450px; 

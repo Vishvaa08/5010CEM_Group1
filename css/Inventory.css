@@ -1,12 +1,17 @@
-﻿body {
+﻿html{
+    scroll-behavior: smooth;
     font-family: "Josefin Sans", sans-serif;
-    background-color: #E8E8E8;
-    margin: 0;
-    padding: 0;
 }
 
-body::-webkit-scrollbar{
-    display: none;
+body {
+    font-family: "Josefin Sans", sans-serif;
+    background-image: url('../images/desktop.jpg'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
 }
 
 .joti-one-regular {
@@ -24,7 +29,7 @@ body::-webkit-scrollbar{
 .sidebar {
     width: 250px;
     min-height: calc(90vh - 40px);
-    background-color: #FFFFFF;
+    background-color: #ffffff6f;
     position: fixed;
     left: 20px;
     top: 20px;
@@ -70,7 +75,7 @@ body::-webkit-scrollbar{
 }
 
 .sidebar li:hover {
-    background-color: #E8E8E8;
+    background-color: #ffffff;
     padding: 10px;
     border-radius: 10px;
 }
@@ -91,8 +96,9 @@ body::-webkit-scrollbar{
     justify-content: center;
     align-items: center;
     padding: 20px 0;
-    background-color: #f8f9fa;
+    background-color: #ffffff84;
     border-bottom: 1px solid #ddd;
+    border-radius: 10px;
 }
 
 .admin-profile {
@@ -176,7 +182,7 @@ header {
 }
 
 .inventory-container {
-    background-color: #FFFFFF;
+    background-color: #ffffff84;
     border-radius: 15px;
     padding: 20px;
     margin-top: 20px;
@@ -207,11 +213,12 @@ header {
 }
 
 .hotel-description-container {
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    margin-bottom: 10px;
+    display: inline-block;
+    width: 60%; 
+    vertical-align: top;
+    padding: 10px;
 }
+
 
 .hotel-description-container label {
     font-weight: bold; 
@@ -221,8 +228,8 @@ header {
 }
 
 .hotel-description {
-    width: 800px; 
-    height: 60px; 
+    width: 600px; 
+    height: 100px; 
     resize: none; 
     font-size: 18px; 
     font-family: "Joti One", serif;
@@ -231,6 +238,48 @@ header {
     border-radius: 5px; 
     box-sizing: border-box;
 }
+
+.hotel-image-container {
+    display: inline-block;
+    width: 35%; 
+    vertical-align: top;
+    padding: 10px;
+    text-align: center;
+}
+
+.hotel-image-container label {
+    display: block; 
+    font-weight: bold; 
+    font-size: 20px;
+    font-family: "Joti One", serif;
+    margin-bottom: 5px; 
+    text-align: start;
+}
+
+.hotel-image-preview {
+    display: block;  
+    max-width: 100%;  
+    max-height: 200px; 
+    width: auto;       
+    height: auto;     
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 5px; 
+}
+
+
+@media (max-width: 768px) {
+    .hotel-description-container,
+    .hotel-image-container {
+        display: block;
+        width: 100%;
+    }
+
+    .hotel-image-container {
+        margin-top: 20px;
+    }
+}
+
 
 .toggle-buttons {
     display: flex;
@@ -246,7 +295,7 @@ header {
     cursor: pointer;
     border-radius: 20px;
     transition: background 0.3s, color 0.3s;
-    background-color: #FFF;
+    background-color: #ffffff84;
     color: #333;
 }
 
@@ -284,6 +333,25 @@ header {
     display: inline-block;
     min-width: 100px; 
     text-align: center;
+    border-radius: 10px;
+}
+
+.availability-label {
+    font-size: 20px;
+    font-weight: bold; 
+}
+
+.availability_label {
+    font-size: 20px;
+    font-weight: bold; 
+    vertical-align: middle;
+    margin-right: 5px; 
+}
+
+.check_box {
+    display: inline-block;
+    vertical-align: middle; 
+    margin-bottom: 5px;
 }
 
 .availability{
@@ -296,21 +364,29 @@ header {
     font-size: 18px;
     padding: 10px;
     width: 50px; 
+    text-align: center; 
 }
 
 .room-type-btn {
-    min-width: 150px; 
+    min-width: 150px;
+    cursor: pointer; 
 }
 
 .room-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
     margin-top: 20px;
+    border-spacing: 10px;
+    padding: 15px; 
+    text-align: center;
 }
 
 .room-table th {
-    background-color: #F2F2F2;
+    background-color: #ffffff98;
     font-weight: bold;
+    border-radius: 10px;
+    padding: 10px;
+
 }
 
 input[type="checkbox"] {
@@ -331,6 +407,7 @@ input[type="checkbox"] {
     border-radius: 10px;
     cursor: pointer;
     display: inline-block;
+    font-weight: bold;
 }
 
 .update-btn:hover {
@@ -349,6 +426,7 @@ input[type="checkbox"] {
     cursor: pointer;
     display: inline-block;
     margin-left: 10px; 
+    font-weight: bold;
 }
 
 .delete-btn:hover {

@@ -1,14 +1,38 @@
-﻿body {
-    font-family: Arial, sans-serif;
-    background-color: #E8E8E8;
+﻿html{
+    scroll-behavior: smooth;
+    font-family: "Josefin Sans", sans-serif;
+}
+
+body {
+    font-family: "Josefin Sans", sans-serif;
+    background-image: url('../images/desktop.jpg'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
     margin: 0;
     padding: 0;
+}
+
+body::-webkit-scrollbar{
+    display: none;
+}
+
+.joti-one-regular {
+    font-family: "Joti One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.josefin-sans {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
 
 .sidebar {
     width: 250px;
     min-height: calc(90vh - 40px);
-    background-color: #FFFFFF;
+    background-color: #ffffff96;
     position: fixed;
     left: 20px;
     top: 20px;
@@ -18,6 +42,8 @@
     justify-content: space-between;
     border-radius: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    font-family: "Joti One", serif; 
+    font-size: 20px;
 }
 
 .sidebar ul {
@@ -50,7 +76,7 @@
 }
 
 .sidebar li:hover {
-    background-color: #E8E8E8;
+    background-color: #ffffff;
     padding: 10px;
     border-radius: 10px;
 }
@@ -73,6 +99,8 @@
     padding: 20px 0;
     background-color: #f8f9fa;
     border-bottom: 1px solid #ddd;
+    font-family: "Joti One", serif; 
+    font-size: 20px;
 }
 
 .admin-profile {
@@ -97,12 +125,15 @@
 .main-content {
     margin-left: 300px;
     padding: 20px;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: "Joti One", serif; 
+    font-size: 20px;
 }
 
 .header-left {
@@ -112,6 +143,7 @@ header {
 .header-right {
     display: flex;
     align-items: center;
+    font-family: "Joti One", serif; 
 }
 
 
@@ -120,6 +152,22 @@ header {
     font-weight: bold;
     display: flex;
     align-items: center; 
+}
+
+.logout-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333; 
+    font-weight: bold;
+    margin-left: 10px;
+    
+}
+
+.logout-link span {
+    margin-left: 5px; 
+    font-size: 20px; 
+    font-family: "Joti One", serif; 
 }
 
 .logout-icon {
@@ -150,7 +198,7 @@ header {
 }
 
 .user-details {
-    background-color: #f4f4f4;
+    background-color: #ffffffc3;
     padding: 20px; 
     border-radius: 10px;
     width: 48%; 
@@ -161,22 +209,30 @@ header {
 table {
     width: 100%;
     border-collapse: collapse;
+    font-family: "Joti One", serif; 
+    font-size: 20px;
 }
 
 th, td {
     padding: 10px 15px; 
     text-align: center;
+    font-family: "Joti One", serif; 
 }
 
 th {
-    background-color: #e9e9e9;
+    background-color: #b3b2b2d2;
     font-weight: bold;
     border-bottom: 1px solid #ddd; 
 }
 
 .user-details th {
-    background-color: #000;
-    color: #fff;
+    background-color: #ffffffb3;
+    color: #000000;
+    font-family: "Joti One", serif; 
+}
+
+.user-details h1{
+    font-family: "Joti One", serif; 
 }
 
 td {
