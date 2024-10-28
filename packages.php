@@ -1,15 +1,3 @@
-<?php
-session_start();
-
-$pic = '';
-
-if (isset($_SESSION['userName'])) {
-    $pic = $_SESSION['profileImage'];
-} else {
-    $pic = 'images/user.png';
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 

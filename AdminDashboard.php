@@ -155,41 +155,58 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
                     <img src="images/notifications.png" alt="Notifications Icon" class="notification-icon" id="notificationIcon">
                 </div>
                 <div class="header-right d-flex align-items-center">
-                    <a href="login.php" class="logout-link">
-                        <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
-                        <span>Logout</span>
-                    </a>
+                <a href="php_functions/logout.php"  class="logout-link">
+                    <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+                    <span>Logout</span>
+                </a>
                 </div>
             </div>
         </header>
 
         <div class="info-box-container">
-        <!-- Total Users Box -->
-        <div class="info-box" id="totalUsersBox">
-            <div class="info-box-row">
-                <div class="info-box-icon">
-                    <img src="images/total_users.png" alt="Total Users Icon">
-                </div>
-                <div class="info-box-content">
-                    <h3>Total Users</h3>
-                    <p id="totalUsersCount">10</p>
-                </div>
+    <!-- Total Users Box -->
+    <div class="info-box" id="totalUsersBox">
+        <div class="info-box-row">
+            <div class="info-box-icon">
+                <img src="images/total_users.png" alt="Total Users Icon">
             </div>
-        </div>
-
-        <!-- Total Countries Box -->
-        <div class="info-box" id="totalCountriesBox">
-            <div class="info-box-row">
-                <div class="info-box-icon">
-                    <img src="images/countries.png" alt="Total Countries Icon">
-                </div>
-                <div class="info-box-content">
-                    <h3>Total Countries</h3>
-                    <p id="totalCountriesCount">6</p>
-                </div>
+            <div class="info-box-content">
+                <h3>Total Users</h3>
+                <p id="totalUsersCount">10</p>
             </div>
         </div>
     </div>
+
+    <!-- Total Countries Box -->
+    <div class="info-box" id="totalCountriesBox">
+        <div class="info-box-row">
+            <div class="info-box-icon">
+                <img src="images/countries.png" alt="Total Countries Icon">
+            </div>
+            <div class="info-box-content">
+                <h3>Total Countries</h3>
+                <p id="totalCountriesCount">6</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Income Box -->
+    <div class="info-box" id="totalEarningsBox">
+        <div class="info-box-row">
+            <div class="info-box-icon">
+                <img src="images/earnings.png" alt="Total Earnings Icon"> 
+            </div>
+            <div class="info-box-content">
+                <h3>Total Income</h3>
+                <p id="totalEarnings">RM<span id="totalEarningsAmount">0.00</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
     <div class="charts">
     <div class="chart pie">
         <h3>Total Earnings</h3>
@@ -212,8 +229,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
     <h3>Monthly Earnings Report for <?php echo date('Y'); ?></h3>
     <div class="bar-chart">
         <canvas id="paymentsChart"></canvas>
+        <button id="generateReport" class="generate-btn">Generate Report</button>
     </div>
-    <button id="generateReport" class="generate-btn">Generate Report</button>
+    
     </div>
    </div>
 
@@ -221,6 +239,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
 
     const cardEarnings = <?php echo $cardEarnings; ?>;
     const fpxEarnings = <?php echo $fpxEarnings; ?>;
+    const totalEarnings = <?php echo $totalEarnings; ?>;
     const minDisplayValue = 0.01;
 
     const adjustedCardEarnings = cardEarnings < minDisplayValue ? minDisplayValue : cardEarnings;
@@ -251,54 +270,83 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
         let paymentsChart;
 
         function updateChartWithMonthlyData() {
-            fetch('<?php echo $_SERVER['PHP_SELF']; ?>?action=fetchMonthlyEarnings') 
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
+    fetch('<?php echo $_SERVER['PHP_SELF']; ?>?action=fetchMonthlyEarnings') 
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
 
-                    const months = Array.from({ length: 12 }, (_, i) => i + 1); 
-                    const cardEarnings = months.map(month => data.card[month] || 0); 
-                    const fpxEarnings = months.map(month => data.fpx[month] || 0);   
+            const months = Array.from({ length: 12 }, (_, i) => i + 1); 
+            const cardEarnings = months.map(month => data.card[month] || 0); 
+            const fpxEarnings = months.map(month => data.fpx[month] || 0);   
 
-                    const totalCardEarnings = cardEarnings.reduce((acc, curr) => acc + curr, 0);
-                    const totalFpxEarnings = fpxEarnings.reduce((acc, curr) => acc + curr, 0);
+            const totalCardEarnings = cardEarnings.reduce((acc, curr) => acc + curr, 0);
+            const totalFpxEarnings = fpxEarnings.reduce((acc, curr) => acc + curr, 0);
 
-                    console.log("Card Earnings:", totalCardEarnings);
-                    console.log("FPX Earnings:", totalFpxEarnings);
+            console.log("Card Earnings:", totalCardEarnings);
+            console.log("FPX Earnings:", totalFpxEarnings);
 
-                    if (typeof paymentsChart !== 'undefined') {
-                        paymentsChart.destroy(); 
-                    }
+            if (typeof paymentsChart !== 'undefined') {
+                paymentsChart.destroy(); 
+            }
 
-                    const paymentCtx = document.getElementById('paymentsChart').getContext('2d');
-                    paymentsChart = new Chart(paymentCtx, {
-                        type: 'bar',
-                        data: {
-                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                            datasets: [
-                                {
-                                    label: 'Card Payments',
-                                    data: cardEarnings,
-                                    backgroundColor: 'rgba(255, 205, 86, 0.7)' 
-                                },
-                                {
-                                    label: 'Bank Transfer (FPX)',
-                                    data: fpxEarnings,
-                                    backgroundColor: 'rgba(54, 162, 235, 0.7)' 
-                                }
-                            ]
+            const paymentCtx = document.getElementById('paymentsChart').getContext('2d');
+            paymentsChart = new Chart(paymentCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [
+                        {
+                            label: 'Card Payments',
+                            data: cardEarnings,
+                            backgroundColor: 'rgba(255, 205, 86, 0.8)' 
                         },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
+                        {
+                            label: 'Bank Transfer (FPX)',
+                            data: fpxEarnings,
+                            backgroundColor: 'rgba(54, 162, 235, 0.8)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#444' 
+                            },
+                            ticks: {
+                                color: '#000' 
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#000' 
                             }
                         }
-                    });
-                
-
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#000' 
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+                            titleColor: '#000', 
+                            bodyColor: '#000' 
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            left: 20,
+                            right: 20,
+                            top: 20,
+                            bottom: 20
+                        }
+                    }
+                }
+            });
 
                     document.getElementById('generateReport').addEventListener('click', function () {
                         html2canvas(document.getElementById('paymentsChart')).then(function (canvas) {
@@ -323,8 +371,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
 
             document.getElementById('totalUsersCount').textContent = '<?php echo $totalUsers; ?>';
             document.getElementById('totalCountriesCount').textContent = '<?php echo $totalCountries; ?>';
-
-        
+            document.getElementById('totalEarningsAmount').textContent = '<?php echo $totalEarnings; ?>';
             document.getElementById('notificationIcon').addEventListener('click', function() {
             window.location.href = 'messages.php';  
         });

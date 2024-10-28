@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </div>
         <ul>
             <li>
-                <img src="images/home dark.jpg" alt="Dashboard Icon">
+                <img src="images/home.png" alt="Dashboard Icon">
                 <a href="AdminDashboard.php">Dashboard</a>
             </li>
             <li>
@@ -147,25 +147,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <td><?php echo htmlspecialchars($user['phone']); ?></td>
                         <td><?php echo htmlspecialchars($user['email']); ?></td>
                         <td>
-                            <form method="POST" action="AdminUser.php">
-                                <input type="hidden" name="userId" value="<?php echo $key; ?>">
-                                <button type="submit" name="rejectUser" class="btn btn-danger">Reject</button>
-                            </form>
+                        <form method="POST" action="AdminUser.php" style="display: inline-block;">
+                            <input type="hidden" name="userId" value="<?php echo $key; ?>">
+                            <button type="submit" name="rejectUser" class="btn btn-danger">Reject</button>
+                        </form>
 
-                            <?php if (isset($user['status']) && $user['status'] === 'approved' && $user['role'] !== 'admin'): ?>
-                                <form method="POST" action="AdminUser.php">
-                                    <input type="hidden" name="userId" value="<?php echo $key; ?>">
-                                    <button type="submit" name="verifyUser" class="btn btn-success">Verify</button>
-                                </form>
-                            <?php endif; ?>
+                        <form method="POST" action="AdminUser.php" style="display: inline-block;">
+                            <input type="hidden" name="userId" value="<?php echo $key; ?>">
+                            <button type="submit" name="verifyUser" class="btn btn-success">Verify</button>
+                        </form>
 
-                            <?php if (isset($user['role']) && $user['role'] === 'adminREQUEST' && isset($user['status']) && $user['status'] === 'pending'): ?>
-                                <form method="POST" action="AdminUser.php">
-                                    <input type="hidden" name="userId" value="<?php echo $key; ?>">
-                                    <button type="submit" name="approveAdmin" class="btn btn-primary">Admin</button>
-                                </form>
-                            <?php endif; ?>
-                        </td>
+                        <form method="POST" action="AdminUser.php" style="display: inline-block;">
+                            <input type="hidden" name="userId" value="<?php echo $key; ?>">
+                            <button type="submit" name="approveAdmin" class="btn btn-primary">Admin</button>
+                        </form>
+                    </td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
