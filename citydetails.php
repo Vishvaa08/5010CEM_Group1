@@ -84,8 +84,8 @@ if (isset($_SESSION['userName'])) {
 
                 echo '<div class="card">';
 
-                if (isset($cities['ItineraryImage'])) {
-                    echo '<img src="' . ($cities['ItineraryImage']) . ' Image" class="card-image">';
+                if (isset($cities['Image'])) {
+                    echo '<img src="' . ($cities['Image']) . ' Image" class="card-image">';
                 } else {
                     echo '<img src="images/error.jpg" class="card-image">';
                 }
@@ -96,8 +96,8 @@ if (isset($_SESSION['userName'])) {
                     echo '<h2 class="title">No country details available...</h2>';
                 }
 
-                if (isset($cities['ItineraryPrice'])) {
-                    echo '<h2 class="price-iti"> RM' . ($cities['ItineraryPrice']) . '</h2>';
+                if (isset($cities['Price'])) {
+                    echo '<h2 class="price-iti"> RM' . ($cities['Price']) . '</h2>';
                 } else {
                     echo '<h2 class="price-iti">XX</h2>';
                 }

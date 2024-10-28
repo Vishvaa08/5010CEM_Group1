@@ -1,18 +1,34 @@
 ﻿html{
     scroll-behavior: smooth;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: rgb(232, 232, 232);
+    font-family: "Josefin Sans", sans-serif;
+    background-image: url('../images/desktop.jpg'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
     margin: 0;
     padding: 0;
+}
+
+.joti-one-regular {
+    font-family: "Joti One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.josefin-sans {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
 
 .sidebar {
     width: 250px;
     min-height: calc(90vh - 40px);
-    background-color: #FFFFFF;
+    background-color: #ffffff6f;
     position: fixed;
     left: 20px;
     top: 20px;
@@ -22,6 +38,7 @@ body {
     justify-content: space-between;
     border-radius: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    font-size: 20px;
 }
 
 .sidebar ul {
@@ -29,32 +46,36 @@ body {
     padding: 10px;
     margin: 0;
     flex-grow: 1;
+    margin-top: 20px;
 }
 
 .sidebar li {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     color: #333333;
     font-size: 17px;
+    margin-top: 20px;
 }
 
 .sidebar li img {
-    width: 26px;
-    height: 26px;
-    margin-right: 15px;
-    vertical-align: middle;
+    width: 26px; 
+    height: 26px; 
+    margin-right: 15px; 
+    vertical-align: middle; 
 }
 
 .sidebar li a {
     text-decoration: none;
+    font-family: "Joti One", serif;
+    font-size: 20px;
     color: inherit;
     display: flex;
     align-items: center;
 }
 
 .sidebar li:hover {
-    background-color: #E8E8E8;
+    background-color: #ffffff;
     padding: 10px;
     border-radius: 10px;
 }
@@ -74,18 +95,37 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 30px;
-    padding: 20px;
+    padding: 20px 0;
+    background-color: #ffffff6f;
+    border-bottom: 1px solid #ddd;
+    font-family: "Joti One", serif;
+    border-radius: 10px;
+    font-size: 20px;
 }
 
-.sidebar-header h2 {
+.admin-profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-profile img.profile-pic {
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px; 
+}
+
+.admin-profile p {
+    font-weight: bold;
+    color: #333;
     margin: 0;
-    text-align: center;
 }
 
 .main-content {
     margin-left: 300px;
     padding: 20px;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 header {
@@ -97,12 +137,21 @@ header {
 .header-left {
     display: flex;
     flex-direction: column;
+    font-family: "Josefin Sans", sans-serif;
+}
+
+.header-left1 {
+    display: flex;
+    flex-direction: column;
+    margin-top: -120px;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 .header-right {
     display: flex;
     align-items: center;
     gap: 15px; 
+    font-family: "Josefin Sans", sans-serif;
 }
 
 .search-box {
@@ -124,20 +173,33 @@ header {
     align-items: center; 
 }
 
-.logout-icon {
-    width: 24px; 
-    height: 24px; 
+.logout-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333; 
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.logout-link span {
     margin-left: 5px; 
-    vertical-align: middle;
+    font-size: 20px;  
+    font-family: "Joti One", serif;
+}
+
+.logout-icon {
+    width: 24px;
+    height: 24px;
 }
 
 .country-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 40px;
     margin-top: 20px;
-    justify-content: center; /* Centers the cards */
-    padding: 0 20px; /* Adds some padding on the sides */
+    justify-content: center;
+    padding: 0 20px; 
 }
 
 .country-card,
@@ -151,30 +213,47 @@ header {
 }
 
 .country-card {
-    width: 200px;
-    margin: 0 auto; /* Centers each card if necessary */
+    width: 250px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #ffffff91;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+    font-family: "Josefin Sans", sans-serif;
 }
+
 .city-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 100px;
+    gap: 120px;
     justify-content: center; 
     padding: 20px 0; 
 }
-
 
 .city-card {
     width: 450px;
     box-sizing: border-box;
     flex-direction: column;
+    font-family: "Josefin Sans", sans-serif;
+    background-color: #ffffffb3;
 }
 
-.city-card img,
 .country-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.city-card img{
     width: 100%;
     height: 200px;
     object-fit: cover;
     border-radius: 10px;
+    margin-bottom: 10px;
 }
 
 .hotel-dropdown,
@@ -184,6 +263,7 @@ header {
     border-radius: 5px;
     border: 1px solid #ccc;
     font-weight: bold;
+    font-family: "Josefin Sans", sans-serif;
     margin-bottom: 5px;
 }
 
@@ -240,21 +320,79 @@ header {
     align-items: flex-start;
 }
 
-.description-container {
-    width: 100%; 
-    display: flex;
-    flex-direction: column;
+.description-textarea:focus {
+    border-color: #007bff;
+    outline: none;
 }
 
-.description-textarea {
-    width: 100%; 
-    resize: none; 
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    padding: 8px;
-    box-sizing: border-box;
-    max-width: 100%; 
+.country-card:hover {
+    transform: scale(1.05); 
 }
+
+.description-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    margin: 10px 0;
+    width: 100%; 
+}
+
+.description1-textarea {
+    width: 100%; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    resize: none; 
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+    font-family: "Josefin Sans", sans-serif;
+    background-color: #f9f9f9; 
+    white-space: pre-wrap; 
+    overflow: visible; 
+    height: auto; 
+    min-height: 80px; 
+}
+
+.description-container label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+    font-family: "Josefin Sans", sans-serif;
+}
+
+
+.fixed-textarea {
+    width: 100%; 
+    height: 60px; 
+    resize: none; 
+    border-radius: 5px; 
+    border: 1px solid #ccc; 
+    padding: 8px;
+    box-sizing: border-box; 
+    margin-bottom: 10px;
+}
+
+.D_textarea {
+    width: 100%; 
+    height: 50px; 
+    border: 1px solid #ccc;
+    margin-left: -10px;
+    border-radius: 5px;
+    padding: 10px;
+    resize: none; 
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+    font-family: "Josefin Sans", sans-serif;
+}
+
+.D_textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
 
 .description {
     width: 100%; 
@@ -262,9 +400,11 @@ header {
 }
 
 .description label {
-    font-weight: bold; 
-    margin-bottom: 5px; 
-    display: block; 
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: left;
+    width: 100%;  
 }
 
 .description-text {
@@ -274,7 +414,8 @@ header {
     border-radius: 5px;
     border: 1px solid #ccc; 
     padding: 8px; 
-    }
+    font-family: "Josefin Sans", sans-serif;
+}
 
 .hotel-item input,
 .hotel-item textarea {
@@ -344,20 +485,47 @@ header {
 /* Action buttons */
 .action-buttons {
     display: flex;
-    justify-content: space-between;
+    gap: 10px; 
     margin-top: 15px;
+    font-family: "Josefin Sans", sans-serif;
 }
 
 .action-buttons button {
-    width: 30%;
+    flex: 1; 
     padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: "Josefin Sans", sans-serif;
+    text-align: center;
+    transition: background-color 0.3s ease;
 }
 
-.action-buttons button:hover {
-    background-color: #333;
+.edit-btn {
+    background-color: #22ae03;
+    color: white;
+
+}.image-btn {
+    background-color: #e49814;
+    color: white;
+}
+
+.edit-btn:hover{
+    background-color: #84e34d;
+
+} .image-btn:hover {
+    background-color: #f2b44a;
+}
+
+.delete1-btn {
+    background-color: #E53935;
+    color: white;
+}
+
+.delete1-btn:hover {
+    background-color: #ec6666;
 }
 
 .itinerary {
@@ -383,6 +551,7 @@ header {
     height: 38px;
     width: 100%;
     border: 1px solid #ccc;
+    font-family: "Josefin Sans", sans-serif;
     border-radius: 5px;
     text-align: center;
     box-sizing: border-box;
@@ -404,40 +573,45 @@ header {
 }
 
 .draggable-container {
-    display: flex;
-    gap: 10px; 
-    margin-bottom: 20px; 
-    margin-top: 20px; 
+    position: fixed;  
+    bottom: 20px;     
+    right: 20px;      
+    display: flex;    
+    flex-direction: column;  
+    gap: 10px;        
+    z-index: 1000;    
 }
-
 
 .draggable {
-    width: 100px;
-    height: 50px;
-    padding: 5px;
-    padding-bottom: 10px;
-    background-color: #9f9d9d;
-    border: 1px solid #9a9999;
-    border-radius: 7px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: move;
+    width: 50px;               
+    height: 30px;               
+    padding: 5px;               
+    padding-bottom: 10px;       
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    border: 1px solid #9a9999;  
+    border-radius: 7px;        
+    text-align: center;          
+    color: white;                
+    display: flex;               
+    align-items: center;         
+    justify-content: center;    
+    cursor: move;               
 }
+
 
 /* Add Button - Country */
 .add-package-btn {
     text-align: right;
-    margin-top: 10px;
+    margin-top: 0px;
 }
 .add-package-btn button {
-    background-color: #000000; 
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
     border: none;
     color: white;
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    font-weight: bold;
     border-radius: 10%;
     transition: all 0.3s ease;
     padding: 0;
@@ -449,140 +623,242 @@ header {
     transform: scale(1.1); 
 }
 
-#addCountryForm .card {
-    border: none;
-    border-radius: 10px;
-    background-color: #f8f9fa; 
+.add-country-section {
+    display: flex; 
+    align-items: flex-start;
+    gap: 20px; 
 }
 
-#addCountryForm .card-title {
-    font-weight: bold;
-    color: #343a40; 
-}
-
-#addCountryForm .card-body {
-    padding: 30px;
-}
-
-#addCountryForm .form-control {
-    border-radius: 8px;
-    padding: 10px 15px;
+/* Submit Button Country */
+#addCountryForm .submit-btn-success {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
     font-size: 16px;
-    border: 1px solid #ced4da; 
-    transition: border-color 0.3s ease;
-}
-
-#addCountryForm .form-control:focus {
-    border-color: #5e5e5e; 
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25); 
-}
-
-#addCountryForm .btn-success {
-    background-color: #28a745;
+    font-weight: bold;
     border: none;
-    padding: 5px;
-    font-size: 18px;
     border-radius: 8px;
+    cursor: pointer;
+    font-family: "Joti One", serif;
     transition: background-color 0.3s ease;
 }
 
-#addCountryForm .btn-success:hover {
-    background-color: #218838; 
+#addCountryForm .submit-btn-success:hover {
+    background-color: #858585;
+} 
+
+/* AddCity - form */
+.add-city-container {
+    display: flex; 
+    align-items: flex-start; 
+    margin-left: 10px;
 }
 
-#addCountryForm {
-    margin-bottom: 40px;
+#addCityForm {
+    width: 220px; 
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    display: block; 
 }
 
-@media (max-width: 768px) {
-    #addCountryForm .card-body {
-        padding: 20px;
-    }
+.card-body {
+    padding: 5px; 
 }
 
-/* Add Button - City */
-.add-city-btn {
-    margin-top: 0; 
-    display: flex;
-    align-items: center;
+.card-title {
+    font-family: "Josefin Sans", sans-serif; 
+    font-size: 18px; 
+    text-align: center; 
+    color: #333; 
+    margin-top: 5px;
 }
 
-.add-city-btn button {
-    background-color: #000000; 
-    border: none;
-    color: white;
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-    border-radius: 10%; 
-    transition: all 0.3s ease;
-    padding: 0;
-    margin-left: 10px; 
+#addCityForm .form-group {
+    display: flex;  
+    align-items: center; 
 }
 
-.add-city-btn button:hover {
-    background-color: #848687; 
-    transform: scale(1.1); 
-}
-
-/* City Form Styling */
-#addCityForm .card {
-    border: none;
-    border-radius: 10px;
-    background-color: #f8f9fa; 
-}
-
-#addCityForm .card-title {
+#addCityForm .form-group label {
+    flex: 0 0 80px; 
     font-weight: bold;
-    color: #343a40; 
+    margin-bottom: 0; 
+    font-family: "Joti One", serif;
+    font-size: 14px;
+    color: #333;
 }
 
-#addCityForm .card-body {
-    padding: 30px;
-}
-
-#addCityForm .form-control {
+#addCityForm .form-group input[type="text"], 
+#addCityForm .form-group input[type="file"], 
+#addCityForm .form-group textarea {
+    flex: 1; 
+    padding: 8px;
+    border: 1px solid #ccc;
     border-radius: 8px;
-    padding: 10px 15px;
-    font-size: 16px;
-    border: 1px solid #ced4da; 
-    transition: border-color 0.3s ease;
+    font-size: 14px;
+    font-family: "Josefin Sans", sans-serif;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    resize: none;
 }
 
-#addCityForm .form-control:focus {
-    border-color: #5e5e5e; 
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25); 
+#addCityForm .form-group input[type="text"]:focus, 
+#addCityForm .form-group input[type="file"]:focus, 
+#addCityForm .form-group textarea:focus {
+    border-color: #333;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
 }
 
+/* Submit Button City */
 #addCityForm .btn-success {
-    background-color: #28a745;
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
     border: none;
-    padding: 5px;
-    font-size: 18px;
     border-radius: 8px;
+    cursor: pointer;
+    font-family: "Joti One", serif;
     transition: background-color 0.3s ease;
 }
 
 #addCityForm .btn-success:hover {
-    background-color: #218838; 
-}
+    background-color: #858585;
+} 
 
-#addCityForm {
-    margin-bottom: 40px;
-}
-
-.delete-icon {
-    color: red;
-    cursor: pointer;
-    margin-left: 10px;
-    font-weight: bold;
-}
-.delete-icon:hover {
-    color: darkred;
-}
 
 .file-availability-container {
     display: flex;
     align-items: center;
     margin-top: 10px;
 }
+
+.view-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #000000; 
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.view-btn:hover {
+    background-color: #a0a0a0; 
+}
+
+.card-form-container {
+    width: 300px; 
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    position: relative; 
+    margin-top: 20px; 
+    z-index: 100; 
+}
+
+.form-title {
+    font-family: "Joti One", serif;
+    font-size: 18px;
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group input[type="text"], 
+.form-group input[type="file"], 
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: "Josefin Sans", sans-serif;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    resize: none;
+}
+
+.form-group input[type="text"]:focus, 
+.form-group input[type="file"]:focus, 
+.form-group textarea:focus {
+    border-color: #333;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    font-family: "Joti One", serif;
+    font-size: 14px;
+    color: #333;
+}
+
+.delete-btn {
+    padding: 10px 20px;
+    margin-left: 10px;
+    background-color: #E53935;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #ec6666;
+}
+
+.city-details-container {
+    padding: 20px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.category {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.category h3 {
+    cursor: pointer;
+}
+
+.category .hotel-section,
+.category .flight-section,
+.category .vehicle-section,
+.category .itinerary-section {
+    display: none; /* Initially hidden */
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+

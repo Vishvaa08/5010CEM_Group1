@@ -29,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,11 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
 </head>
-
 <body>
     <div id="header">
         <div id="left-nav">
-            <a href="index.php">
+            <a href="index.html">
                 <div class="logo-container">
                     <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
                 </div>
@@ -59,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="user-profile" id="userProfile"></div>
         </div>
     </div>
-
     <div class="login-container-1">
         <div class="login-container">
             <h2>Login Form</h2>
@@ -127,14 +124,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <img src="${userData.profileImageUrl}" alt="Profile Image" style="width:50px; height:50px; border-radius:50%;">
             `;
                         if (userData.role === 'admin') {
-                            window.location.href = 'adminDashboard.php';
+                            window.location.href = 'AdminDashboard.php';
                         } else if (userData.role === 'adminREQUEST') {
                             window.location.href = 'adminWait.php';
                         } else {
                             window.location.href = 'index.php';
-                            window.onload = function() {
-                                window.location.reload(true);
-                            };
                         }
                     });
                 })
@@ -149,5 +143,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     </script>
 </body>
-
 </html>
