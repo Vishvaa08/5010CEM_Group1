@@ -4,7 +4,7 @@ include 'firebase_connection.php';
 
 $pic = '';
 
-if (isset($_SESSION['userName'])) {
+if (isset($_SESSION['userEmail'])) {
     $pic = $_SESSION['profileImage'];
     $name = $_SESSION['userName'];
 } else {
@@ -83,7 +83,7 @@ if (is_array($users)) {
             </div>
             <div class="header-right">
                 <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Search by name or date" onkeyup="filterUsers()">
+                    <input type="text" id="searchInput" placeholder="Search by email/date/status" onkeyup="filterUsers()">
                 </div>
                 <div class="header-right d-flex align-items-center">
                 <a href="AdminLogin.php" class="logout-link">
@@ -99,7 +99,7 @@ if (is_array($users)) {
             <table id="userTable">
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Email</th>
                         <th>Date</th>
                         <th>Receipt</th>
                         <th>Action</th>
@@ -110,7 +110,7 @@ if (is_array($users)) {
         <?php foreach ($bookings as $bookingId => $booking): ?>
             <?php if (isset($booking['bankDetails'])): ?>
                 <tr>
-                    <td><?php echo isset($booking['userName']) ? htmlspecialchars($booking['userName']) : 'N/A'; ?></td>
+                    <td><?php echo isset($booking['userEmail']) ? htmlspecialchars($booking['userEmail']) : 'N/A'; ?></td>
                     <td><?php echo isset($booking['checkInDate']) ? htmlspecialchars($booking['checkInDate']) : 'N/A'; ?></td>
                     <td>
                         <?php if (!empty($booking['paymentProof'])): ?>

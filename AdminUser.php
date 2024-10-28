@@ -48,7 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
         }
 
-        // Redirect after action
         header('Location: AdminUser.php');
         exit();
     }
