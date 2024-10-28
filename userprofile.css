@@ -1,0 +1,168 @@
+/* Reset default margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General body styling */
+body {
+    font-family: "Josefin Sans", sans-serif;
+    background-color: #282828;
+    color: #fff;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Header section styling */
+#header {
+    background-color: #161616;
+    height: 12vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 6;
+}
+
+h1 {
+    margin-left: 2vw;
+    font-family: "Joti One", serif;
+    font-size: 40px;
+    color: white;
+}
+
+#left-nav {
+    display: flex;
+    align-items: center;
+}
+
+#left-nav a {
+    text-decoration: none;
+    color: white;
+}
+
+.logo-container {
+    width: 60px;
+    height: 60px;
+    background-color: black;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 2vw;
+}
+
+#right-nav a {
+    font-family: "Joti One", serif;
+    font-size: 25px;
+    color: white;
+    margin-right: 3vw;
+    text-decoration: none;
+}
+
+#right-nav a:hover {
+    color: #929292;
+    transition: 0.3s;
+}
+
+/* Container for profile content */
+.container-1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin-top: 12vh; /* Adjust for header height */
+}
+
+/* Profile card container */
+.container {
+    background-color: rgba(255, 255, 255, 0.85);
+    color: #000;
+    padding: 40px; /* Increase padding for larger feel */
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Bigger shadow for better visual impact */
+    width: 700px; /* Increased the width */
+    max-width: 90%; /* Limit max-width to prevent overflow on small screens */
+    margin-top: 15vh;
+}
+
+/* Profile heading */
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-family: "Joti One", serif;
+    font-size: 36px; /* Slightly larger title */
+}
+
+/* Profile image and details layout */
+.profile-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+/* Profile image */
+.profile-image {
+    width: 150px; /* Increase profile image size */
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Profile details */
+.profile-details {
+    margin-left: 30px;
+    flex-grow: 1;
+}
+
+.profile-details p {
+    font-size: 20px; /* Increase font size */
+    margin: 10px 0;
+    font-family: "Josefin Sans", sans-serif;
+}
+
+/* Edit profile button */
+.edit-profile-btn {
+    display: block;
+    width: 100%;
+    padding: 15px; /* Increase button padding */
+    background-color: black;
+    color: white;
+    text-align: center;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: "Joti One", serif;
+    font-size: 24px; /* Larger button text */
+    cursor: pointer;
+}
+
+.edit-profile-btn:hover {
+    background-color: #929292;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+/* Make the profile page responsive */
+@media screen and (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+
+    .profile-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-details {
+        margin: 10px 0 0;
+    }
+
+    .profile-image {
+        margin-bottom: 20px;
+    }
+}
