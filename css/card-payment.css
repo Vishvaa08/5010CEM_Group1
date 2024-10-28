@@ -68,13 +68,8 @@ h1 {
 }
 
 .user-profile {
-    height: 75px;
-    width: 75px;
-    border-radius: 50%;
-    background-image: url('../images/user.png');
-    background-position: center;
-    background-size: cover;
-    margin-right: 1vw;
+    margin-right: 1vw !important;
+    margin-top: 5px !important;
 }
 
 #right-nav a {
@@ -190,7 +185,7 @@ h1 {
     background-color: white;
     border: none;
     padding-left: 1vw;
-    letter-spacing: 26px;
+    letter-spacing: 18px;
     text-align: center;
 }
 

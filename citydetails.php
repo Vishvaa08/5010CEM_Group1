@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+$pic = '';
+
+if (isset($_SESSION['userName'])) {
+    $pic = $_SESSION['profileImage'];
+} else {
+    $pic = 'images/user.png';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,7 +48,7 @@
             <a class="nav-link" href="index.php#home">Home</a>
             <a class="nav-link" href="index.php#about">About</a>
             <a class="nav-link" href="index.php#contact">Contact</a>
-            <div class="user-profile"></div>
+            <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo $pic; ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
         </div>
     </div>
 
@@ -72,8 +84,8 @@
 
                 echo '<div class="card">';
 
-                if (isset($cities['ItineraryImage'])) {
-                    echo '<img src="' . ($cities['ItineraryImage']) . ' Image" class="card-image">';
+                if (isset($cities['Image'])) {
+                    echo '<img src="' . ($cities['Image']) . ' Image" class="card-image">';
                 } else {
                     echo '<img src="images/error.jpg" class="card-image">';
                 }
@@ -84,8 +96,8 @@
                     echo '<h2 class="title">No country details available...</h2>';
                 }
 
-                if (isset($cities['ItineraryPrice'])) {
-                    echo '<h2 class="price-iti"> RM' . ($cities['ItineraryPrice']) . '</h2>';
+                if (isset($cities['Price'])) {
+                    echo '<h2 class="price-iti"> RM' . ($cities['Price']) . '</h2>';
                 } else {
                     echo '<h2 class="price-iti">XX</h2>';
                 }

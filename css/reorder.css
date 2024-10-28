@@ -5,7 +5,7 @@ html{
 body {
     margin: 0;
     padding: 0;
-    background-color: #4b4b4b;
+    background-color:  #272727;;
 }
 
 body::-webkit-scrollbar{
@@ -25,7 +25,7 @@ body::-webkit-scrollbar{
 }
 
 #header {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #161616;
     height: 12vh;
     display: flex;
     align-items: center;
@@ -67,17 +67,12 @@ h1 {
     margin-left: 2vw;
     font-family: "Joti One", serif;
     font-size: 40px;
-    color: #fff;
+    color: white;
 }
 
 .user-profile {
-    height: 75px;
-    width: 75px;
-    border-radius: 50%;
-    background-image: url('../images/user.png');
-    background-size: cover;
-    background-position: center;
-    margin-right: 1vw;
+    margin-right: 1vw !important;
+    margin-top: 5px !important;
 }
 
 #right-nav a {
@@ -97,6 +92,7 @@ h1 {
 .user-profile:hover {
     cursor: pointer;
 }
+
 #orders {
     margin-top: 100px;
     width: 90%; 
@@ -125,33 +121,65 @@ h2 {
 }
 
 .order-item {
-    background-color: #fff; 
+    background-color: none;
     margin-bottom: 20px;
-    padding: 15px;
+    padding: 5px;
     border-radius: 10px;
     color: #000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    border: none;
 }
 
 .order-info {
     display: flex;
     justify-content: space-between;
-    
+    align-items: center; 
+    padding: 15px;
+    background-color: #cacaca;
 }
+
 
 .order-details,
 .order-actions {
     flex-basis: 45%;
+    font-family: "Joti One", serif;
+}
+.order-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 2px solid #ccc; 
 }
 
+.order-column {
+    text-align: center; 
+    flex: 1;
+}
+
+.order-column p {
+    margin: 0;
+}
+
+.label {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.value {
+    font-size: 1em;
+    color: #333;
+    margin-top: 5px;
+}
 .order-details p,
 .order-actions p {
-    margin: 5px 0;
+    margin: 5px 5px;
     color: #000; 
-    font-size: 22px;
+    font-size: 20px; 
+    font-family: "Joti One", serif;
 }
-
 .order-details-expanded {
     display: none; 
+    position: relative;
     flex-direction: row;
     margin-top: 15px;
     background-color: #fff;
@@ -160,10 +188,13 @@ h2 {
 }
 
 .order-img {
-    max-width: 150px;
+    max-width: 180px;
     margin-right: 20px;
     border-radius: 5px;
+    object-fit: cover; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
+
 
 .order-booking-info p {
     margin: 5px 0;
@@ -172,17 +203,22 @@ h2 {
 }
 
 .reorder-button {
-    background-color: #0d6efd; 
+    position: absolute;  
+    bottom: 15px;  
+    right: 25px; 
+    background-color: #007bff;
     color: white;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
+    font-size: 16px;
 }
 
 .reorder-button:hover {
-    background-color: #004fca; 
+    background-color: #0056b3;
 }
+
 
 .action-link {
     background: none;
@@ -195,3 +231,4 @@ h2 {
 .action-link:hover {
     text-decoration: underline;
 }
+

@@ -1,3 +1,18 @@
+<?php
+session_start();
+
+$pic = '';
+$userLoggedIn = false;
+
+if (isset($_SESSION['userName'])) {
+    $pic = $_SESSION['profileImage'];
+    $userLoggedIn = true;
+} else {
+    $pic = 'images/user.png';
+    $userLoggedIn = false;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,7 +51,7 @@
             <a class="nav-link" href="index.php#home">Home</a>
             <a class="nav-link" href="index.php#about">About</a>
             <a class="nav-link" href="index.php#contact">Contact</a>
-            <div class="user-profile"></div>
+            <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo $pic; ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
         </div>
     </div>
 
@@ -71,10 +86,10 @@
                     <?php
                     echo '<div>';
                     foreach ($dataCityItinerary as $key => $itinerary) {
-                        if (isset($itinerary['Itinerary']) && isset($itinerary['ItineraryPrice'])) {
+                        if (isset($itinerary['Itinerary']) && isset($itinerary['Price'])) {
                             echo '<label>';
-                            echo '<input type="checkbox" class="itinerary-checkbox" name="itineraries[]" value="' . htmlspecialchars($itinerary['Itinerary']) . '|' . htmlspecialchars($itinerary['ItineraryPrice']) . '">';
-                            echo htmlspecialchars($itinerary['Itinerary']) . ' - <span style="color: white;">RM' . htmlspecialchars($itinerary['ItineraryPrice']);
+                            echo '<input type="checkbox" class="itinerary-checkbox" name="itineraries[]" value="' . htmlspecialchars($itinerary['Itinerary']) . '|' . htmlspecialchars($itinerary['Price']) . '">';
+                            echo htmlspecialchars($itinerary['Itinerary']) . ' - <span style="color: white;">RM' . htmlspecialchars($itinerary['Price']);
                             echo '</label>';
                         }
                     }
@@ -237,6 +252,13 @@
             const itineraries = document.querySelectorAll('input[name="itineraries[]"]:checked');
             const ticketType = document.querySelector('input[name="ticket-type"]:checked');
 
+            const userLoggedIn = <?php echo json_encode($userLoggedIn); ?>;
+
+            if (!userLoggedIn) {
+                alert("Please log in before booking.");
+                return;
+            }
+
             if (selectedBank && selectedVehicle && selectedRoom && selectedFlight && itineraries.length > 0 && ticketType) {
                 var form = document.getElementById('form');
                 const bankValue = selectedBank.value;
@@ -286,6 +308,13 @@
             const selectedFlight = document.querySelector('input[name="flight"]:checked');
             const itineraries = document.querySelectorAll('input[name="itineraries[]"]:checked');
             const ticketType = document.querySelector('input[name="ticket-type"]:checked');
+
+            const userLoggedIn = <?php echo json_encode($userLoggedIn); ?>;
+
+            if (!userLoggedIn) {
+                alert("Please log in before making a booking.");
+                return;
+            }
 
             if (selectedVehicle && selectedRoom && selectedFlight && itineraries.length > 0 && ticketType) {
                 var form = document.getElementById('form');

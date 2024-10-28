@@ -38,7 +38,7 @@
             <a class="nav-link" href="index.php#home">Home</a>
             <a class="nav-link" href="index.php#about">About</a>
             <a class="nav-link" href="index.php#contact">Contact</a>
-            <div class="user-profile"></div>
+            <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo $pic; ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
         </div>
     </div>
     </div>

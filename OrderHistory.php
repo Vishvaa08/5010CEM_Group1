@@ -1,101 +1,119 @@
+<?php
+session_start();
+include 'firebase_connection.php';
+
+if (isset($_SESSION['userName'])) {
+    $userName = $_SESSION['userName'];
+    $pic = $_SESSION['profileImage'] ?? 'images/user.png';
+} else {
+    header("Location: login.php");
+    exit();
+}
+
+$bookingsRef = $database->getReference('Admin/newBookings');
+$bookingsData = $bookingsRef->getValue() ?: [];
+
+$userBookings = [];
+foreach ($bookingsData as $bookingId => $bookingDetails) {
+    if (isset($bookingDetails['userName']) && $bookingDetails['userName'] === $userName) {
+        $userBookings[$bookingId] = $bookingDetails;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order History</title>
-    <link rel="stylesheet" type="text/css" href="css/reorder.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Joti+One&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/reorder.css">
 </head>
 <body>
-    <div id="home">
-        <div id="header">
-            <div id="left-nav">
-                <a href="index.php">
-                    <div class="logo-container">
-                        <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
-                    </div>
-                </a>
-                <h1>TravelTrail</h1>
-            </div>
+
+    <div id="header">
+        <div id="left-nav">
+            <a href="#home">
+                <div class="logo-container">
+                    <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
+                </div>
+            </a>
+            <h1>TravelTrail</h1>
+        </div>
+
             <div id="right-nav">
                 <a class="nav-link" href="#home">Home</a>
                 <a class="nav-link" href="#about">About</a>
                 <a class="nav-link" href="#contact">Contact</a>
-                <div class="user-profile"></div>
+                <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo htmlspecialchars($pic, ENT_QUOTES, 'UTF-8'); ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
             </div>
         </div>
 
+       
         <div id="orders">
-            <h2>Your Orders <span class="order-count">2</span></h2>
+        <h2>Your Orders <span class="order-count"><?= count($userBookings); ?></span></h2>
 
-            <div class="order-item">
-                <div class="order-info">
+        <?php if (!empty($userBookings)) : ?>
+            <?php foreach ($userBookings as $bookingId => $booking) : ?>
+                <div class="order-item">
+                    <div class="order-info">
                     <div class="order-details">
-                        <p><strong>Order Placed:</strong> August 2, 2024</p>
-                        <p><strong>Total:</strong> RM3050.00</p>
-                        <p><strong>Location:</strong> Japan, Tokyo</p>
-                    </div>
-                    <div class="order-actions">
-                        <p><strong>Order #:</strong> 002356</p>
-                        <button onclick="toggleDetails(this)" class="action-link">View Details</button>
-                    </div>
-                </div>
-                <div class="order-details-expanded" style="display: none;">
-                    <img src="tokyo.jpg" alt="Tokyo" class="order-img">
-                    <div class="order-booking-info">
-                        <p><strong>Hotel:</strong> 3-Star, Double</p>
-                        <p>2 rooms</p>
-                        <p><strong>Flight:</strong> Economy, 1-way, 4 seats</p>
-                        <p><strong>Vehicle:</strong> 4-seater, September 5, 2024</p>
-                        <button class="reorder-button">Order again</button>
-                    </div>
-                </div>
+        <div class="order-row">
+            <div class="order-column">
+                <p class="label">Order Placed</p>
+                <p class="value"><?= htmlspecialchars($booking['orderDate']); ?></p>
             </div>
-
-            <div class="order-item">
-                <div class="order-info">
-                    <div class="order-details">
-                        <p><strong>Order Placed:</strong> November 12, 2024</p>
-                        <p><strong>Total:</strong> RM5050.00</p>
-                        <p><strong>Location:</strong> Korea, Seoul</p>
-                    </div>
-                    <div class="order-actions">
-                        <p><strong>Order #:</strong> 004569</p>
-                        <button onclick="toggleDetails(this)" class="action-link">View Details</button>
-                    </div>
-                </div>
-                <div class="order-details-expanded" style="display: none;">
-                    <img src="seoul.jpg" alt="Seoul" class="order-img">
-                    <div class="order-booking-info">
-                        <p><strong>Hotel:</strong> 4-Star, Double</p>
-                        <p>1 room</p>
-                        <p><strong>Flight:</strong> Business, 1-way, 2 seats</p>
-                        <p><strong>Vehicle:</strong> 6-seater, November 20, 2024</p>
-                        <button class="reorder-button">Order again</button>
-                    </div>
-                </div>
+            <div class="order-column">
+                <p class="label">Total</p>
+                <p class="value">RM<?= htmlspecialchars($booking['totalPrice']); ?></p>
             </div>
-
+            <div class="order-column">
+                <p class="label">Location</p>
+                <p class="value"><?= htmlspecialchars($booking['country']); ?>, <?= htmlspecialchars($booking['city']); ?></p>
+            </div>
         </div>
     </div>
 
-    <script>
-        function toggleDetails(button) {
-            const orderItem = button.closest('.order-item');
-            const details = orderItem.querySelector('.order-details-expanded');
-            if (details.style.display === 'none') {
-                details.style.display = 'flex';
-                button.textContent = 'Hide Details';
-            } else {
-                details.style.display = 'none';
-                button.textContent = 'View Details';
-            }
+        <div class="order-actions">
+            <p>Order #<?= htmlspecialchars($bookingId); ?></p>
+            <button class="action-link" onclick="showOrderDetails('<?= $bookingId; ?>')">View Details</button>
+        </div>
+    </div>
+
+    <div id="order-details-<?= $bookingId; ?>" class="order-details-expanded">
+        <img src="images/<?= strtolower($booking['city']); ?>.jpg" alt="<?= htmlspecialchars($booking['city']); ?>" class="order-img">
+        <div class="order-booking-info">
+            <p>Hotel: <?= htmlspecialchars($booking['hotelID']); ?>, <?= htmlspecialchars($booking['roomType']); ?></p>
+            <p>Flight: <?= htmlspecialchars($booking['flightType']); ?>, <?= htmlspecialchars($booking['numTickets']); ?> seats</p>
+            <p>Vehicle: <?= htmlspecialchars($booking['vehicleType']); ?></p>
+            <p>Date: <?= htmlspecialchars($booking['checkInDate']); ?></p>
+        </div>
+        <form action="citydetails.php" method="GET">
+            <input type="hidden" name="city" value="<?= htmlspecialchars($booking['city']); ?>">
+            <input type="hidden" name="country" value="<?= htmlspecialchars($booking['country']); ?>">
+            <button type="submit" class="reorder-button">Order again</button>
+        </form>
+        </div>
+    </div>
+        <?php endforeach; ?>
+        <?php else : ?>
+        <p>No orders found.</p>
+    <?php endif; ?>
+    </div>
+
+
+
+<script>
+        function showOrderDetails(orderId) {
+        var detailsDiv = document.getElementById('order-details-' + orderId);
+        if (detailsDiv.style.display === "none" || detailsDiv.style.display === "") {
+            detailsDiv.style.display = "flex";
+        } else {
+            detailsDiv.style.display = "none";
         }
-    </script>
+        }
+        
+</script>
+
 </body>
 </html>

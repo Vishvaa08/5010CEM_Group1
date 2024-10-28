@@ -1,10 +1,16 @@
 <?php
 session_start();
 
+$pic = '';
+
 if (isset($_SESSION['userName'])) {
     $name = $_SESSION['userName'];
+    $pic = $_SESSION['profileImage'];
+    $email = $_SESSION['userEmail'];
 } else {
     $name = 'Error:Name not found';
+    $pic = 'images/user.png';
+    $email = 'N/A';
 }
 ?>
 
@@ -142,7 +148,7 @@ if (isset($_SESSION['userName'])) {
             <a class="nav-link" href="index.php#home">Home</a>
             <a class="nav-link" href="index.php#about">About</a>
             <a class="nav-link" href="index.php#contact">Contact</a>
-            <div class="user-profile"></div>
+            <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo $pic; ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
         </div>
     </div>
 
@@ -170,9 +176,9 @@ if (isset($_SESSION['userName'])) {
                     <div class="text-text">Card Number</div>
                 </div>
                 <div class="card-input">
-                    <input type="text" id="card-number-input" minlength="12" maxlength="14"
-                        oninput="this.value = this.value.replace(/\D/g, '').replace(/(.{4})(?=.)/g, '$1-').slice(0, 14);"
-                        placeholder="xxxx-xxxx-xxxx" class="card-num-input">
+                    <input type="text" id="card-number-input" minlength="19" maxlength="19"
+                        oninput="this.value = this.value.replace(/\D/g, '').replace(/(.{4})(?=.)/g, '$1-').slice(0, 19);"
+                        placeholder="xxxx-xxxx-xxxx-xxxx" class="card-num-input">
                 </div>
             </div>
             <div id="middle">
@@ -260,6 +266,7 @@ if (isset($_SESSION['userName'])) {
                 hotelID: '<?php echo $hotel; ?>',
                 orderDate: dateToday,
                 userName: '<?php echo $name; ?>',
+                email: '<?php echo $email ?>',
                 cardDetails: {
                     cardNumber: cardNumber,
                     expiry: expiryNumber,
