@@ -140,7 +140,12 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
                 <img src="images/payments.png" alt="Report Icon">
                 <a href="AdminReport.php">Bookings</a>
             </li>
+                
         </ul>
+            <a href="php_functions/logout.php"  class="logout-link">
+                <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+                <span>Logout</span>
+            </a>
     </div>
 
     <div class="main-content">
@@ -149,18 +154,13 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
             <h2>Dashboard / Home</h2>
             <p>Dashboard</p>
         </div>
-            <div class="header-right d-flex align-items-center">
-                <div class="notification-container">
-                    <a href= "messages.php">
-                    <img src="images/notifications.png" alt="Notifications Icon" class="notification-icon" id="notificationIcon">
-                </div>
-                <div class="header-right d-flex align-items-center">
-                <a href="php_functions/logout.php"  class="logout-link">
-                    <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
-                    <span>Logout</span>
-                </a>
-                </div>
+        <div class="header-right d-flex align-items-center">
+            <div class="notification-container">
+            <a href="messages.php">
+                <img src="images/notifications.png" alt="Notifications Icon" class="notification-icon" id="notificationIcon">
+            </a>
             </div>
+        </div>
         </header>
 
         <div class="info-box-container">

@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Verify User
         if (isset($_POST['verifyUser'])) {
             $userSnapshot = $database->getReference('users/' . $userId)->getValue();
-            if ($userSnapshot['status'] === 'approved') {
+            if ($userSnapshot['status'] === 'pending') {
                 $database->getReference('users/' . $userId)
                     ->update([
                         'status' => 'verified'
@@ -48,7 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
         }
 
-        // Redirect after action
         header('Location: AdminUser.php');
         exit();
     }
@@ -94,10 +93,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <a href="AdminInventory.php">Hotel/Flight Management</a>
             </li>
             <li>
-                <img src="images/report.png" alt="Report Icon">
-                <a href="AdminReport.php">Report</a>
+                <img src="images/payments.png" alt="Report Icon">
+                <a href="AdminReport.php">Bookings</a>
             </li>
         </ul>
+        <a href="php_functions/logout.php"  class="logout-link">
+            <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+            <span>Logout</span>
+        </a>
     </div>
 
 <div class="main-content">
@@ -111,10 +114,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <input type="text" id="searchInput" placeholder="Search by name or date" onkeyup="filterUsers()">
             </div>
             <div class="header-right d-flex align-items-center">
-            <a href="login.php" class="logout-link">
-                <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
-                <span>Logout</span> 
-            </a>
         </div>
         </div>
     </header>
