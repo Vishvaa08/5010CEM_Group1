@@ -2,11 +2,10 @@
 session_start();
 include 'firebase_connection.php';
 
-// Initialize profile info
 $pic = isset($_SESSION['userName']) ? $_SESSION['profileImage'] : 'images/user.png';
 $name = isset($_SESSION['userName']) ? $_SESSION['userName'] : 'Admin';
 
-// Get country, city, and hotel data from GET parameters
+// Get country, city, and hotel data from 
 $country = isset($_GET['country']) ? $_GET['country'] : '';
 $city = isset($_GET['city']) ? $_GET['city'] : '';
 $hotelIndex = isset($_GET['hotel']) ? (int)$_GET['hotel'] : null;
@@ -28,14 +27,13 @@ if ($country) {
     }
 }
 
-// Initialize hotel, flight, and room data
 $hotels = [];
 $flights = [];
 $hotelDescription = '';
 $imageUrl = '';
 $rooms = [];
 
-// Fetch hotel data if a country and city are selected
+// Fetch hotel data when a country and city are selected
 if ($country && $city) {
     $hotelRef = $database->getReference('Packages/' . $country . '/' . $city . '/Hotels');
     $hotelData = $hotelRef->getValue() ?: [];
@@ -45,7 +43,7 @@ if ($country && $city) {
         }
     }
 
-    // Fetch selected hotel details if a hotel is selected
+    // Fetch selected hotel details when hotel is selected
     if ($hotelIndex !== null && isset($hotelData[$hotelIndex])) {
         $selectedHotel = $hotelData[$hotelIndex];
         $imageUrl = $selectedHotel['Image'] ?? 'images/error.jpg';
@@ -73,26 +71,21 @@ if ($country && $city) {
 
 // Handle form submission for hotel and flight updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Handle image upload if provided
     if (isset($_FILES['hotel_image']) && $_FILES['hotel_image']['error'] === UPLOAD_ERR_OK) {
         $imageFile = $_FILES['hotel_image'];
         $imageName = basename($imageFile['name']);
         $imageTempPath = $imageFile['tmp_name'];
 
-        // Upload the image to Firebase Storage
         $bucket = $storage->getBucket();
         $storagePath = "hotel_images/{$country}/{$city}/{$hotelIndex}/{$imageName}";
 
         try {
-            // Upload the image
             $bucket->upload(fopen($imageTempPath, 'r'), [
                 'name' => $storagePath
             ]);
 
-            // Get the public URL of the uploaded image
             $imageUrl = "https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/" . urlencode($storagePath) . "?alt=media";
 
-            // Update the hotel image URL in the Realtime Database
             $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex)
                 ->update(['Image' => $imageUrl]);
         } catch (FirebaseException $e) {
@@ -100,7 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Update hotel description and availability if provided
     if (isset($_POST['hotel_description']) || isset($_POST['hotel_availability'])) {
         $updateData = [];
         if (isset($_POST['hotel_description'])) {
@@ -116,7 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Update room availability and price if provided
     if (isset($_POST['availability']) && isset($_POST['price'])) {
         foreach ($_POST['availability'] as $roomType => $availability) {
             $availability = (int) $availability;
@@ -128,7 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'Price' => $price
                 ]);
 
-        // Redirect to refresh the page
         header('Location: ' . $_SERVER['REQUEST_URI']);
         exit();
 
@@ -146,13 +136,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ->update(['Seats' => $availability, 'Price' => $price]);
             }
 
-            // Redirect to refresh the page
             header('Location: ' . $_SERVER['REQUEST_URI']);
             exit();
         }
     }
 
-    // Handle hotel deletion
     if (isset($_POST['delete_hotel']) && $view === 'hotel' && $country && $city && $hotelIndex !== null) {
         $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex)->remove();
         header('Location: AdminInventory.php?view=hotel&country=' . urlencode($country) . '&city=' . urlencode($city));
@@ -205,6 +193,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="AdminReport.php">Bookings</a>
         </li>
     </ul>
+    <a href="php_functions/logout.php"  class="logout-link">
+        <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+        <span>Logout</span>
+    </a>
 </div>
 
 <div class="main-content">
@@ -218,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <!-- Hotel Inventory Content -->
-<div id="hotel-content" style="display: <?= $view === 'hotel' ? 'block' : 'none' ?>;">
+    <div id="hotel-content" style="display: <?= $view === 'hotel' ? 'block' : 'none' ?>;">
     <div class="inventory-container">
         <form method="GET">
             <input type="hidden" name="view" value="hotel">
