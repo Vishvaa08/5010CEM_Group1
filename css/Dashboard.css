@@ -171,6 +171,7 @@ header {
 .header-right {
     display: flex;
     align-items: center;
+    justify-content: flex-end; 
 }
 
 .user-wrapper {
@@ -285,7 +286,7 @@ header {
 
 
 .chart {
-    background: #ffffffad;
+    background: #ffffffcf;
     border-radius: 12px;
     padding: 20px;
     width: 450px; 
@@ -366,6 +367,8 @@ header {
 }
 
 .notification {
+    display: flex;
+    justify-content: flex-end; 
     margin-right: 20px; 
 }
 
@@ -374,6 +377,7 @@ header {
     height: 24px !important;
     padding: 15px;
     vertical-align: middle;
+    cursor: pointer;
 }
 
 .icon-wrapper {

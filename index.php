@@ -40,23 +40,23 @@ if (isset($_SESSION['userName'])) {
     <!--Beginning of home section of homepage including navigation-->
     <div id="home">
 
-        <div id="header">
-            <div id="left-nav">
-                <a href="#home">
-                    <div class="logo-container">
-                        <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
-                    </div>
-                </a>
-                <h1>TravelTrail</h1>
-            </div>
-
-            <div id="right-nav">
-                <a class="nav-link" href="#home">Home</a>
-                <a class="nav-link" href="#about">About</a>
-                <a class="nav-link" href="#contact">Contact</a>
-                <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo htmlspecialchars($pic, ENT_QUOTES, 'UTF-8'); ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
-            </div>
+    <div id="header">
+        <div id="left-nav">
+            <a href="index.php">
+                <div class="logo-container">
+                    <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
+                </div>
+            </a>
+            <h1>TravelTrail</h1>
         </div>
+
+        <div id="right-nav">
+            <a class="nav-link" href="index.php#home">Home</a>
+            <a class="nav-link" href="index.php#about">About</a>
+            <a class="nav-link" href="index.php#contact">Contact</a>
+            <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo $pic; ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
+        </div>
+    </div>
 
         <div id="main-title">
             <p class="title">Let's Embark On</br>Your Journey</br>Together!</p>

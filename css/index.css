@@ -38,7 +38,7 @@ body::-webkit-scrollbar{
 #left-nav {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: right;
     height: 12vh;
 }
 
@@ -58,8 +58,8 @@ body::-webkit-scrollbar{
     margin-left: 2vw;
     border-radius: 18px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: right;
+    justify-content: right;
 }
 
 h1 {
@@ -67,6 +67,11 @@ h1 {
     font-family: "Joti One", serif;
     font-size: 40px;
     color: white;
+}
+
+.user-profile {
+    margin-right: 1vw !important;
+    margin-top: 5px !important;
 }
 
 #right-nav a {

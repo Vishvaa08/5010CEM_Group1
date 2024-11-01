@@ -107,11 +107,8 @@ $messages = $snapshot->getValue();
     }
 
     function sendReply(notificationKey) {
-    // Get the reply message and user email from the specific form
     const replyMessage = document.querySelector(`#replyForm-${notificationKey} textarea`).value;
     const userEmail = document.querySelector(`#replyForm-${notificationKey} input[name="userEmail"]`).value;
-
-    // Fetch the user name from the notification item instead of the details section
     const userName = document.querySelector(`#details-${notificationKey}`).previousElementSibling.querySelector('h3').innerText;
 
     if (replyMessage.trim() === "") {
@@ -119,7 +116,6 @@ $messages = $snapshot->getValue();
         return;
     }
 
-    // Data to be saved in Firebase
     const replyData = {
         adminReply: replyMessage,
         timestamp: new Date().toISOString(),
@@ -127,20 +123,17 @@ $messages = $snapshot->getValue();
         userEmail: userEmail
     };
 
-    // Firebase URL for saving the reply under userNotifications (using userEmail as reference)
-    const userNotificationsRef = `userNotifications/${btoa(userEmail)}`; // Encoding the email to avoid special characters in path
+    const userNotificationsRef = `userNotifications/${btoa(userEmail)}`; 
 
-    // Save the reply in Firebase (replace this with your actual saving logic)
     saveReplyToFirebase(userNotificationsRef, replyData);
 
-    // Clear the reply message field after sending
     document.querySelector(`#replyForm-${notificationKey} textarea`).value = '';
 
     alert("Reply sent successfully!");
 }
 
     function saveReplyToFirebase(reference, data) {
-    fetch('reply.php', {
+    fetch('php_functions/reply.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

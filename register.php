@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'address' => $address,
             'profileImageUrl' => $profileImageUrl,
             'role' => $role,
-            'status' => ($role === 'admin') ? 'pending' : 'approved'
+            'status' => ($role === 'admin') ? 'pending' : 'pending'
            
         ]);
 
@@ -187,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             address: address,
                             profileImageUrl: downloadURL,
                             role: role,
-                            status: (role === 'adminREQUEST') ? 'pending' : 'approved' 
+                            status: (role === 'adminREQUEST') ? 'pending' : 'pending' 
                         });
                     }).then(() => {
                         console.log('User registered successfully');

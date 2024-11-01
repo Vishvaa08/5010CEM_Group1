@@ -134,29 +134,50 @@ if (isset($_POST['submit'])) {
                 <a href="AdminReport.php">Report</a>
             </li>
         </ul>
+            <a href="php_functions/logout.php"  class="logout-link">
+                <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+                <span>Logout</span>
+            </a>
     </div>
 
     <div class="main-content">
-        <header>
-            <div class="header-left">
-                <h2>Dashboard / Travel Package</h2>
-                <p>Travel Package</p>
-            </div>
+    <header>
+    <div class="header-left">
+        <h2>Dashboard / Travel Package</h2>
+        <p>Travel Package</p>
+    </div>
 
-            <div class="header-right d-flex align-items-center">
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Search" onkeyup="filterCountries()">
+    <div class="header-right d-flex align-items-center">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search" onkeyup="filterCountries()">
+        </div>
+
+        <div class="add-country-section" id="addCountryForm" style="display: flex; margin-left: 20px;">
+        <h4 class="form-title">Add New Country</h4>
+        <form action="AdminPackage.php" method="POST" enctype="multipart/form-data" class="add-country-form">  
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="countryName">Country Name</label>
+                    <input type="text" id="countryName" name="countryName" placeholder="Enter country name" required>
                 </div>
-
-                <div class="add-package-btn">
-                <button id="toggleFormButton">+</button>
+                <div class="form-group">
+                    <label for="countryImage">Upload Country Image</label>
+                    <input type="file" id="countryImage" name="countryImage" accept="image/*" required>
+                </div>
             </div>
 
-                <a href="login.php" class="logout-link">
-                <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
-                <span>Logout</span> 
-            </a>
-        </header>
+            <div class="form-group">
+                <label for="countryDescription">Country Description</label>
+                <textarea id="countryDescription" name="countryDescription" rows="3" placeholder="Enter country description" required></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" name="submit" class="submit-btn-success">Submit</button>
+            </div>
+    </form>
+</div>
+
+    </div>
+</header>
 
         <div class="countries-display" id="countriesDisplay">
             <div class="country-grid">
@@ -238,7 +259,7 @@ if (isset($_POST['submit'])) {
                 countryDetail: countryDetail 
             };
 
-            fetch('update_country.php', {
+            fetch('php_functions/update_country.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -261,14 +282,6 @@ if (isset($_POST['submit'])) {
     });
 });
 
-    document.getElementById("toggleFormButton").addEventListener("click", function() {
-    const form = document.getElementById("addCountryForm");
-    if (form.style.display === "none" || form.style.display === "") {
-        form.style.display = "block";  // Show form
-    } else {
-        form.style.display = "none";  // Hide form
-    }
-});
 
     function filterCountries() {
         const input = document.getElementById('searchInput').value.toLowerCase();

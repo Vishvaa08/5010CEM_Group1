@@ -268,14 +268,20 @@ tr:last-child td {
 }
 
 .approved {
-    color: green; 
-    font-weight: bold; 
+    color: green;
+    font-weight: bold;
+}
+
+.unapproved {
+    color: rgb(0, 13, 255);
+    font-weight: bold;
 }
 
 .rejected {
-    color: red; 
-    font-weight: bold; 
+    color: red;
+    font-weight: bold;
 }
+
 button {
     background: none; 
     border: none; 
