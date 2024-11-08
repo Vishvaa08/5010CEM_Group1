@@ -56,10 +56,14 @@ if (isset($_SESSION['userName'])) {
             <a href="AdminInventory.php">Hotel/Flight Management</a>
         </li>
         <li>
-            <img src="images/report.png" alt="Report Icon">
-            <a href="AdminReport.php">Report</a>
+            <img src="images/payments.png" alt="Report Icon">
+            <a href="AdminReport.php">Bookings</a>
         </li>
     </ul>
+    <a href="php_functions/logout.php"  class="logout-link">
+        <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+        <span>Logout</span>
+    </a>
 </div>
 
 <div class="main-content">
@@ -77,7 +81,7 @@ if (isset($_SESSION['userName'])) {
                 <input type="text" class="form-control" id="cityName" placeholder="Enter city name" required style="flex: 1;">
             </div>
             <div class="form-group d-flex align-items-center" style="margin-bottom: 15px;">
-                <label for="cityImage" style="margin-right: 10px;">Upload City Image</label>
+                <label for="cityImage" style="margin-right: 10px;">City Image</label>
                 <input type="file" class="form-control-file" id="cityImage" accept="image/*" required style="flex: 1;">
             </div>
             <button type="submit" class="btn btn-success">Submit City</button>
@@ -399,7 +403,7 @@ if (isset($_SESSION['userName'])) {
             formData.append('cityImage', cityImageFile);
 
             $.ajax({
-                url: 'add_new_city.php', 
+                url: 'php_functions/add_new_city.php', 
                 type: 'POST',
                 data: formData,
                 contentType: false,
@@ -441,7 +445,7 @@ if (isset($_SESSION['userName'])) {
         formData.append('imageFile', newImageFile); 
 
         $.ajax({
-        url: 'upload_image.php', 
+        url: 'php_functions/upload_image.php', 
         type: 'POST',
         data: formData,
         contentType: false,
@@ -544,7 +548,7 @@ $(document).on('click', '.edit-btn', function() {
                 imageFormData.append('rooms', JSON.stringify(hotels[hotelId].Rooms));
 
                 const uploadPromise = $.ajax({
-                    url: 'upload_hotel_image.php',
+                    url: 'php_functions/upload_hotel_image.php',
                     type: 'POST',
                     data: imageFormData,
                     contentType: false,
@@ -623,7 +627,7 @@ $(document).on('click', '.edit-btn', function() {
                 formData.append('itineraryImage', itineraryImageFile);
 
                 const itineraryPromise = $.ajax({
-                    url: 'save_itinerary.php', 
+                    url: 'php_functions/save_itinerary.php', 
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -663,7 +667,7 @@ $(document).on('click', '.edit-btn', function() {
         formData.append('data', JSON.stringify(dataToUpdate)); 
 
         $.ajax({
-            url: 'save_to_firebase.php', 
+            url: 'php_functions/save_to_firebase.php', 
             type: 'POST',
             data: formData,
             contentType: false,
@@ -693,7 +697,7 @@ $(document).on('click', '.edit-btn', function() {
 
 
 /// Delete Itinerary
-$(document).on('click', '.delete-itinerary-btn', function() {
+$(document).on('click', '.php_functions/delete-itinerary-btn', function() {
     const itineraryItem = $(this).closest('.itinerary-item');
     const itineraryIndex = itineraryItem.data('index'); 
     const cityCard = itineraryItem.closest('.city-card');
@@ -730,7 +734,7 @@ $(document).on('click', '.delete1-btn', function() {
 
     if (confirm('Are you sure you want to delete this city package?')) {
         $.ajax({
-            url: 'delete_city.php', 
+            url: 'php_functions/delete_city.php', 
             type: 'POST',
             data: { country: country, city: city }, 
             success: function(response) {
