@@ -58,7 +58,7 @@ body::-webkit-scrollbar{
     display: flex;
     align-items: center;
     color: #333333;
-    font-size: 17px;
+    font-size: 20px;
 }
 
 .sidebar li img {
@@ -146,7 +146,6 @@ header {
     font-family: "Joti One", serif; 
 }
 
-
 .user-wrapper {
     color: #282828;
     font-weight: bold;
@@ -186,7 +185,6 @@ header {
 .search-box {
     margin-right: 20px;
 }
-
 
 .search-box input {
     padding: 10px;
@@ -270,14 +268,20 @@ tr:last-child td {
 }
 
 .approved {
-    color: green; 
-    font-weight: bold; 
+    color: green;
+    font-weight: bold;
+}
+
+.unapproved {
+    color: rgb(0, 13, 255);
+    font-weight: bold;
 }
 
 .rejected {
-    color: red; 
-    font-weight: bold; 
+    color: red;
+    font-weight: bold;
 }
+
 button {
     background: none; 
     border: none; 
