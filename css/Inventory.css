@@ -1,4 +1,4 @@
-﻿html{
+﻿html {
     scroll-behavior: smooth;
     font-family: "Josefin Sans", sans-serif;
 }
@@ -29,7 +29,7 @@ body {
 .sidebar {
     width: 250px;
     min-height: calc(90vh - 40px);
-    background-color: #ffffff6f;
+    background-color: rgba(255, 255, 255, 0.43);
     position: fixed;
     left: 20px;
     top: 20px;
@@ -81,7 +81,7 @@ body {
 }
 
 .sidebar li.active {
-    background-color: black;
+    background-color: #000000;
     color: #FFFFFF;
     padding: 10px;
     border-radius: 10px;
@@ -96,7 +96,7 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px 0;
-    background-color: #ffffff84;
+    background-color: rgba(255, 255, 255, 0.52);
     border-bottom: 1px solid #ddd;
     border-radius: 10px;
 }
@@ -125,6 +125,7 @@ body {
     padding: 20px;
     font-family: "Joti One", serif;
 }
+
 header {
     display: flex;
     justify-content: space-between;
@@ -182,10 +183,10 @@ header {
 }
 
 .inventory-container {
-    background-color: #ffffff84;
+    background-color: rgba(255, 255, 255, 0.52);
     border-radius: 15px;
-    padding: 20px;
-    margin-top: 20px;
+    padding: 10px;
+    margin-top: 10px;
 }
 
 .selection-buttons, .dropdowns {
@@ -198,7 +199,7 @@ header {
 
 .selection-buttons label, .dropdowns label {
     font-weight: bold; 
-    font-size:20px;
+    font-size: 20px;
     font-family: "Joti One", serif;
 }
 
@@ -219,7 +220,6 @@ header {
     padding: 10px;
 }
 
-
 .hotel-description-container label {
     font-weight: bold; 
     font-size: 20px;
@@ -228,7 +228,8 @@ header {
 }
 
 .hotel-description {
-    width: 600px; 
+    width: 100%;
+    max-width: 600px; 
     height: 100px; 
     resize: none; 
     font-size: 18px; 
@@ -245,6 +246,7 @@ header {
     vertical-align: top;
     padding: 10px;
     text-align: center;
+    margin-top: -25px;
 }
 
 .hotel-image-container label {
@@ -267,7 +269,6 @@ header {
     margin-top: 5px; 
 }
 
-
 @media (max-width: 768px) {
     .hotel-description-container,
     .hotel-image-container {
@@ -276,10 +277,9 @@ header {
     }
 
     .hotel-image-container {
-        margin-top: 20px;
+        margin-top: 10px;
     }
 }
-
 
 .toggle-buttons {
     display: flex;
@@ -295,7 +295,7 @@ header {
     cursor: pointer;
     border-radius: 20px;
     transition: background 0.3s, color 0.3s;
-    background-color: #ffffff84;
+    background-color: rgba(255, 255, 255, 0.52);
     color: #333;
 }
 
@@ -314,7 +314,7 @@ header {
 
 .room-table th,
 .room-table td {
-    padding: 15px;
+    padding: 10px;
     text-align: center;
     font-size: 18px;
     font-family: "Joti One", serif;
@@ -327,13 +327,13 @@ header {
     color: #FFF;
     border: none;
     border-radius: 10px;
-    padding: 10px 20px;
+    padding: 7px 10px;
     font-size: 20px;
     font-family: "Joti One", serif;
     display: inline-block;
     min-width: 100px; 
     text-align: center;
-    border-radius: 10px;
+    margin-top: -2px;
 }
 
 .availability-label {
@@ -354,9 +354,9 @@ header {
     margin-bottom: 5px;
 }
 
-.availability{
+.availability {
     font-size: 18px;
-    padding: 10px;
+    padding: 7px;
     min-width: 80px; 
 }
 
@@ -382,11 +382,10 @@ header {
 }
 
 .room-table th {
-    background-color: #ffffff98;
+    background-color: rgba(255, 255, 255, 0.6);
     font-weight: bold;
     border-radius: 10px;
     padding: 10px;
-
 }
 
 input[type="checkbox"] {
@@ -395,10 +394,9 @@ input[type="checkbox"] {
     accent-color: #333;
 }
 
-
 .update-btn {
-    margin-top: 20px;
-    padding: 10px 20px;
+    margin-top: 2px;
+    padding: 10px 10px;
     background-color: #4CAF50;
     font-family: "Joti One", serif;
     color: white;
@@ -415,8 +413,8 @@ input[type="checkbox"] {
 }
 
 .delete-btn {
-    margin-top: 20px;
-    padding: 10px 20px;
+    margin-top: 2px;
+    padding: 10px 10px;
     background-color: #E53935; 
     font-family: "Joti One", serif;
     color: white;
@@ -441,4 +439,3 @@ input[type="checkbox"] {
     padding: 10px 20px;
     font-size: 16px;
 }
-
