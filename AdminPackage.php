@@ -205,7 +205,8 @@ if (isset($_POST['submit'])) {
                     $checked = ($availability === 'Available') ? 'checked' : '';
                     
                     echo '<div class="form-check">';
-                    echo '<input type="checkbox" class="form-check-input" id="availabilityCheckbox_' . htmlspecialchars($country) . '" ' . $checked . ' onchange="updateAvailability(\'' . htmlspecialchars($country) . '\', this.checked)">';
+                    echo '<input type="checkbox" class="form-check-input" id="availabilityCheckbox_' . htmlspecialchars($country) . '" ' . $checked . 
+                    ' onchange="updateAvailability(\'' . htmlspecialchars($country) . '\', this.checked)">';
                     echo '<label class="form-check-label" for="availabilityCheckbox_' . htmlspecialchars($country) . '">Available</label>';
                     echo '</div>';
 
@@ -259,7 +260,7 @@ if (isset($_POST['submit'])) {
                 countryDetail: countryDetail 
             };
 
-            fetch('php_functions/update_country.php', {
+            fetch('/php_functions/update_country.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

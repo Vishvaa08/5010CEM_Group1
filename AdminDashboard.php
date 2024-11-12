@@ -142,7 +142,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
             </li>
                 
         </ul>
-            <a href="php_functions/logout.php"  class="logout-link">
+            <a href="/php_functions/logout.php"  class="logout-link">
                 <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
                 <span>Logout</span>
             </a>
@@ -172,7 +172,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
             </div>
             <div class="info-box-content">
                 <h3>Total Users</h3>
-                <p id="totalUsersCount">10</p>
+                <p id="totalUsersCount">100</p>
             </div>
         </div>
     </div>

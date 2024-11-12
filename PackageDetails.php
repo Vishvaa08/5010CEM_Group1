@@ -60,7 +60,7 @@ if (isset($_SESSION['userName'])) {
             <a href="AdminReport.php">Bookings</a>
         </li>
     </ul>
-    <a href="php_functions/logout.php"  class="logout-link">
+    <a href="/php_functions/logout.php"  class="logout-link">
         <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
         <span>Logout</span>
     </a>
@@ -133,7 +133,8 @@ if (isset($_SESSION['userName'])) {
                     $availability = isset($cityDetails['Availability']) ? $cityDetails['Availability'] : 'N/A';
                     echo '<div style="display: flex; align-items: left; margin-top: -18px;">'; 
                     echo '<div class="form-check" style="margin-left: 330px;">'; 
-                        echo '<input type="checkbox" class="form-check-input availability-checkbox" data-city="' . htmlspecialchars($city) . '" data-country="' . htmlspecialchars($country) . '" ' . ($availability == 'Available' ? 'checked' : '') . '>';
+                        echo '<input type="checkbox" class="form-check-input availability-checkbox" data-city="' . htmlspecialchars($city) . 
+                        '" data-country="' . htmlspecialchars($country) . '" ' . ($availability == 'Available' ? 'checked' : '') . '>';
                         echo '<label class="form-check-label">Available</label>';
                     echo '</div>';
                     echo '</div>';
@@ -403,7 +404,7 @@ if (isset($_SESSION['userName'])) {
             formData.append('cityImage', cityImageFile);
 
             $.ajax({
-                url: 'php_functions/add_new_city.php', 
+                url: '/php_functions/add_new_city.php', 
                 type: 'POST',
                 data: formData,
                 contentType: false,
@@ -445,7 +446,7 @@ if (isset($_SESSION['userName'])) {
         formData.append('imageFile', newImageFile); 
 
         $.ajax({
-        url: 'php_functions/upload_image.php', 
+        url: '/php_functions/upload_image.php', 
         type: 'POST',
         data: formData,
         contentType: false,
@@ -548,7 +549,7 @@ $(document).on('click', '.edit-btn', function() {
                 imageFormData.append('rooms', JSON.stringify(hotels[hotelId].Rooms));
 
                 const uploadPromise = $.ajax({
-                    url: 'php_functions/upload_hotel_image.php',
+                    url: '/php_functions/upload_hotel_image.php',
                     type: 'POST',
                     data: imageFormData,
                     contentType: false,
@@ -627,7 +628,7 @@ $(document).on('click', '.edit-btn', function() {
                 formData.append('itineraryImage', itineraryImageFile);
 
                 const itineraryPromise = $.ajax({
-                    url: 'php_functions/save_itinerary.php', 
+                    url: '/php_functions/save_itinerary.php', 
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -667,7 +668,7 @@ $(document).on('click', '.edit-btn', function() {
         formData.append('data', JSON.stringify(dataToUpdate)); 
 
         $.ajax({
-            url: 'php_functions/save_to_firebase.php', 
+            url: '/php_functions/save_to_firebase.php', 
             type: 'POST',
             data: formData,
             contentType: false,
@@ -706,7 +707,7 @@ $(document).on('click', '.php_functions/delete-itinerary-btn', function() {
 
     if (confirm('Are you sure you want to delete this itinerary?')) {
         $.ajax({
-            url: 'delete_itinerary.php', 
+            url: '/php_functions/delete_itinerary.php', 
             type: 'POST',
             data: { country: country, city: city, index: itineraryIndex }, 
             success: function(response) {
@@ -734,7 +735,7 @@ $(document).on('click', '.delete1-btn', function() {
 
     if (confirm('Are you sure you want to delete this city package?')) {
         $.ajax({
-            url: 'php_functions/delete_city.php', 
+            url: '/php_functions/delete_city.php', 
             type: 'POST',
             data: { country: country, city: city }, 
             success: function(response) {
