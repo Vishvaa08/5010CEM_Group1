@@ -1,7 +1,4 @@
 <?php
-require 'vendor/autoload.php';
-use Kreait\Firebase\Factory;
-use Kreait\Firebase\Exception\FirebaseException;
 
 include '../firebase_connection.php';
 

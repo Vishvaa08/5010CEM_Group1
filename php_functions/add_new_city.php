@@ -1,20 +1,5 @@
 <?php
-require 'vendor/autoload.php';
-
-use Kreait\Firebase\Factory;
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-$serviceAccount = __DIR__ . '/prvkey.json';
-
-$factory = (new Factory)
-    ->withServiceAccount($serviceAccount)
-    ->withDatabaseUri('https://traveltrail-39e23-default-rtdb.firebaseio.com/');
-
-$storage = $factory->createStorage();
-$database = $factory->createDatabase();
+include '../firebase_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $country = $_POST['country'];
