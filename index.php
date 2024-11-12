@@ -54,6 +54,8 @@ if (isset($_SESSION['userName'])) {
             <a class="nav-link" href="index.php#home">Home</a>
             <a class="nav-link" href="index.php#about">About</a>
             <a class="nav-link" href="index.php#contact">Contact</a>
+            <a href="userNotifications.php" class="notification-button">
+            <i class="fa fa-bell" aria-hidden="true"></i></a>
             <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo $pic; ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
         </div>
     </div>
