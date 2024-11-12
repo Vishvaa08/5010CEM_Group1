@@ -133,7 +133,7 @@ body::-webkit-scrollbar{
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
 }
 
 header {
@@ -141,19 +141,19 @@ header {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
 }
 
 .header-left {
     display: block; 
     margin-left: 10px;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
 }
 
 .header-right {
     display: flex;
     align-items: center;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
 }
 
 .user-wrapper {
@@ -175,7 +175,7 @@ header {
 .logout-link span {
     margin-left: 5px; 
     font-size: 20px;  
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
 }
 
 .logout-icon {
