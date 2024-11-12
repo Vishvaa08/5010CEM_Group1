@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
-    <link rel="stylesheet" type="text/css" href="userprofile.css">
+    <link rel="stylesheet" type="text/css" href="css/userprofile.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Joti+One&display=swap" rel="stylesheet">
@@ -26,6 +26,7 @@
         </div>
         <div id="right-nav">
             <a href="login.php" class="login-btn" id="logoutBtn">Logout</a>
+            <a href="OrderHistory.php" class="login-btn" id="logoutBtn">History</a>
         </div>
     </div>
     <div class="container-1">
@@ -72,7 +73,7 @@
                 fetchUserData(user.uid);
             } else {
                 
-                window.location.href = 'login.html';
+                window.location.href = 'index.php';
             }
         });
 

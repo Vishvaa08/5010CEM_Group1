@@ -3,13 +3,16 @@ session_start();
 
 $pic = '';
 $userLoggedIn = false;
+$status = 'pending';
 
 if (isset($_SESSION['userName'])) {
     $pic = $_SESSION['profileImage'];
     $userLoggedIn = true;
+    $status = $_SESSION['status'];
 } else {
     $pic = 'images/user.png';
     $userLoggedIn = false;
+    $status = 'pending';
 }
 ?>
 
@@ -259,6 +262,13 @@ if (isset($_SESSION['userName'])) {
                 return;
             }
 
+            const userStatus = <?php echo json_encode($status); ?>;
+
+            if(userStatus === 'pending'){
+                alert("Wait until your account has been verified.");
+                return;
+            }
+
             if (selectedBank && selectedVehicle && selectedRoom && selectedFlight && itineraries.length > 0 && ticketType) {
                 var form = document.getElementById('form');
                 const bankValue = selectedBank.value;
@@ -313,6 +323,13 @@ if (isset($_SESSION['userName'])) {
 
             if (!userLoggedIn) {
                 alert("Please log in before making a booking.");
+                return;
+            }
+
+            const userStatus = <?php echo json_encode($status); ?>;
+
+            if(userStatus === 'pending'){
+                alert("Wait until your account has been verified.");
                 return;
             }
 
