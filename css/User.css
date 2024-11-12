@@ -47,7 +47,7 @@ body::-webkit-scrollbar{
 
 .sidebar ul {
     list-style: none;
-    padding: 5px;
+    padding: 10px;
     margin: 0;
     flex-grow: 1;
 }
@@ -95,7 +95,7 @@ body::-webkit-scrollbar{
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px 0;
+    padding: 20px 0;
     background-color: #ffffffb3;
     border-bottom: 1px solid #ddd;
     font-family: "Josefin Sans", sans-serif;
