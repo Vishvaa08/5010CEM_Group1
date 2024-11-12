@@ -15,7 +15,6 @@ if (isset($_SESSION['userName'])) {
     $userEmail = $_SESSION['userEmail'] ?? ''; 
 }
 
-// Fetch notifications from Firebase
 $notifications = [];
 if ($isLoggedIn) {
     $notificationsRef = $database->getReference('userNotifications');
