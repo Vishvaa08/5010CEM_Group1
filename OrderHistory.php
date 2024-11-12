@@ -81,8 +81,8 @@ foreach ($bookingsData as $bookingId => $bookingDetails) {
     </div>
 
     <div id="order-details-<?= $bookingId; ?>" class="order-details-expanded">
-        <img src="images/<?= strtolower($booking['city']); ?>.jpg" alt="<?= htmlspecialchars($booking['city']); ?>" class="order-img">
-        <div class="order-booking-info">
+    <img src="https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/<?= urlencode($booking['city']); ?>.jpg?alt=media&token=" alt="<?= htmlspecialchars($booking['city']); ?>" class="order-img">
+    <div class="order-booking-info">
             <p>Hotel: <?= htmlspecialchars($booking['hotelID']); ?>, <?= htmlspecialchars($booking['roomType']); ?></p>
             <p>Flight: <?= htmlspecialchars($booking['flightType']); ?>, <?= htmlspecialchars($booking['numTickets']); ?> seats</p>
             <p>Vehicle: <?= htmlspecialchars($booking['vehicleType']); ?></p>
