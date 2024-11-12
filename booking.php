@@ -265,7 +265,7 @@ if (isset($_SESSION['userName'])) {
             const userStatus = <?php echo json_encode($status); ?>;
 
             if(userStatus === 'pending'){
-                alert("Wait until your account has been veridfied.");
+                alert("Wait until your account has been verified.");
                 return;
             }
 
@@ -323,6 +323,13 @@ if (isset($_SESSION['userName'])) {
 
             if (!userLoggedIn) {
                 alert("Please log in before making a booking.");
+                return;
+            }
+
+            const userStatus = <?php echo json_encode($status); ?>;
+
+            if(userStatus === 'pending'){
+                alert("Wait until your account has been verified.");
                 return;
             }
 
