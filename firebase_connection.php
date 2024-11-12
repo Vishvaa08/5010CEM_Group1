@@ -3,6 +3,8 @@
 require 'vendor/autoload.php';
 
 use Kreait\Firebase\Factory;
+use Kreait\Firebase\Exception\FirebaseException;
+
 
 $serviceAccount = __DIR__ . '/prvkey.json';
 
