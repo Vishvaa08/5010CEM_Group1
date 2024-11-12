@@ -3,13 +3,16 @@ session_start();
 
 $pic = '';
 $userLoggedIn = false;
+$status = 'pending';
 
 if (isset($_SESSION['userName'])) {
     $pic = $_SESSION['profileImage'];
     $userLoggedIn = true;
+    $status = $_SESSION['status'];
 } else {
     $pic = 'images/user.png';
     $userLoggedIn = false;
+    $status = 'pending';
 }
 ?>
 
@@ -256,6 +259,13 @@ if (isset($_SESSION['userName'])) {
 
             if (!userLoggedIn) {
                 alert("Please log in before booking.");
+                return;
+            }
+
+            const userStatus = <?php echo json_encode($status); ?>;
+
+            if(userStatus === 'pending'){
+                alert("Wait until your account has been veridfied.");
                 return;
             }
 
