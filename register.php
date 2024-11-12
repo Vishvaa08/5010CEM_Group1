@@ -10,6 +10,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $role = $_POST['role'];
     $profileImage = $_FILES['profileImage'];
 
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        die("Invalid email format");
+    }
+
+    if ($password !== $confirmPassword) {
+        die("Passwords do not match.");
+    }
+    if (strlen($password) < 6) {
+        die("Password must be at least 6 characters.");
+    }
+
+    if (empty($name)) {
+        die("Name is required.");
+    }
+
+    if (!preg_match('/^[0-9]{10,15}$/', $phone)) {
+        die("Phone number must be between 10 to 15 digits.");
+    }
+
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!in_array($profileImage['type'], $allowedTypes) || $profileImage['size'] > 2 * 1024 * 1024) {
+        die("Profile image must be JPEG, PNG, or GIF and less than 2MB.");
+    }
+
+
     // Create user with Firebase Auth
     $auth = $factory->createAuth();
     $storage = $factory->createStorage();
@@ -164,10 +189,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             const role = document.getElementById('role').value;
 
             // Check if password and confirm password match
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailPattern.test(email)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+
             if (password !== confirmPassword) {
                 alert("Passwords do not match.");
                 return;
             }
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters.");
+                return;
+            }
+
+            const namePattern = /^[A-Za-z\s]+$/;
+            if (!namePattern.test(name)) {
+               alert("Name must contain only letters and spaces.");
+               return;
+           }
+
+           const phonePattern = /^[0-9]{10,15}$/;
+            if (!phonePattern.test(phone)) {
+                alert("Please enter a valid phone number (10-15 digits).");
+                return;
+            }
+
 
             // Create user with Firebase authentication
             auth.createUserWithEmailAndPassword(email, password)
