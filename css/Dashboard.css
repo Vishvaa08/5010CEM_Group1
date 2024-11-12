@@ -5,7 +5,7 @@
 
 body {
     font-family: "Josefin Sans", sans-serif;
-    background-image: url('../images/desktop.jpg'); 
+    background-image: url('../images/bgm.jpg'); 
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat;
@@ -51,15 +51,16 @@ body::-webkit-scrollbar{
     padding: 10px;
     margin: 0;
     flex-grow: 1;
+    margin-top: 10px;
 }
 
 .sidebar li {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
-    color: #333333;
-    font-size: 20px;
-    font-family: "Joti One", serif;
+    color: #000000;
+    font-size: 17px;
+    margin-top: 20px;
 }
 
 .sidebar li img {
@@ -71,6 +72,8 @@ body::-webkit-scrollbar{
 
 .sidebar li a {
     text-decoration: none;
+    font-family: "Joti One", serif;
+    font-size: 17px;
     color: inherit;
     display: flex;
     align-items: center;
@@ -262,14 +265,14 @@ header {
 
 .info-box-content h3 {
     font-size: 1.2rem;
-    color: #333;
+    color: #000000;
     margin-bottom: 5px;
 }
 
 .info-box-content p {
     font-size: 2rem;
     font-weight: bold;
-    color: #333;
+    color: #000000;
     margin: 0;
 }
 

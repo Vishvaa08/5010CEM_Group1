@@ -1,16 +1,18 @@
 html{
     scroll-behavior: smooth;
     font-family: "Josefin Sans", sans-serif;
+    min-height: 100%;
 }
 
 body {
     font-family: "Josefin Sans", sans-serif;
-    background-image: url('../images/desktop.jpg'); 
+    background-image: url('../images/bgm.jpg'); 
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat;
     margin: 0;
     padding: 0;
+    min-height: 100%;
   
    
 }
@@ -48,7 +50,7 @@ body {
     padding: 10px;
     margin: 0;
     flex-grow: 1;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .sidebar li {
@@ -70,7 +72,7 @@ body {
 .sidebar li a {
     text-decoration: none;
     font-family: "Joti One", serif;
-    font-size: 20px;
+    font-size: 17px;
     color: inherit;
     display: flex;
     align-items: center;
@@ -83,7 +85,7 @@ body {
 }
 
 .sidebar li.active {
-    background-color: rgba(0, 0, 0, 0.366);
+    background-color: black;
     color: #FFFFFF;
     padding: 10px;
     border-radius: 10px;

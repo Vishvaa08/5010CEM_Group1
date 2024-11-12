@@ -122,7 +122,7 @@ function getUserEmailByName($userName, $users) {
                                 <td>
                                     <?php 
                                     $status = isset($booking['status']) ? $booking['status'] : 'pending';
-                                    echo $status === 'approved' ? "<span class='approved'>Approved</span>" : "<span class='unapproved'>Unapproved</span>";
+                                    echo $status === 'approved' ? "<span class='approved'>Approved</span>" : "<span class='unapproved'>Rejected</span>";
                                     ?>
                                 </td>
                                 <td>

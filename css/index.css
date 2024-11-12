@@ -39,7 +39,7 @@ body::-webkit-scrollbar{
 #left-nav {
     display: flex;
     flex-direction: row;
-    align-items: right;
+    align-items: center;
     height: 12vh;
 }
 
@@ -59,8 +59,8 @@ body::-webkit-scrollbar{
     margin-left: 2vw;
     border-radius: 18px;
     display: flex;
-    align-items: right;
-    justify-content: right;
+    align-items: center;
+    justify-content: center;
 }
 
 h1 {
