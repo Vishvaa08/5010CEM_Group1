@@ -119,33 +119,32 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
         </div>
     </div>
 </div>
-        <ul>
+<ul>
             <li class="active">
-                <img src="images/home dark.jpg" alt="Dashboard Icon">
+                <img src="images/home.webp" alt="Dashboard Icon">
                 <a href="AdminDashboard.php">Dashboard</a>
             </li>
             <li>
-                <img src="images/package.png" alt="Packages Icon">
+                <img src="images/packages.png" alt="Packages Icon">
                 <a href="AdminPackage.php">Travel Packages</a>
             </li>
             <li>
-                <img src="images/users.png" alt="User Icon">
+                <img src="images/users.webp" alt="User Icon">
                 <a href="AdminUser.php">User Management</a>
             </li>
             <li>
-                <img src="images/inventory.png" alt="Inventory Icon">
+                <img src="images/inventory.webp" alt="Inventory Icon">
                 <a href="AdminInventory.php">Hotel/Flight Management</a>
             </li>
             <li>
-                <img src="images/payments.png" alt="Report Icon">
+                <img src="images/payments.webp" alt="Report Icon">
                 <a href="AdminReport.php">Bookings</a>
             </li>
-                
         </ul>
-            <a href="php_functions/logout.php"  class="logout-link">
-                <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
-                <span>Logout</span>
-            </a>
+        <a href="php_functions/logout.php"  class="logout-link">
+        <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
+        <span>Logout</span>
+    </a>
     </div>
 
     <div class="main-content">
@@ -172,7 +171,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchMonthlyEarnings') {
             </div>
             <div class="info-box-content">
                 <h3>Total Users</h3>
-                <p id="totalUsersCount">10</p>
+                <p id="totalUsersCount">100</p>
             </div>
         </div>
     </div>

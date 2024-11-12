@@ -122,9 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: ' . $_SERVER['REQUEST_URI']);
         exit();
 
-        }
-
-        
+        }      
 
         // Update flight data if the 'flight' view is active
         if ($view === 'flight' && $country && $city) {
@@ -142,10 +140,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (isset($_POST['delete_hotel']) && $view === 'hotel' && $country && $city && $hotelIndex !== null) {
-        $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex)->remove();
-        header('Location: AdminInventory.php?view=hotel&country=' . urlencode($country) . '&city=' . urlencode($city));
-        exit();
-    }
+        try {
+            $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex)->remove();
+            header('Location: AdminInventory.php?view=hotel&country=' . urlencode($country) . '&city=' . urlencode($city));
+            exit();
+        } catch (Exception $e) {
+            error_log('Error deleting hotel: ' . $e->getMessage());
+        }
+    }    
 
 }
 
@@ -172,27 +174,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     <ul>
-        <li>
-            <img src="images/home.png" alt="Dashboard Icon">
-            <a href="AdminDashboard.php">Dashboard</a>
-        </li>
-        <li>
-            <img src="images/package.png" alt="Packages Icon">
-            <a href="AdminPackage.php">Travel Packages</a>
-        </li>
-        <li>
-            <img src="images/users.png" alt="User Icon">
-            <a href="AdminUser.php">User Management</a>
-        </li>
-        <li class="active">
-            <img src="images/inventory dark.jpg" alt="Inventory Icon">
-            <a href="AdminInventory.php">Hotel/Flight Management</a>
-        </li>
-        <li>
-            <img src="images/payments.png" alt="Report Icon">
-            <a href="AdminReport.php">Bookings</a>
-        </li>
-    </ul>
+    <ul>
+            <li>
+                <img src="images/home.webp" alt="Dashboard Icon">
+                <a href="AdminDashboard.php">Dashboard</a>
+            </li>
+            <li>
+                <img src="images/packages.png" alt="Packages Icon">
+                <a href="AdminPackage.php">Travel Packages</a>
+            </li>
+            <li>
+                <img src="images/users.webp" alt="User Icon">
+                <a href="AdminUser.php">User Management</a>
+            </li>
+            <li class="active">
+                <img src="images/inventory.webp" alt="Inventory Icon">
+                <a href="AdminInventory.php">Hotel/Flight Management</a>
+            </li>
+            <li>
+                <img src="images/payments.webp" alt="Report Icon">
+                <a href="AdminReport.php">Bookings</a>
+            </li>
+        </ul>
     <a href="php_functions/logout.php"  class="logout-link">
         <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
         <span>Logout</span>
@@ -299,6 +302,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <button type="submit" name="update_availability" class="update-btn">Update Hotel</button>
                 <button type="button" name="delete_hotel" class="delete-btn" onclick="deleteHotel()">Delete Hotel</button>
+
             </form>
         <?php else : ?>
             <p>Please select a package, city, and hotel to view room availability.</p>
@@ -391,14 +395,35 @@ function showFlight() {
 
 function deleteHotel() {
     if (confirm("Are you sure you want to delete this hotel?")) {
-        const deleteButton = document.createElement('input');
-        deleteButton.type = 'hidden';
-        deleteButton.name = 'delete_hotel';
-        deleteButton.value = 'true';
-        document.getElementById('availabilityForm').appendChild(deleteButton);
-        document.getElementById('availabilityForm').submit();
+        const country = "<?php echo htmlspecialchars($country); ?>";
+        const city = "<?php echo htmlspecialchars($city); ?>";
+        const hotelIndex = "<?php echo htmlspecialchars($hotelIndex); ?>";
+
+        $.ajax({
+            url: 'php_functions/delete_hotel.php',  
+            type: 'POST',
+            data: {
+                country: country,
+                city: city,
+                hotelIndex: hotelIndex
+            },
+            success: function(response) {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    alert("Hotel deleted successfully!");
+                    location.reload();
+                } else {
+                    alert("Error: " + result.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("Failed to delete hotel.");
+                console.error("Error:", error);
+            }
+        });
     }
 }
+
 
 function updateBookedRooms(input, roomType) {
     const availability = parseInt(input.value);

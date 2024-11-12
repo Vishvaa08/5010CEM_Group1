@@ -75,25 +75,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
     </div>
 </div>
-        <ul>
+<ul>
             <li>
-                <img src="images/home.png" alt="Dashboard Icon">
+                <img src="images/home.webp" alt="Dashboard Icon">
                 <a href="AdminDashboard.php">Dashboard</a>
             </li>
             <li>
-                <img src="images/package.png" alt="Packages Icon">
+                <img src="images/packages.png" alt="Packages Icon">
                 <a href="AdminPackage.php">Travel Packages</a>
             </li>
             <li class="active">
-                <img src="images/user.jpg" alt="User Icon">
+                <img src="images/users.webp" alt="User Icon">
                 <a href="AdminUser.php">User Management</a>
             </li>
             <li>
-                <img src="images/inventory.png" alt="Inventory Icon">
+                <img src="images/inventory.webp" alt="Inventory Icon">
                 <a href="AdminInventory.php">Hotel/Flight Management</a>
             </li>
             <li>
-                <img src="images/payments.png" alt="Report Icon">
+                <img src="images/payments.webp" alt="Report Icon">
                 <a href="AdminReport.php">Bookings</a>
             </li>
         </ul>

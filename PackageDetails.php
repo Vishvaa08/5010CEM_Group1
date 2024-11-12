@@ -38,28 +38,28 @@ if (isset($_SESSION['userName'])) {
         </div>
     </div>
 </div>
-    <ul>
-        <li>
-            <img src="images/home.png" alt="Dashboard Icon">
-            <a href="AdminDashboard.php">Dashboard</a>
-        </li>
-        <li class="active">
-            <img src="images/package dark.jpg" alt="Packages Icon">
-            <a href="AdminPackage.php">Travel Packages</a>
-        </li>
-        <li>
-            <img src="images/users.png" alt="User Icon">
-            <a href="AdminUser.php">User Management</a>
-        </li>
-        <li>
-            <img src="images/inventory.png" alt="Inventory Icon">
-            <a href="AdminInventory.php">Hotel/Flight Management</a>
-        </li>
-        <li>
-            <img src="images/payments.png" alt="Report Icon">
-            <a href="AdminReport.php">Bookings</a>
-        </li>
-    </ul>
+        <ul>
+            <li>
+                <img src="images/home.webp" alt="Dashboard Icon">
+                <a href="AdminDashboard.php">Dashboard</a>
+            </li>
+            <li class="active">
+                <img src="images/packages.png" alt="Packages Icon">
+                <a href="AdminPackage.php">Travel Packages</a>
+            </li>
+            <li>
+                <img src="images/users.webp" alt="User Icon">
+                <a href="AdminUser.php">User Management</a>
+            </li>
+            <li>
+                <img src="images/inventory.webp" alt="Inventory Icon">
+                <a href="AdminInventory.php">Hotel/Flight Management</a>
+            </li>
+            <li>
+                <img src="images/payments.webp" alt="Report Icon">
+                <a href="AdminReport.php">Bookings</a>
+            </li>
+        </ul>
     <a href="php_functions/logout.php"  class="logout-link">
         <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
         <span>Logout</span>
@@ -133,7 +133,8 @@ if (isset($_SESSION['userName'])) {
                     $availability = isset($cityDetails['Availability']) ? $cityDetails['Availability'] : 'N/A';
                     echo '<div style="display: flex; align-items: left; margin-top: -18px;">'; 
                     echo '<div class="form-check" style="margin-left: 330px;">'; 
-                        echo '<input type="checkbox" class="form-check-input availability-checkbox" data-city="' . htmlspecialchars($city) . '" data-country="' . htmlspecialchars($country) . '" ' . ($availability == 'Available' ? 'checked' : '') . '>';
+                        echo '<input type="checkbox" class="form-check-input availability-checkbox" data-city="' . htmlspecialchars($city) . 
+                        '" data-country="' . htmlspecialchars($country) . '" ' . ($availability == 'Available' ? 'checked' : '') . '>';
                         echo '<label class="form-check-label">Available</label>';
                     echo '</div>';
                     echo '</div>';
@@ -697,7 +698,7 @@ $(document).on('click', '.edit-btn', function() {
 
 
 /// Delete Itinerary
-$(document).on('click', '.php_functions/delete-itinerary-btn', function() {
+$(document).on('click', '.delete-itinerary-btn', function() {
     const itineraryItem = $(this).closest('.itinerary-item');
     const itineraryIndex = itineraryItem.data('index'); 
     const cityCard = itineraryItem.closest('.city-card');
@@ -706,7 +707,7 @@ $(document).on('click', '.php_functions/delete-itinerary-btn', function() {
 
     if (confirm('Are you sure you want to delete this itinerary?')) {
         $.ajax({
-            url: 'delete_itinerary.php', 
+            url: 'php_functions/delete_itinerary.php', 
             type: 'POST',
             data: { country: country, city: city, index: itineraryIndex }, 
             success: function(response) {

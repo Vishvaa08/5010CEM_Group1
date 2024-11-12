@@ -49,27 +49,27 @@ function getUserEmailByName($userName, $users) {
         </div>
     </div>
     <ul>
-        <li>
-            <img src="images/home.png" alt="Dashboard Icon">
-            <a href="AdminDashboard.php">Dashboard</a>
-        </li>
-        <li>
-            <img src="images/package.png" alt="Packages Icon">
-            <a href="AdminPackage.php">Travel Packages</a>
-        </li>
-        <li>
-            <img src="images/users.png" alt="User Icon">
-            <a href="AdminUser.php">User Management</a>
-        </li>
-        <li>
-            <img src="images/inventory.png" alt="Inventory Icon">
-            <a href="AdminInventory.php">Hotel/Flight Management</a>
-        </li>
-        <li class="active">
-            <img src="images/payment.jpg" alt="Report Icon">
-            <a href="AdminReport.php">Bookings</a>
-        </li>
-    </ul>
+            <li>
+                <img src="images/home.webp" alt="Dashboard Icon">
+                <a href="AdminDashboard.php">Dashboard</a>
+            </li>
+            <li>
+                <img src="images/packages.png" alt="Packages Icon">
+                <a href="AdminPackage.php">Travel Packages</a>
+            </li>
+            <li>
+                <img src="images/users.webp" alt="User Icon">
+                <a href="AdminUser.php">User Management</a>
+            </li>
+            <li>
+                <img src="images/inventory.webp" alt="Inventory Icon">
+                <a href="AdminInventory.php">Hotel/Flight Management</a>
+            </li>
+            <li  class="active">
+                <img src="images/payments.webp" alt="Report Icon">
+                <a href="AdminReport.php">Bookings</a>
+            </li>
+        </ul>
     <a href="php_functions/logout.php"  class="logout-link">
         <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
         <span>Logout</span>
@@ -122,7 +122,7 @@ function getUserEmailByName($userName, $users) {
                                 <td>
                                     <?php 
                                     $status = isset($booking['status']) ? $booking['status'] : 'pending';
-                                    echo $status === 'approved' ? "<span class='approved'>Approved</span>" : "<span class='unapproved'>Unapproved</span>";
+                                    echo $status === 'approved' ? "<span class='approved'>Approved</span>" : "<span class='unapproved'>Rejected</span>";
                                     ?>
                                 </td>
                                 <td>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'firebase_connection.php';
+include '../firebase_connection.php';
 
 // Ensure the user is logged in
 if (!isset($_SESSION['uid'])) {

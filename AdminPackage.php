@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-include 'firebase_connection.php'; 
+include 'firebase_connection.php';
 include 'firebase_data.php'; 
 
 $pic = '';
@@ -98,7 +98,7 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Country Management</title>
-    <link rel="stylesheet" href="css/Package.css">
+    <link rel="stylesheet" href="css/Country.css">
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -114,24 +114,24 @@ if (isset($_POST['submit'])) {
     </div>
         <ul>
             <li>
-                <img src="images/home.png" alt="Dashboard Icon">
+                <img src="images/home.webp" alt="Dashboard Icon">
                 <a href="AdminDashboard.php">Dashboard</a>
             </li>
             <li class="active">
-                <img src="images/package dark.jpg" alt="Packages Icon">
+                <img src="images/packages.png" alt="Packages Icon">
                 <a href="AdminPackage.php">Travel Packages</a>
             </li>
             <li>
-                <img src="images/users.png" alt="User Icon">
+                <img src="images/users.webp" alt="User Icon">
                 <a href="AdminUser.php">User Management</a>
             </li>
             <li>
-                <img src="images/inventory.png" alt="Inventory Icon">
+                <img src="images/inventory.webp" alt="Inventory Icon">
                 <a href="AdminInventory.php">Hotel/Flight Management</a>
             </li>
             <li>
-                <img src="images/report.png" alt="Report Icon">
-                <a href="AdminReport.php">Report</a>
+                <img src="images/payments.webp" alt="Report Icon">
+                <a href="AdminReport.php">Bookings</a>
             </li>
         </ul>
             <a href="php_functions/logout.php"  class="logout-link">
@@ -205,7 +205,8 @@ if (isset($_POST['submit'])) {
                     $checked = ($availability === 'Available') ? 'checked' : '';
                     
                     echo '<div class="form-check">';
-                    echo '<input type="checkbox" class="form-check-input" id="availabilityCheckbox_' . htmlspecialchars($country) . '" ' . $checked . ' onchange="updateAvailability(\'' . htmlspecialchars($country) . '\', this.checked)">';
+                    echo '<input type="checkbox" class="form-check-input" id="availabilityCheckbox_' . htmlspecialchars($country) . '" ' . $checked . 
+                    ' onchange="updateAvailability(\'' . htmlspecialchars($country) . '\', this.checked)">';
                     echo '<label class="form-check-label" for="availabilityCheckbox_' . htmlspecialchars($country) . '">Available</label>';
                     echo '</div>';
 

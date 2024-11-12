@@ -1,5 +1,5 @@
 <?php
-include 'firebase_connection.php'; 
+include '../firebase_connection.php';
 
 header('Content-Type: application/json');
 

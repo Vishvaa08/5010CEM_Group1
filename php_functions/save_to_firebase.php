@@ -1,9 +1,6 @@
 <?php
-require 'vendor/autoload.php';
-use Kreait\Firebase\Factory;
-use Kreait\Firebase\Exception\FirebaseException;
+include '../firebase_connection.php';
 
-include 'firebase_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     error_log('POST request received.');
