@@ -47,7 +47,7 @@ body::-webkit-scrollbar{
 
 .sidebar ul {
     list-style: none;
-    padding: 10px;
+    padding: 5px;
     margin: 0;
     flex-grow: 1;
 }
@@ -61,8 +61,8 @@ body::-webkit-scrollbar{
 }
 
 .sidebar li img {
-    width: 26px; 
-    height: 26px; 
+    width: 34px; 
+    height: 34px; 
     margin-right: 15px; 
     vertical-align: middle; 
 }
@@ -95,7 +95,7 @@ body::-webkit-scrollbar{
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 0;
+    padding: 10px 0;
     background-color: #ffffffb3;
     border-bottom: 1px solid #ddd;
     font-family: "Josefin Sans", sans-serif;

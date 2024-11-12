@@ -60,7 +60,7 @@ if (isset($_SESSION['userName'])) {
             <a href="AdminReport.php">Bookings</a>
         </li>
     </ul>
-    <a href="/php_functions/logout.php"  class="logout-link">
+    <a href="php_functions/logout.php"  class="logout-link">
         <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
         <span>Logout</span>
     </a>
@@ -404,7 +404,7 @@ if (isset($_SESSION['userName'])) {
             formData.append('cityImage', cityImageFile);
 
             $.ajax({
-                url: '/php_functions/add_new_city.php', 
+                url: 'php_functions/add_new_city.php', 
                 type: 'POST',
                 data: formData,
                 contentType: false,
@@ -446,7 +446,7 @@ if (isset($_SESSION['userName'])) {
         formData.append('imageFile', newImageFile); 
 
         $.ajax({
-        url: '/php_functions/upload_image.php', 
+        url: 'php_functions/upload_image.php', 
         type: 'POST',
         data: formData,
         contentType: false,
@@ -628,7 +628,7 @@ $(document).on('click', '.edit-btn', function() {
                 formData.append('itineraryImage', itineraryImageFile);
 
                 const itineraryPromise = $.ajax({
-                    url: '/php_functions/save_itinerary.php', 
+                    url: 'php_functions/save_itinerary.php', 
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -668,7 +668,7 @@ $(document).on('click', '.edit-btn', function() {
         formData.append('data', JSON.stringify(dataToUpdate)); 
 
         $.ajax({
-            url: '/php_functions/save_to_firebase.php', 
+            url: 'php_functions/save_to_firebase.php', 
             type: 'POST',
             data: formData,
             contentType: false,
@@ -698,7 +698,7 @@ $(document).on('click', '.edit-btn', function() {
 
 
 /// Delete Itinerary
-$(document).on('click', '.php_functions/delete-itinerary-btn', function() {
+$(document).on('click', '.delete-itinerary-btn', function() {
     const itineraryItem = $(this).closest('.itinerary-item');
     const itineraryIndex = itineraryItem.data('index'); 
     const cityCard = itineraryItem.closest('.city-card');
@@ -707,7 +707,7 @@ $(document).on('click', '.php_functions/delete-itinerary-btn', function() {
 
     if (confirm('Are you sure you want to delete this itinerary?')) {
         $.ajax({
-            url: '/php_functions/delete_itinerary.php', 
+            url: 'php_functions/delete_itinerary.php', 
             type: 'POST',
             data: { country: country, city: city, index: itineraryIndex }, 
             success: function(response) {
@@ -735,7 +735,7 @@ $(document).on('click', '.delete1-btn', function() {
 
     if (confirm('Are you sure you want to delete this city package?')) {
         $.ajax({
-            url: '/php_functions/delete_city.php', 
+            url: 'php_functions/delete_city.php', 
             type: 'POST',
             data: { country: country, city: city }, 
             success: function(response) {

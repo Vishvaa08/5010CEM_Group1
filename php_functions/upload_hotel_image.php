@@ -1,17 +1,5 @@
 <?php
-require 'vendor/autoload.php';
-use Kreait\Firebase\Factory;
-use Kreait\Firebase\Storage;
-use Kreait\Firebase\Exception\FirebaseException;
-
-$serviceAccount = __DIR__ . '/prvkey.json';
-
-$factory = (new Factory)
-    ->withServiceAccount($serviceAccount)
-    ->withDatabaseUri('https://traveltrail-39e23-default-rtdb.firebaseio.com/');
-
-$database = $factory->createDatabase();
-$storage = $factory->createStorage();
+include '../firebase_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hotelId = $_POST['hotelId'] ?? null;
