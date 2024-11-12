@@ -133,7 +133,8 @@ if (isset($_SESSION['userName'])) {
                     $availability = isset($cityDetails['Availability']) ? $cityDetails['Availability'] : 'N/A';
                     echo '<div style="display: flex; align-items: left; margin-top: -18px;">'; 
                     echo '<div class="form-check" style="margin-left: 330px;">'; 
-                        echo '<input type="checkbox" class="form-check-input availability-checkbox" data-city="' . htmlspecialchars($city) . '" data-country="' . htmlspecialchars($country) . '" ' . ($availability == 'Available' ? 'checked' : '') . '>';
+                        echo '<input type="checkbox" class="form-check-input availability-checkbox" data-city="' . htmlspecialchars($city) . 
+                        '" data-country="' . htmlspecialchars($country) . '" ' . ($availability == 'Available' ? 'checked' : '') . '>';
                         echo '<label class="form-check-label">Available</label>';
                     echo '</div>';
                     echo '</div>';
