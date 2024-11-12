@@ -260,7 +260,7 @@ if (isset($_POST['submit'])) {
                 countryDetail: countryDetail 
             };
 
-            fetch('php_functions/update_country.php', {
+            fetch('/php_functions/update_country.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -70,7 +70,7 @@ function getUserEmailByName($userName, $users) {
             <a href="AdminReport.php">Bookings</a>
         </li>
     </ul>
-    <a href="php_functions/logout.php"  class="logout-link">
+    <a href="/php_functions/logout.php"  class="logout-link">
         <img src="images/logout.png" alt="Logout Icon" class="logout-icon">
         <span>Logout</span>
     </a>

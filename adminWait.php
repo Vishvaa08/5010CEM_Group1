@@ -53,7 +53,7 @@ if (isset($_SESSION['userName'])) {
     <script>
         // Periodically check for approval every 10 seconds
         setInterval(function() {
-            fetch('php_functions/checkApproval.php')
+            fetch('/php_functions/checkApproval.php')
                 .then(response => response.json())
                 .then(data => {
                     if (data.approved) {
