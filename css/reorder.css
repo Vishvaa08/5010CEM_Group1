@@ -25,7 +25,7 @@ body::-webkit-scrollbar{
 }
 
 #header {
-    background-color: #161616;
+    background-color: rgba(0, 0, 0, 0.4);
     height: 12vh;
     display: flex;
     align-items: center;

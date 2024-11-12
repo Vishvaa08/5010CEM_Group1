@@ -37,12 +37,16 @@ function fetchCityImage($country, $city) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order History</title>
     <link rel="stylesheet" href="css/reorder.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Joti+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <div id="header">
         <div id="left-nav">
-            <a href="#home">
+            <a href="index.php">
                 <div class="logo-container">
                     <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
                 </div>
@@ -50,13 +54,14 @@ function fetchCityImage($country, $city) {
             <h1>TravelTrail</h1>
         </div>
 
-            <div id="right-nav">
-                <a class="nav-link" href="#home">Home</a>
-                <a class="nav-link" href="#about">About</a>
-                <a class="nav-link" href="#contact">Contact</a>
-                <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo htmlspecialchars($pic, ENT_QUOTES, 'UTF-8'); ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
-            </div>
+        <div id="right-nav">
+            <a class="nav-link" href="index.php#home">Home</a>
+            <a class="nav-link" href="index.php#about">About</a>
+            <a class="nav-link" href="index.php#contact">Contact</a>
+            <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo $pic; ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
         </div>
+    </div>
+    </div>
 
        
         <div id="orders">
