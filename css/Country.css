@@ -1,4 +1,4 @@
-﻿html{
+html{
     scroll-behavior: smooth;
     font-family: "Josefin Sans", sans-serif;
 }
@@ -11,7 +11,7 @@ body {
     background-repeat: no-repeat;
     margin: 0;
     padding: 0;
-    height: 100vh;
+  
    
 }
 
@@ -83,7 +83,7 @@ body {
 }
 
 .sidebar li.active {
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.366);
     color: #FFFFFF;
     padding: 10px;
     border-radius: 10px;
@@ -207,8 +207,7 @@ header {
     padding: 0 20px; 
 }
 
-.country-card,
-.city-card {
+.country-card{
     background-color: #FFFFFF;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -229,21 +228,6 @@ header {
     font-family: "Josefin Sans", sans-serif;
 }
 
-.city-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 120px;
-    justify-content: center; 
-    padding: 20px 0; 
-}
-
-.city-card {
-    width: 450px;
-    box-sizing: border-box;
-    flex-direction: column;
-    font-family: "Josefin Sans", sans-serif;
-    background-color: #ffffffb3;
-}
 
 .country-card img {
     width: 100%;
@@ -251,78 +235,6 @@ header {
     object-fit: cover;
     border-radius: 10px;
     margin-bottom: 10px;
-}
-
-.city-card img{
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-
-.hotel-dropdown,
-.itinerary-dropdown {
-    width: 100%;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-weight: bold;
-    font-family: "Josefin Sans", sans-serif;
-    margin-bottom: 5px;
-}
-
-.hotel-item,
-.itinerary-item {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.hotel-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px auto;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    width: 80%; 
-}
-
-.hotel-image-container {
-    width: 100%; 
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.hotel-image {
-    width: 100%; 
-    height: 200px; 
-    object-fit: cover; 
-    border-radius: 10px;
-}
-
-.hotel-details-container {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 15px; 
-    margin-bottom: 20px; 
-}
-
-.room-detail {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
 }
 
 .description-textarea:focus {
@@ -422,71 +334,6 @@ header {
     font-family: "Josefin Sans", sans-serif;
 }
 
-.hotel-item input,
-.hotel-item textarea {
-    padding: 8px;
-    height: 38px;
-    width: 100%;
-    resize: none;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    text-align: center;
-    box-sizing: border-box;
-}
-
-.hotel-item span,
-.itinerary-item span {
-    text-align: left;
-    padding: 5px;
-}
-
-.flight-item {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 15px;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.flight-item input {
-    padding: 5px;
-    height: 38px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    text-align: center;
-    box-sizing: border-box;
-}
-
-.flight-item span {
-    text-align: left;
-    padding: 5px;
-}
-
-.vehicle-item {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.vehicle-item input,
-.vehicle-item select {
-    padding: 5px;
-    height: 38px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    text-align: center;
-    box-sizing: border-box;
-}
-
-.vehicle-item span {
-    text-align: left;
-    padding: 5px;
-}
-
 /* Action buttons */
 .action-buttons {
     display: flex;
@@ -533,74 +380,9 @@ header {
     background-color: #ec6666;
 }
 
-.itinerary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 15px;
-}
-
-.itinerary-details-container {
-    flex-grow: 2; 
-    display: flex;
-    flex-direction: column; 
-    justify-content: center;
-    margin-right: 10px;
-}
-
-.itinerary-details-container input {
-    padding: 8px;
-    height: 38px;
-    width: 100%;
-    border: 1px solid #ccc;
-    font-family: "Josefin Sans", sans-serif;
-    border-radius: 5px;
-    text-align: center;
-    box-sizing: border-box;
-}
-
 .image-container {
     flex-grow: 1;
     text-align: center;
-}
-
-.thumbnail {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    display: block;
-    margin-top: 10px;
-}
-
-.draggable-container {
-    position: fixed;  
-    bottom: 20px;     
-    right: 20px;      
-    display: flex;    
-    flex-direction: column;  
-    gap: 10px;        
-    z-index: 1000;    
-}
-
-.draggable {
-    width: 50px;               
-    height: 30px;               
-    padding: 5px;               
-    padding-bottom: 10px;       
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    border: 1px solid #9a9999;  
-    border-radius: 7px;        
-    text-align: center;          
-    color: white;                
-    display: flex;               
-    align-items: center;         
-    justify-content: center;    
-    cursor: move;               
 }
 
 /* Add Country form */
@@ -647,93 +429,6 @@ header {
 #addCountryForm .submit-btn-success:hover {
     background-color: #858585;
 }
-
-
-
-/* AddCity - form */
-.add-city-container {
-    display: flex; 
-    align-items: flex-start; 
-    margin-left: 10px;
-}
-
-#addCityForm {
-    width: 250px; 
-    background-color: #FFFFFF;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    display: block; 
-}
-
-.card-body {
-    padding: 5px; 
-}
-
-.card-title {
-    font-family: "Josefin Sans", sans-serif; 
-    font-size: 18px; 
-    text-align: center; 
-    color: #333; 
-    margin-top: 5px;
-}
-
-#addCityForm .form-group {
-    display: flex;  
-    align-items: center; 
-}
-
-#addCityForm .form-group label {
-    flex: 0 0 80px; 
-    font-weight: bold;
-    margin-bottom: 0; 
-    font-family: "Joti One", serif;
-    font-size: 14px;
-    color: #333;
-}
-
-#addCityForm .form-group input[type="text"], 
-#addCityForm .form-group input[type="file"], 
-#addCityForm .form-group textarea {
-    flex: 1; 
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: "Josefin Sans", sans-serif;
-    background-color: #f9f9f9;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-    resize: none;
-}
-
-#addCityForm .form-group input[type="text"]:focus, 
-#addCityForm .form-group input[type="file"]:focus, 
-#addCityForm .form-group textarea:focus {
-    border-color: #333;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
-}
-
-/* Submit Button City */
-#addCityForm .btn-success {
-    width: 100%;
-    padding: 10px;
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: "Joti One", serif;
-    transition: background-color 0.3s ease;
-}
-
-#addCityForm .btn-success:hover {
-    background-color: #858585;
-} 
-
 
 .file-availability-container {
     display: flex;
@@ -830,32 +525,6 @@ header {
 
 .delete-btn:hover {
     background-color: #ec6666;
-}
-
-.city-details-container {
-    padding: 20px;
-    background-color: #FFFFFF;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin: 20px 0;
-}
-
-.category {
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 15px;
-}
-
-.category h3 {
-    cursor: pointer;
-}
-
-.category .hotel-section,
-.category .flight-section,
-.category .vehicle-section,
-.category .itinerary-section {
-    display: none; 
 }
 
 .action-buttons {

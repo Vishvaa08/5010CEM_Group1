@@ -79,7 +79,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
                 
                 const formData = new FormData(form);
                 
-                fetch('/php_functions/submit_contact.php', {
+                fetch('php_functions/submit_contact.php', {
                     method: 'POST',
                     body: formData
                 })
