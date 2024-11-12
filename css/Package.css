@@ -1,11 +1,11 @@
 ﻿html{
     scroll-behavior: smooth;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
     min-height: 100%;
 }
 
 body {
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
     background-image: url('../images/bgm.jpg'); 
     background-size: cover; 
     background-position: center; 
@@ -128,7 +128,7 @@ body {
 .main-content {
     margin-left: 300px;
     padding: 20px;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
 }
 
 header {
@@ -140,7 +140,7 @@ header {
 .header-left {
     display: flex;
     flex-direction: column;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
     margin-top: -160px;
 
 }
@@ -149,14 +149,14 @@ header {
     display: flex;
     flex-direction: column;
     margin-top: -120px;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
 }
 
 .header-right {
     display: flex;
     align-items: center;
     gap: 15px; 
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
 }
 
 .search-box {
@@ -227,7 +227,7 @@ header {
     background-color: #ffffff91;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
 }
 
 .city-grid {
@@ -242,7 +242,7 @@ header {
     width: 450px;
     box-sizing: border-box;
     flex-direction: column;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
     background-color: #ffffffb3;
 }
 
@@ -269,7 +269,7 @@ header {
     border-radius: 5px;
     border: 1px solid #ccc;
     font-weight: bold;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
     margin-bottom: 5px;
 }
 
@@ -352,7 +352,7 @@ header {
     font-size: 14px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s ease;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
     background-color: #f9f9f9; 
     white-space: pre-wrap; 
     overflow: visible; 
@@ -365,7 +365,7 @@ header {
     font-weight: bold;
     margin-bottom: 5px;
     color: #333;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
 }
 
 
@@ -391,7 +391,7 @@ header {
     font-size: 14px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s ease;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
 }
 
 .D_textarea:focus {
@@ -420,7 +420,7 @@ header {
     border-radius: 5px;
     border: 1px solid #ccc; 
     padding: 8px; 
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
 }
 
 .hotel-item input,
@@ -493,7 +493,7 @@ header {
     display: flex;
     gap: 10px; 
     margin-top: 15px;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
 }
 
 .action-buttons button {
@@ -504,7 +504,7 @@ header {
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
     text-align: center;
     transition: background-color 0.3s ease;
 }
@@ -557,7 +557,7 @@ header {
     height: 38px;
     width: 100%;
     border: 1px solid #ccc;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
     border-radius: 5px;
     text-align: center;
     box-sizing: border-box;
@@ -672,7 +672,7 @@ header {
 }
 
 .card-title {
-    font-family: "Josefin Sans", sans-serif; 
+    font-family: "Joti One", serif;
     font-size: 18px; 
     text-align: center; 
     color: #333; 
@@ -701,7 +701,7 @@ header {
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 14px;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
     background-color: #f9f9f9;
     transition: all 0.3s ease;
     box-sizing: border-box;
@@ -791,7 +791,7 @@ header {
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 14px;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Joti One", serif;
     background-color: #f9f9f9;
     transition: all 0.3s ease;
     box-sizing: border-box;
