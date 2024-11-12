@@ -1,4 +1,7 @@
 <?php
+
+use Kreait\Firebase\Exception\FirebaseException;
+
 session_start();
 include 'firebase_connection.php';
 
@@ -108,32 +111,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if (isset($_POST['availability']) && isset($_POST['price'])) {
-        foreach ($_POST['availability'] as $roomType => $availability) {
-            $availability = (int) $availability;
-            $price = isset($_POST['price'][$roomType]) ? (float) $_POST['price'][$roomType] : 0;
+    if (isset($_POST['update_hotel_availability']) && $_POST['update_hotel_availability'] === 'update') {
+        if (isset($_POST['availability']) && isset($_POST['price'])) {
+            // Loop through all room types to update availability and price
+            foreach ($_POST['availability'] as $roomType => $availability) {
+                // Ensure the availability and price values are correctly set
+                $availability = (int) $availability; // Convert to integer
+                $price = isset($_POST['price'][$roomType]) ? (float) $_POST['price'][$roomType] : 0; // Convert price to float
+    
+                // Update availability and price for the room in Firebase
+                $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex . '/Rooms/' . $roomType)
+                    ->update([
+                        'Availability' => $availability,
+                        'Price' => $price
+                    ]);
+            }
+    
+            // Redirect to avoid form resubmission on page refresh
+            header('Location: ' . $_SERVER['REQUEST_URI']);
+            exit();
+        }
+    }
 
-            $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex . '/Rooms/' . $roomType)
-                ->update([
-                    'Availability' => $availability,
-                    'Price' => $price
-                ]);
-
-        header('Location: ' . $_SERVER['REQUEST_URI']);
-        exit();
-
-        }      
-
-        // Update flight data if the 'flight' view is active
-        if ($view === 'flight' && $country && $city) {
+    if (isset($_POST['update_flight_availability']) && $_POST['update_flight_availability'] === 'update') {
+        // Process the availability and price update
+        if (isset($_POST['availability']) && isset($_POST['price'])) {
             foreach ($_POST['availability'] as $flightClass => $availability) {
                 $availability = (int) $availability;
                 $price = isset($_POST['price'][$flightClass]) ? (float) $_POST['price'][$flightClass] : 0;
 
+                // Update flight data in Firebase
                 $database->getReference('Packages/' . $country . '/' . $city . '/Flights/' . $flightClass)
                     ->update(['Seats' => $availability, 'Price' => $price]);
             }
 
+            // Redirect to avoid form resubmission on page refresh
             header('Location: ' . $_SERVER['REQUEST_URI']);
             exit();
         }
@@ -301,7 +313,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="checkbox" class="check_box" name="hotel_availability" id="hotel-availability" <?= ($selectedHotel['Availability'] === 'Available') ? 'checked' : '' ?>>
                 <label for="hotel-availability" class="availability_label">Available</label>
 
-                <button type="submit" name="update_availability" class="update-btn">Update Hotel</button>
+                <button type="submit" name="update_hotel_availability" class="update-btn" value="update">Update Hotel</button>
                 <button type="button" name="delete_hotel" class="delete-btn" onclick="deleteHotel()">Delete Hotel</button>
 
             </form>
@@ -369,7 +381,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <button type="submit" name="update_availability" class="update-btn">Update Flight</button>
+                <button type="submit" name="update_flight_availability" class="update-btn" value="update">Update Flight</button>
             </form>
         <?php else: ?>
             <p>Please select a package and city to view flight seat availability.</p>
