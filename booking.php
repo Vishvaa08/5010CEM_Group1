@@ -63,7 +63,7 @@ if (isset($_SESSION['userName'])) {
             <div id="banner">
 
                 <?php
-
+                //display Banner2 child under $dataCityImages db reference from firebase_data.php
                 if (isset($dataCityImages['Banner2'])) {
                     echo '<img src="' . ($dataCityImages['Banner2']) . ' Image" class="banner2-image">';
                 } else {
@@ -71,7 +71,7 @@ if (isset($_SESSION['userName'])) {
                 }
 
                 ?>
-
+                <!-- display city name in uppercase div -->
                 <div id="opacity">
 
                     <?php
@@ -88,7 +88,9 @@ if (isset($_SESSION['userName'])) {
                     <h1>Itineraries :</h1>
                     <?php
                     echo '<div>';
+                    //foreach loop that displays all Itinerary under specific city
                     foreach ($dataCityItinerary as $key => $itinerary) {
+                        //displays only itinerary with child Itinerary and child Price
                         if (isset($itinerary['Itinerary']) && isset($itinerary['Price'])) {
                             echo '<label>';
                             echo '<input type="checkbox" class="itinerary-checkbox" name="itineraries[]" value="' . htmlspecialchars($itinerary['Itinerary']) . '|' . htmlspecialchars($itinerary['Price']) . '">';
@@ -104,7 +106,9 @@ if (isset($_SESSION['userName'])) {
                     <h1>Vehicle :</h1>
                     <?php
                     echo '<div>';
+                    //foreach loop to loop and display all vehicles under $dataVehicle db reference
                     foreach ($dataVehicle as $key => $vehicle1) {
+                        //only displays vehicles with child Type and child Price
                         if (isset($vehicle1['Type']) && isset($vehicle1['Price'])) {
                             echo '<label class="vehicles">';
                             echo '<input type="radio" id="vehicle" name="vehicle" value="' . htmlspecialchars($vehicle1['Type']) . '|' . htmlspecialchars($vehicle1['Price']) . '">';
@@ -116,13 +120,14 @@ if (isset($_SESSION['userName'])) {
                     ?>
 
                     <hr>
-
+                    <!-- display hotel name dynamically based on what was selected previously -->
                     <h1><?php if (isset($dataHotel['Hotel'])) {
                             echo $dataHotel['Hotel'];
                         } ?>
                     </h1>
 
                     <label>
+                        <!-- radio button for single room : button disabled if value is = 0 -->
                         <input type="radio" name="room" value="Single|<?php echo $singlePrice; ?>"
                             <?php echo ($single == 0) ? 'disabled' : ''; ?>>
                         Single Room - <span style="color: white;">RM<?php echo $singlePrice ?></span>
@@ -143,6 +148,7 @@ if (isset($_SESSION['userName'])) {
                         <div id="right">Check Out</div>
                     </div>
                     <div id="calendar-bottom">
+                        <!-- date inputs for check in and check out -->
                         <div id="left"><input type="date" id="check-in-date" name="check-in-date" value="check-in-date" min="<?php echo date('Y-m-d'); ?>" required></div>
                         <div id="right"><input type="date" id="check-out-date" name="check-out-date" value="check-out-date" required></div>
                     </div>
@@ -151,6 +157,7 @@ if (isset($_SESSION['userName'])) {
 
                     <h1>Flight :</h1>
                     <label>
+                        <!-- radio button for flight seats : button disabled if value = 0 -->
                         <input type="radio" name="flight" value="Economy|<?php echo $economyPrice; ?>"
                             <?php echo ($economySeats == 0) ? 'disabled' : ''; ?>>
                         Economy : Seats Available : <?php echo $economySeats ?> - <span style="color: white;">RM<?php echo $economyPrice ?></span>
@@ -215,24 +222,28 @@ if (isset($_SESSION['userName'])) {
     <div id="footer"></div>
 
     <script>
+        //initialising variables for JS use
         const today = new Date();
         const dd = String(today.getDate()).padStart(2, '0');
         const mm = String(today.getMonth() + 1).padStart(2, '0');
         const yyyy = today.getFullYear();
 
         const formattedDate = yyyy + '-' + mm + '-' + dd;
-
+        //set minimum value to checkinInput
         const checkinInput = document.getElementById('check-in-date');
         checkinInput.setAttribute('min', formattedDate);
-
+        //validation to ensure check-out date is not before check-in date
         checkinInput.addEventListener('change', function() {
             const checkinValue = new Date(checkinInput.value);
+            //+1 date to checkinValue : to later assign to checkout so user can select a date from 1 day onwards of check in
             checkinValue.setDate(checkinValue.getDate() + 1);
-
+            //convert value to string
             const checkoutMinDate = checkinValue.toISOString().split('T')[0];
+            //set checkout date with the +1 date data from earlier
             document.getElementById('check-out-date').setAttribute('min', checkoutMinDate);
         });
 
+        //click bank button to set display options to either block or none
         document.getElementById('bank-btn').addEventListener('click', function() {
             var bankOptions = document.getElementById('bank-options');
             if (bankOptions.style.display === 'none') {
@@ -245,7 +256,7 @@ if (isset($_SESSION['userName'])) {
                 bankOptions.style.display = 'none';
             }
         });
-
+        //function when pay button is clicked
         document.getElementById('pay-btn').addEventListener('click', function(event) {
             event.preventDefault();
             const selectedBank = document.querySelector('input[name="bank"]:checked');
@@ -256,14 +267,14 @@ if (isset($_SESSION['userName'])) {
             const ticketType = document.querySelector('input[name="ticket-type"]:checked');
 
             const userLoggedIn = <?php echo json_encode($userLoggedIn); ?>;
-
+            //login validation
             if (!userLoggedIn) {
                 alert("Please log in before booking.");
                 return;
             }
 
             const userStatus = <?php echo json_encode($status); ?>;
-
+            //validation for account verification
             if(userStatus === 'pending'){
                 alert("Wait until your account has been verified.");
                 return;
@@ -278,19 +289,19 @@ if (isset($_SESSION['userName'])) {
 
                 const checkinDate = document.getElementById('check-in-date').value;
                 const checkoutDate = document.getElementById('check-out-date').value;
-
+                //validation to choose both check in check out date
                 if (!checkinDate || !checkoutDate) {
                     alert('Please select both check-in and check-out dates.');
                     return;
                 }
-
+                //add all selected itineraries into an array
                 const itineraries = document.querySelectorAll('input[name="itineraries[]"]:checked');
                 let itineraryParams = [];
 
                 itineraries.forEach(function(itinerary) {
                     itineraryParams.push(itinerary.value);
                 });
-
+                //dynamic link for bank payment option based on user's selection
                 if (bankValue === 'bank1') {
                     form.action = 'pbe.php?city=' + city + '&country=' + country;
                 } else if (bankValue === 'bank2') {
@@ -299,6 +310,7 @@ if (isset($_SESSION['userName'])) {
 
                 form.submit();
             } else {
+                //validation if any data is empty or not selected by user
                 let alertMessage = 'Please select the following:\n';
                 if (itineraries.length === 0) alertMessage += '- Itineraries\n';
                 if (!selectedVehicle) alertMessage += '- Vehicle\n';

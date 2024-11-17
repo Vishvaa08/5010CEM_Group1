@@ -319,7 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="checkbox" class="check_box" name="hotel_availability" id="hotel-availability" <?= ($selectedHotel['Availability'] === 'Available') ? 'checked' : '' ?>>
                 <label for="hotel-availability" class="availability_label">Available</label>
 
-                <button type="submit" name="update_availability" class="update-btn">Update Hotel</button>
+                <button type="submit" name="update_hotel_availability" class="update-btn" value="update">Update Hotel</button>
                 <button type="button" name="delete_hotel" class="delete-btn" onclick="deleteHotel()">Delete Hotel</button>
 
             </form>
@@ -387,7 +387,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <button type="submit" name="update_availability" class="update-btn">Update Flight</button>
+                <button type="submit" name="update_flight_availability" class="update-btn" value="update">Update Flight</button>
             </form>
         <?php else: ?>
             <p>Please select a package and city to view flight seat availability.</p>
