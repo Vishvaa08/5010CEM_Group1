@@ -1,22 +1,25 @@
 <?php
 session_start();
 
-$pic = 'images/user.png'; 
-$isLoggedIn = false; 
-$userName = 'Guest'; 
-$userEmail = ''; 
+//setting default values for variables in session and initialising variables
+$pic = 'images/user.png';
+$isLoggedIn = false;
+$userName = 'Guest';
+$userEmail = '';
 
+//if session data exists then retrieve these data from sesssion
 if (isset($_SESSION['userName'])) {
-    $pic = $_SESSION['profileImage'] ?? $pic; 
+    $pic = $_SESSION['profileImage'] ?? $pic;
     $isLoggedIn = true;
-    $userName = $_SESSION['userName']; 
-    $userEmail = $_SESSION['userEmail'] ?? ''; 
+    $userName = $_SESSION['userName'];
+    $userEmail = $_SESSION['userEmail'] ?? '';
 }
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,6 +31,7 @@ if (isset($_SESSION['userName'])) {
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
+
 <body>
     <!-- Splash screen for when website is first opened -->
     <div class="splash-screen">
@@ -40,25 +44,25 @@ if (isset($_SESSION['userName'])) {
     <!--Beginning of home section of homepage including navigation-->
     <div id="home">
 
-    <div id="header">
-        <div id="left-nav">
-            <a href="index.php">
-                <div class="logo-container">
-                    <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
-                </div>
-            </a>
-            <h1>TravelTrail</h1>
-        </div>
+        <div id="header">
+            <div id="left-nav">
+                <a href="index.php">
+                    <div class="logo-container">
+                        <p style="color: white; font-size: 25px; font-family: 'Joti One', serif;">TT</p>
+                    </div>
+                </a>
+                <h1>TravelTrail</h1>
+            </div>
 
-        <div id="right-nav">
-            <a class="nav-link" href="index.php#home">Home</a>
-            <a class="nav-link" href="index.php#about">About</a>
-            <a class="nav-link" href="index.php#contact">Contact</a>
-            <a href="userNotifications.php" class="notification-button">
-            <i class="fa fa-bell" aria-hidden="true"></i></a>
-            <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo $pic; ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
+            <div id="right-nav">
+                <a class="nav-link" href="index.php#home">Home</a>
+                <a class="nav-link" href="index.php#about">About</a>
+                <a class="nav-link" href="index.php#contact">Contact</a>
+                <a href="userNotifications.php" class="notification-button">
+                    <i class="fa fa-bell" aria-hidden="true"></i></a>
+                <a href="php_functions/user_login_check.php" class="user-profile"><img src="<?php echo $pic; ?>" style="width:75px; height:75px; border-radius:50%; object-fit:cover;"></a>
+            </div>
         </div>
-    </div>
 
         <div id="main-title">
             <p class="title">Let's Embark On</br>Your Journey</br>Together!</p>
@@ -113,68 +117,68 @@ if (isset($_SESSION['userName'])) {
 
     <!-- Contact Form -->
     <div id="contact">
-    <div class="contact-section">
-        <h2>Get the Info you're looking for!</h2>
+        <div class="contact-section">
+            <h2>Get the Info you're looking for!</h2>
 
-        <div class="info-item">
-            <button class="info-btn" data-id="info1">
-                Delays and Cancellations 
-                <i class="arrow down"></i>
-                <i class="arrow up" style="display: none;"></i>
-            </button>
-            <div class="info-details" id="info1">
-                <p>As a third-party booking service, we are not responsible for delays or cancellations related to flights or hotels. For any issues with your tour guide, please contact us directly for assistance.</p>
+            <div class="info-item">
+                <button class="info-btn" data-id="info1">
+                    Delays and Cancellations
+                    <i class="arrow down"></i>
+                    <i class="arrow up" style="display: none;"></i>
+                </button>
+                <div class="info-details" id="info1">
+                    <p>As a third-party booking service, we are not responsible for delays or cancellations related to flights or hotels. For any issues with your tour guide, please contact us directly for assistance.</p>
+                </div>
             </div>
-        </div>
 
-        <div class="info-item">
-            <button class="info-btn" data-id="info2">
-                Refunds 
-                <i class="arrow down"></i>
-                <i class="arrow up" style="display: none;"></i>
-            </button>
-            <div class="info-details" id="info2">
-                <p>Refunds are not provided through our service, as we act solely as a booking platform. Please reach out to the airline, hotel, or service provider directly for any refund inquiries.</p>
+            <div class="info-item">
+                <button class="info-btn" data-id="info2">
+                    Refunds
+                    <i class="arrow down"></i>
+                    <i class="arrow up" style="display: none;"></i>
+                </button>
+                <div class="info-details" id="info2">
+                    <p>Refunds are not provided through our service, as we act solely as a booking platform. Please reach out to the airline, hotel, or service provider directly for any refund inquiries.</p>
+                </div>
             </div>
-        </div>
 
-        <div class="info-item">
-            <button class="info-btn" data-id="info3">
-                No Change or Cancel Fees 
-                <i class="arrow down"></i>
-                <i class="arrow up" style="display: none;"></i>
-            </button>
-            <div class="info-details" id="info3">
-                <p>We do not charge any fees for changing or cancelling your bookings. However, please refer to the policies of the respective airline, hotel, or service provider for any applicable charges.</p>
+            <div class="info-item">
+                <button class="info-btn" data-id="info3">
+                    No Change or Cancel Fees
+                    <i class="arrow down"></i>
+                    <i class="arrow up" style="display: none;"></i>
+                </button>
+                <div class="info-details" id="info3">
+                    <p>We do not charge any fees for changing or cancelling your bookings. However, please refer to the policies of the respective airline, hotel, or service provider for any applicable charges.</p>
+                </div>
             </div>
-        </div>
 
-        <div class="contact">
-            <p>Still Need HELP? <a href="#" class="contact-link" id="openModal">Contact Us</a></p>
+            <div class="contact">
+                <p>Still Need HELP? <a href="#" class="contact-link" id="openModal">Contact Us</a></p>
             </div>
         </div>
     </div>
 
     <div id="contactModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Contact Us</h2>
-        <p>Got any questions or suggestions? Fill out this form to reach out!</p>
-        <form id="contactForm" method="POST">
-            <?php if ($isLoggedIn): ?>
-                <p>Hi, <?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?>!</p>
-                <input type="hidden" id="userName" name="userName" value="<?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?>">
-                <input type="hidden" id="userEmail" name="userEmail" value="<?php echo htmlspecialchars($userEmail, ENT_QUOTES, 'UTF-8'); ?>">
-            <?php else: ?>
-                <input type="text" id="userName" name="userName" placeholder="Enter your name" required>
-                <input type="email" id="userEmail" name="userEmail" placeholder="Enter your email" required>
-            <?php endif; ?>
-            <textarea name="userMessage" placeholder="Enter your message" required></textarea>
-            <button type="submit" class="submit-btn">Submit</button>
-        </form>
-        <div id="toast" class="toast">Message successfully sent!</div>
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Contact Us</h2>
+            <p>Got any questions or suggestions? Fill out this form to reach out!</p>
+            <form id="contactForm" method="POST">
+                <?php if ($isLoggedIn): ?>
+                    <p>Hi, <?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?>!</p>
+                    <input type="hidden" id="userName" name="userName" value="<?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" id="userEmail" name="userEmail" value="<?php echo htmlspecialchars($userEmail, ENT_QUOTES, 'UTF-8'); ?>">
+                <?php else: ?>
+                    <input type="text" id="userName" name="userName" placeholder="Enter your name" required>
+                    <input type="email" id="userEmail" name="userEmail" placeholder="Enter your email" required>
+                <?php endif; ?>
+                <textarea name="userMessage" placeholder="Enter your message" required></textarea>
+                <button type="submit" class="submit-btn">Submit</button>
+            </form>
+            <div id="toast" class="toast">Message successfully sent!</div>
+        </div>
     </div>
-</div>
 
     <script src="js/index.js"></script>
 
@@ -182,4 +186,5 @@ if (isset($_SESSION['userName'])) {
         <p>TravelTrail</p>
     </div>
 </body>
+
 </html>

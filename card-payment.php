@@ -81,7 +81,8 @@ if (isset($_SESSION['userName'])) {
     $itineraries = isset($_GET['itineraries']) ? $_GET['itineraries'] : [];
     $itineraryList = [];
     $totalItineraryPrice = 0;
-
+    
+    //retrieve itineraries from booking.php
     foreach ($itineraries as $itinerary) {
         $itineraryData = explode('|', $itinerary);
         if (isset($itineraryData[0]) && isset($itineraryData[1])) {
@@ -91,41 +92,41 @@ if (isset($_SESSION['userName'])) {
             $totalItineraryPrice += $itineraryPrice;
         }
     }
-
+    //retrieving vehicle data from booking.php
     if (isset($_GET['vehicle'])) {
         $vehicleData = explode('|', $_GET['vehicle']);
         $vehicleType = isset($vehicleData[0]) ? $vehicleData[0] : '';
         $vehiclePrice = isset($vehicleData[1]) ? $vehicleData[1] : 0;
     }
-
+    //retrieving room data from booking.php
     if (isset($_GET['room'])) {
         $roomData = explode('|', $_GET['room']);
         $roomType = isset($roomData[0]) ? $roomData[0] : '';
         $roomPrice = isset($roomData[1]) ? $roomData[1] : 0;
     }
-
+    //retrieving check in data from booking.php
     if (isset($_GET['check-in-date'])) {
         $checkInDate = $_GET['check-in-date'];
     }
-
+    //retrieving check out data from booking.php
     if (isset($_GET['check-out-date'])) {
         $checkOutDate = $_GET['check-out-date'];
     }
-
+    //retrieving flight data from booking.php
     if (isset($_GET['flight'])) {
         $dataFlights = explode('|', $_GET['flight']);
         $flightType = isset($dataFlights[0]) ? $dataFlights[0] : '';
         $flightPrice = isset($dataFlights[1]) ? $dataFlights[1] : 0;
     }
-
+    //retrieving flight ticket data from booking.php
     if (isset($_GET['ticket-type'])) {
         $ticketType = $_GET['ticket-type'];
     }
-
+    //retrieving flight num of ticket data from booking.php
     if (isset($_GET['tickets'])) {
         $numTickets = $_GET['tickets'];
     }
-
+    //adjust ticket price value based on one-way or two-way
     if ($ticketType == 2) {
         $calc = ($roomPrice + $vehiclePrice + $totalItineraryPrice) + (($flightPrice + 150) * $numTickets);
     } else {
@@ -247,7 +248,7 @@ if (isset($_SESSION['userName'])) {
                 alert('CVV number must be 3 digits and not empty!');
                 return;
             }
-
+            //bookingData object that stores all value to be submitted to firebase
             const bookingData = {
                 country: '<?php echo $country; ?>',
                 city: '<?php echo $city; ?>',
@@ -273,7 +274,7 @@ if (isset($_SESSION['userName'])) {
                     cvv: cvvNumber
                 }
             };
-
+            //ajax call for pushBookingData.php that contains function to add data to firebase
             fetch('pushBookingData.php', {
                     method: 'POST',
                     headers: {
@@ -300,12 +301,12 @@ if (isset($_SESSION['userName'])) {
                     alert('An error occurred while processing your booking.');
                 });
         }
-
+        //function to show popup after successful booking
         function openPopup(bookingId) {
             document.getElementById('bookingId').textContent = bookingId;
             document.getElementById('popupOverlay').style.display = 'flex';
         }
-
+        //function to close popup 
         function closePopup() {
             document.getElementById('popupOverlay').style.display = 'none';
             window.location.replace('index.php');

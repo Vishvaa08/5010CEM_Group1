@@ -28,7 +28,7 @@ if (isset($_SESSION['userName'])) {
 <body>
 
     <?php
-
+    //including firebase files that contains connections and db references
     include 'firebase_connection.php';
     include 'firebase_data.php';
 
@@ -55,7 +55,7 @@ if (isset($_SESSION['userName'])) {
     <div id="header-image">
 
         <?php
-
+        //display Banner child under $dataCityImages db references from firebase_data.php
         if (isset($dataCityImages['Banner'])) {
             echo '<img src="' . ($dataCityImages['Banner']) . ' Image" class="banner-image">';
         } else {
@@ -75,27 +75,27 @@ if (isset($_SESSION['userName'])) {
         <div id="itineraries-list">
 
             <?php
-
+            //foreach loop that loops through $dataCityItinerary db reference
             foreach ($dataCityItinerary as $city => $cities) {
-
+                //skip if value = empty
                 if (empty($cities)) {
                     continue;
                 }
 
                 echo '<div class="card">';
-
+                //display Image child of the the itinerary
                 if (isset($cities['Image'])) {
                     echo '<img src="' . ($cities['Image']) . ' Image" class="card-image">';
                 } else {
                     echo '<img src="images/error.jpg" class="card-image">';
                 }
-
+                //display Itinerary name of the itinerary
                 if (isset($cities['Itinerary'])) {
                     echo '<h2 class="title">' . ($cities['Itinerary']) . '</h2>';
                 } else {
                     echo '<h2 class="title">No country details available...</h2>';
                 }
-
+                //display Price of the itinerary
                 if (isset($cities['Price'])) {
                     echo '<h2 class="price-iti"> RM' . ($cities['Price']) . '</h2>';
                 } else {
@@ -116,7 +116,7 @@ if (isset($_SESSION['userName'])) {
             <div id="name-card">
 
                 <?php
-
+                //display Banner2 child under $dataCityImages db reference from firebase_data.php
                 if (isset($dataCityImages['Banner2'])) {
                     echo '<img src="' . ($dataCityImages['Banner2']) . ' Image" class="banner2-image">';
                 } else {
@@ -128,11 +128,14 @@ if (isset($_SESSION['userName'])) {
                 <div id="city-name-container2">
 
                     <?php
+                    //get city string from URL
                     $city = htmlspecialchars($_GET['city']);
+                    //update all character in string to upper case
                     $city = strtoupper($city);
+                    //split each character individually and store into $cityArray
                     $cityArray = str_split($city);
                     ?>
-
+                    <!-- foreach loop to display each letter one by one -->
                     <?php foreach ($cityArray as $letter): ?>
                         <div class="city-letter"><?php echo $letter; ?></div>
                     <?php endforeach; ?>
@@ -143,6 +146,7 @@ if (isset($_SESSION['userName'])) {
         </div>
 
         <div id="right">
+            <!-- default hard coded icons for page deco -->
             <div id="icon-card">
 
                 <div id="icon1">
@@ -166,13 +170,13 @@ if (isset($_SESSION['userName'])) {
             <div id="hotel-list">
 
                 <?php
-
+                //foreach loop that loops through $dataHotels db reference from firebase_data.php
                 foreach ($dataHotels as $hotel => $hotelData) {
-
+                        //only display hotels with child Hotel and child Availability which value is set to Available
                         if (isset($hotelData['Hotel']) && isset($hotelData['Availability']) && $hotelData['Availability'] === 'Available') {
                             echo '<div class="card-hotel">';
                             echo '<div class="hotel-image-container">';
-
+                            //display hotel Image child
                             if (isset($hotelData['Image'])) {
                                 echo '<img src="' . $hotelData['Image'] . '" class="card-image-hotel">';
                             }
@@ -181,14 +185,14 @@ if (isset($_SESSION['userName'])) {
                             echo '<div class="hotel-content">';
 
                             echo '<div class="hotel-name">';
-
+                            //display hotel Hotel child
                             if (isset($hotelData['Hotel'])) {
                                 echo '<h2>' . $hotelData['Hotel'] . '</h2>';
                             }
 
                             echo '</div>';
                             echo '<div class="hotel-description">';
-
+                            //display hotel Description child
                             if (isset($hotelData['Description'])) {
                                 echo '<h2>' . $hotelData['Description'] . '</h2>';
                             }
@@ -198,9 +202,12 @@ if (isset($_SESSION['userName'])) {
                             echo '<div class="rooms-container">';
 
                             echo '<div class="single">';
+                            //display Single child under Rooms table for $hotelData db reference
                             if (isset($hotelData['Rooms']['Single'])) {
+                                //assign Availability value of child Single to $singleRoomAvailability
                                 $singleRoomAvailability = $hotelData['Rooms']['Single']['Availability'];
                                 echo '<div class="single-text">Single</div>';
+                                //display the assigned value
                                 echo '<div>' . $singleRoomAvailability . '</div>';
                             }
                             echo '</div>';
@@ -222,9 +229,9 @@ if (isset($_SESSION['userName'])) {
                             echo '</div>';
 
                             echo '</div>';
-
+                            //retrieve CheapestRoom value from firebase
                             echo '<div class="price">RM' . $hotelData['CheapestRoom'] . '</div>';
-
+                            //dynamic link
                             echo '<a href="booking.php?city=' . urlencode(ucfirst(strtolower($city))) . '&country=' . urlencode($country) . '&hotel=' . urlencode($hotel) . '&single=' . urlencode($singleRoomAvailability) . '&double=' . urlencode($doubleRoomAvailability) . '&suite=' . urlencode($suiteRoomAvailability) . '" class="btn">Book</a>';
 
                             echo '</div>';
