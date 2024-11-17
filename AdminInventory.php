@@ -1,4 +1,7 @@
 <?php
+
+use Kreait\Firebase\Exception\FirebaseException;
+
 session_start();
 include 'firebase_connection.php';
 
