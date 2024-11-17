@@ -71,73 +71,91 @@ if ($country && $city) {
 
 // Handle form submission for hotel and flight updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_FILES['hotel_image']) && $_FILES['hotel_image']['error'] === UPLOAD_ERR_OK) {
-        $imageFile = $_FILES['hotel_image'];
-        $imageName = basename($imageFile['name']);
-        $imageTempPath = $imageFile['tmp_name'];
+    // Check and update hotel data
+    if ($view === 'hotel' && $country && $city && $hotelIndex !== null) {
+        $hotelPath = "Packages/$country/$city/Hotels/$hotelIndex";
+        $hotelRef = $database->getReference($hotelPath);
+        $existingHotelData = $hotelRef->getValue();
 
-        $bucket = $storage->getBucket();
-        $storagePath = "hotel_images/{$country}/{$city}/{$hotelIndex}/{$imageName}";
+        if ($existingHotelData !== null) {
+            // Update hotel description and availability
+            if (isset($_POST['hotel_description']) || isset($_POST['hotel_availability'])) {
+                $updateData = [];
+                if (isset($_POST['hotel_description'])) {
+                    $updateData['Description'] = $_POST['hotel_description'];
+                }
+                if (isset($_POST['hotel_availability'])) {
+                    $updateData['Availability'] = $_POST['hotel_availability'] ? 'Available' : 'N/A';
+                }
+                $hotelRef->update($updateData);
+            }
 
-        try {
-            $bucket->upload(fopen($imageTempPath, 'r'), [
-                'name' => $storagePath
-            ]);
+            // Update room data
+            if (isset($_POST['availability']) && isset($_POST['price'])) {
+                foreach ($_POST['availability'] as $roomType => $availability) {
+                    $availability = (int)$availability;
+                    $price = isset($_POST['price'][$roomType]) ? (float)$_POST['price'][$roomType] : 0;
 
-            $imageUrl = "https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/" . urlencode($storagePath) . "?alt=media";
+                    $roomPath = "$hotelPath/Rooms/$roomType";
+                    $database->getReference($roomPath)->update([
+                        'Availability' => $availability,
+                        'Price' => $price,
+                    ]);
+                }
+            }
 
-            $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex)
-                ->update(['Image' => $imageUrl]);
-        } catch (FirebaseException $e) {
-            echo "Error uploading image: " . $e->getMessage();
-        }
-    }
+            // Handle hotel image update
+            if (isset($_FILES['hotel_image']) && $_FILES['hotel_image']['error'] === UPLOAD_ERR_OK) {
+                $imageFile = $_FILES['hotel_image'];
+                $imageName = basename($imageFile['name']);
+                $imageTempPath = $imageFile['tmp_name'];
 
-    if (isset($_POST['hotel_description']) || isset($_POST['hotel_availability'])) {
-        $updateData = [];
-        if (isset($_POST['hotel_description'])) {
-            $updateData['Description'] = $_POST['hotel_description'];
-        }
-        if (isset($_POST['hotel_availability'])) {
-            $updateData['Availability'] = $_POST['hotel_availability'] ? 'Available' : 'N/A';
-        }
+                $bucket = $storage->getBucket();
+                $storagePath = "hotel_images/{$country}/{$city}/{$hotelIndex}/{$imageName}";
 
-        if (!empty($updateData)) {
-            $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex)
-                ->update($updateData);
-        }
-    }
+                try {
+                    $bucket->upload(fopen($imageTempPath, 'r'), [
+                        'name' => $storagePath,
+                    ]);
 
-    if (isset($_POST['availability']) && isset($_POST['price'])) {
-        foreach ($_POST['availability'] as $roomType => $availability) {
-            $availability = (int) $availability;
-            $price = isset($_POST['price'][$roomType]) ? (float) $_POST['price'][$roomType] : 0;
-
-            $database->getReference('Packages/' . $country . '/' . $city . '/Hotels/' . $hotelIndex . '/Rooms/' . $roomType)
-                ->update([
-                    'Availability' => $availability,
-                    'Price' => $price
-                ]);
-
-        header('Location: ' . $_SERVER['REQUEST_URI']);
-        exit();
-
-        }      
-
-        // Update flight data if the 'flight' view is active
-        if ($view === 'flight' && $country && $city) {
-            foreach ($_POST['availability'] as $flightClass => $availability) {
-                $availability = (int) $availability;
-                $price = isset($_POST['price'][$flightClass]) ? (float) $_POST['price'][$flightClass] : 0;
-
-                $database->getReference('Packages/' . $country . '/' . $city . '/Flights/' . $flightClass)
-                    ->update(['Seats' => $availability, 'Price' => $price]);
+                    $imageUrl = "https://firebasestorage.googleapis.com/v0/b/traveltrail-39e23.appspot.com/o/" . urlencode($storagePath) . "?alt=media";
+                    $hotelRef->update(['Image' => $imageUrl]);
+                } catch (FirebaseException $e) {
+                    echo "Error uploading image: " . $e->getMessage();
+                }
             }
 
             header('Location: ' . $_SERVER['REQUEST_URI']);
             exit();
+        } else {
+            echo "Error: Hotel does not exist.";
         }
     }
+
+    // Update flight data 
+    if ($view === 'flight' && $country && $city) {
+        $flightPath = "Packages/$country/$city/Flights";
+        $flightRef = $database->getReference($flightPath);
+
+        if (isset($_POST['availability']) && isset($_POST['price'])) {
+            foreach ($_POST['availability'] as $flightClass => $availability) {
+                $availability = (int)$availability;
+                $price = isset($_POST['price'][$flightClass]) ? (float)$_POST['price'][$flightClass] : 0;
+
+                $flightClassPath = "$flightPath/$flightClass";
+                $database->getReference($flightClassPath)->update([
+                    'Seats' => $availability,
+                    'Price' => $price,
+                ]);
+            }
+
+            header('Location: ' . $_SERVER['REQUEST_URI']);
+            exit();
+        } else {
+            echo "Error: Flight data is missing or incomplete.";
+        }
+    }
+
 
     if (isset($_POST['delete_hotel']) && $view === 'hotel' && $country && $city && $hotelIndex !== null) {
         try {
