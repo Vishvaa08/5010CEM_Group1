@@ -1,4 +1,7 @@
 <?php
+
+use Kreait\Firebase\Exception\FirebaseException;
+
 include '../firebase_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -44,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     try {
-        $database->getReference("Hotels/$hotelId")->set($hotelData);
+        //$database->getReference("Hotels/$hotelId")->set($hotelData);
         echo json_encode(['success' => true, 'imageUrl' => $imageUrl]);
     } catch (FirebaseException $e) {
         error_log('Error saving hotel data: ' . $e->getMessage());
