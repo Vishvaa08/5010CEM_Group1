@@ -28,12 +28,12 @@ if (isset($_SESSION['userName'])) {
 <body>
 
     <?php
-
+    //including firebase files that contains connections and db references
     include 'firebase_connection.php';
     include 'firebase_data.php';
 
     ?>
-
+    <!-- loading animation div -->
     <div id="loading-animation"></div>
 
     <div id="header">
@@ -54,7 +54,7 @@ if (isset($_SESSION['userName'])) {
         </div>
     </div>
     </div>
-
+    <!-- search bar div -->
     <div id="search-container">
         <input type="text" name="search-bar" id="search-bar" onkeyup="filterCity()" placeholder="Search..." />
     </div>
@@ -62,11 +62,12 @@ if (isset($_SESSION['userName'])) {
     <div id="packages" class="packages-container">
 
         <?php
-        //
+        //foreach loop that loops through every child under a certain country
         foreach ($dataCity as $city => $cityData) {
+            //only displays cities that have child City and child Availability that is set to Available
             if (isset($cityData['City']) && isset($cityData['Availability']) && $cityData['Availability'] === 'Available') {
                 echo '<div class="card">';
-
+                //display CityImage child of each City
                 if (isset($cityData['CityImage'])) {
                     echo '<img src="' . $cityData['CityImage'] . '" class="card-image">';
                 } else {
@@ -74,13 +75,13 @@ if (isset($_SESSION['userName'])) {
                 }
 
                 echo '<h2 class="search-name">' . ucfirst($cityData['City']) . '</h2>';
-
+                //display CityDetails child of each city
                 if (isset($cityData['CityDetail'])) {
                     echo '<p>' . ($cityData['CityDetail']) . '</p>';
                 } else {
                     echo '<p>No city details available...</p>';
                 }
-
+                //dynamic link that adds chosen city into the link
                 echo '<a href="citydetails.php?city=' . urlencode($city) . '&country=' . urlencode($country) . '" class="explore-btn">Explore More</a>';
 
                 echo '</div>';
@@ -91,12 +92,13 @@ if (isset($_SESSION['userName'])) {
     </div>
 
     <script>
+        //loading animation function
         var loader = document.getElementById('loading-animation');
 
         window.addEventListener('load', function() {
             loader.style.display = 'none';
         });
-
+        //search bar function
         function filterCity() {
             const userInput = document.getElementById('search-bar').value.toLowerCase();
             const cards = document.querySelectorAll('.card');
